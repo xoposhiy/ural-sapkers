@@ -1,0 +1,13 @@
+>Is it dangerous world?
+c("\r\nMay be ;) Viruses make it smaller.\r\n");
+c("\r\nYes, it is! :)\r\n");
+c("Did you know, that this world is unstable?\r\n Warnings about world collapse can be found in sattelites data :   info ::= ( <game-info> | <start-round-info> | <map-change-info> | <finish-round-info> | <finish-game-info> ) ';'  map-change-info ::= <time-part> '&' <players-part> '&' <changes-part> [ '&' <danger-part>]  danger-part ::= 'd' <sep> <danger-level>\r\n  danger-level ::= <number>\r\n");
+c("\r\n Watch out of high danger levels. Keep close to the center.\r\n");
+c("\r\n This will help you to be on the guard :" + e("pVcsdEaJPIA63HRjBANY") + ".\r\n");
+
+>iddqd;
+c("\r\nOkay, okay! Here it is : " + e("LEI16LPXZ5TUuRmyjp6R") + " \r\n" + "Your sensors will be configured to block the engine, if the territory with high temperature is detected ahead. \r\n" + "This won't help, if you are already on this territory :). \r\n");
+
+>show me the money;
+Hey! You like StarCraft. Did you know StarCraft II to be released in the nearest feature?
+OK. Use CFGaemIBoHKtwDUGqbSvqMR token to earn additional points, cheater.
