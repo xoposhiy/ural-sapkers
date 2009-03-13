@@ -18,5 +18,5 @@ Caesar.
        and always use as many configuration tokens and dma tokens as you can.
 
 
-============ ============================= =============
+=======================================================
 Для входа в режим memconfig пароль - password
