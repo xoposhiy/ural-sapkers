@@ -4,3 +4,7 @@ CFGaqggxGbiZuyJcIPcPosl
 Caesar's cipher (memconfig -> "password" -> engine -> info -> применение мозга):
 CFGgMRaIDiSXwgiaSmpWaOe (даёт возможность посылать команды при запуске сапки)
 DMAWGgMvUryBWgKFECRmFuL (открывает доступ к engine так, чтобы он выводил уже дешифрованный текст)
+
+Lexical analyzer: (memconfig -> "password" -> lexinterpr -> dump -> применение мозга):
+CFGquhMFGDGoXGbMSCVmgmY
+DMAqGgMCIgefAuNwcLMKNir
