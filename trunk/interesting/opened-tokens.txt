@@ -1,0 +1,6 @@
+Show me the money (memconfig -> "show me the money"):
+CFGaqggxGbiZuyJcIPcPosl
+
+Caesar's cipher (memconfig -> "password" -> engine -> info -> применение мозга):
+CFGgMRaIDiSXwgiaSmpWaOe (даёт возможность посылать команды при запуске сапки)
+DMAWGgMvUryBWgKFECRmFuL (открывает доступ к engine так, чтобы он выводил уже дешифрованный текст)
