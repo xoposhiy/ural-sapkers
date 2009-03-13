@@ -1,4 +1,10 @@
 #summary Найденные токены конфигурации
 
-===CFGyAYedKbSHCfYIcRijSwx===
-memconfig + "пароль show me the money"
+Внимание! Токены зависят от имени команды!
+Имя нашей команды - ural-sapkers
+
+===CFGaqggxGbiZuyJcIPcPosl===
+memconfig -> "show me the money"
+
+===CFGgMRaIDiSXwgiaSmpWaOe===
+memconfig -> "password" -> engine -> info -> decipher
