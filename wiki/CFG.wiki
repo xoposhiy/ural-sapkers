@@ -1,5 +1,4 @@
 #summary Найденные токены конфигурации
 
 ===CFGyAYedKbSHCfYIcRijSwx===
-
 memconfig + "пароль show me the money"
