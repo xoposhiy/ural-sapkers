@@ -12,8 +12,6 @@ public final class Loader
     private class OClassLoader extends ClassLoader
     {
 
-        final Loader this$0;
-
         protected Class findClass(String s)
             throws ClassNotFoundException
         {
@@ -33,7 +31,9 @@ public final class Loader
             as = gs(s1);
             s2 = as[generator.nextInt(as.length)];
             Class class2;
-            byte abyte0[] = load((new StringBuilder()).append("/").append(s2).append("/").append(s1).toString(), as);
+            String path = new StringBuilder().append("/").append(s2).append("/").append(s1).toString();
+            byte abyte0[] = load(path, as);
+            
             class2 = defineClass(s, abyte0, 0, abyte0.length);
             loadedClasses.put(s1, class2);
             return class2;
@@ -83,7 +83,6 @@ public final class Loader
 
         private OClassLoader()
         {
-            this$0 = Loader.this;
             super();
         }
 
