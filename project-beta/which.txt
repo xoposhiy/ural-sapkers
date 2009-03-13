@@ -1,0 +1,43 @@
+Простая тулза для поиска классов.
+Использование: пусть есть файл
+
+	package com.stanfy.contest.a.a;
+	import com.stanfy.contest.a.a.a.a;
+	import com.stanfy.contest.a.a.b.b;
+	import com.stanfy.contest.a.a.b.c;
+	import com.stanfy.contest.b.e;
+	import com.stanfy.contest.b.k;
+	import java.util.HashMap;
+
+	public abstract class u
+	  implements c
+	{
+	 ...
+
+Мы заинтересовались строчкой "implements c" и хотим узнать, какой именно файл "c.java" используется.
+Запускаем: locate.pl
+Вводим все строки "package .." и "import .."
+
+>       package com.stanfy.contest.a.a;
+ok
+>       import com.stanfy.contest.a.a.a.a;
+ok
+>       import com.stanfy.contest.a.a.b.b;
+ok
+>       import com.stanfy.contest.a.a.b.c;
+ok
+>       import com.stanfy.contest.b.e;
+ok
+>       import com.stanfy.contest.b.k;
+ok
+>       import java.util.HashMap;
+ok
+
+Теперь спросим, кто такой "c": 
+
+> which c
+./DecompiledByJD/c/com/stanfy/contest/a/a/c.java	<--- ВОТ ОН!
+
+Начать новый поиск можно:
+ а) перезапустив скрипт
+ б) введя команду "new"

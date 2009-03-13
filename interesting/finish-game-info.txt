@@ -1,0 +1,6 @@
+Из файла: \DecompiledByJD\b\com\stanfy\contest\a\a\b.java
+
+	finish-game-info ::= 'GEND' <sep> <rank-score-info>
+	rank-score-info ::= 'P' <number> <sep> <score> <sep> <rank> [ ',' 'P' <number> <sep> <score> <sep> <rank> ]
+	score ::= <number>
+	rank ::= <number>
