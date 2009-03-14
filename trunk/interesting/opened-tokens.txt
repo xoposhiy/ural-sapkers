@@ -8,3 +8,7 @@ DMAWGgMvUryBWgKFECRmFuL (открывает доступ к engine так, чтобы он выводил уже деш
 Lexical analyzer: (memconfig -> "password" -> lexinterpr -> dump -> применение мозга):
 CFGquhMFGDGoXGbMSCVmgmY
 DMAqGgMCIgefAuNwcLMKNir
+
+Clock: (clock)
+CFGWyiasdaKrEatWPEVUO@k -- базовые часы
+CFGGmswKaMWPiweckyPCnUV -- расширенные часы
