@@ -25,6 +25,8 @@ namespace Parsing
 			Assert.AreEqual(1, info.Removes.Length);
 			Assert.AreEqual(2, info.Sapkas.Length);
 			Assert.AreEqual(true, info.Sapkas[0].IsDead);
+			Assert.IsNull(info.Sapkas[0].Pos);
+			Assert.IsNotNull(info.Sapkas[1].Pos);
 		}
 
 		[Test]

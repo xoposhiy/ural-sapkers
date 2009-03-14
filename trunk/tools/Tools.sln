@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Client", "Client\Client.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Parsing", "Parser\Parsing.csproj", "{991AA3AA-F4A1-446A-A45C-7FAB4EAEEB87}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sapka", "Sapka\Sapka.csproj", "{70027960-8509-43A9-AD2F-B6F918D243B7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -25,6 +27,10 @@ Global
 		{991AA3AA-F4A1-446A-A45C-7FAB4EAEEB87}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{991AA3AA-F4A1-446A-A45C-7FAB4EAEEB87}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{991AA3AA-F4A1-446A-A45C-7FAB4EAEEB87}.Release|Any CPU.Build.0 = Release|Any CPU
+		{70027960-8509-43A9-AD2F-B6F918D243B7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{70027960-8509-43A9-AD2F-B6F918D243B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{70027960-8509-43A9-AD2F-B6F918D243B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{70027960-8509-43A9-AD2F-B6F918D243B7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
