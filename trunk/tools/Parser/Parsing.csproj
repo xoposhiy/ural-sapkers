@@ -31,6 +31,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="nunit.framework, Version=2.4.1.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\External\nunit.framework.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
@@ -39,13 +43,18 @@
     <Compile Include="AddInfo.cs" />
     <Compile Include="Cell.cs" />
     <Compile Include="GameInfo.cs" />
+    <Compile Include="GameInfo_Test.cs" />
     <Compile Include="IParserListener.cs" />
     <Compile Include="MapChangeInfo.cs" />
     <Compile Include="MapInfo.cs" />
+    <Compile Include="MapInfo_Test.cs" />
     <Compile Include="Parser.cs" />
+    <Compile Include="Parser_Test.cs" />
     <Compile Include="PlayerResult.cs" />
     <Compile Include="Pos.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Reader.cs" />
+    <Compile Include="Reader_Test.cs" />
     <Compile Include="RemoveInfo.cs" />
     <Compile Include="SapkaInfo.cs" />
     <Compile Include="StartRoundInfo.cs" />

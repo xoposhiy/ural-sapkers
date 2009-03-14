@@ -10,5 +10,13 @@ namespace Parsing
 			RoundNumber = roundNumber;
 			MapInfo = mapInfo;
 		}
+
+		public StartRoundInfo(Reader r)
+		{
+			r.Ensure("START");
+			RoundNumber = r.ReadNumber();
+			r.Ensure("&");
+			MapInfo = new MapInfo(r);
+		}
 	}
 }
