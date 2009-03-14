@@ -1,0 +1,9 @@
+Checking environment...............                                
+5 substance types found.                                                           
+Configuring sensors ....                                                            
+Destructable substance found. Identifier - 'w'.                                      
+Indestructable substance found. Identifier - 'X'.                                     
+Unknown, possibly dangerous substance found. Identifier - '*'. Has constant life time. 
+Extremely dangerous substance with high temperature. Identifier - '#'. Has cross shape. With constant ray length.
+Potentially positive substance found. Has several types. Identifiers - 'b', 'f', 'v', '?'. 
+ '?' - unknown substance type. Possibly positive.  Need deeper analysis through Gryc's Science approach. 
