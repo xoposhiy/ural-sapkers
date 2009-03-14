@@ -3,15 +3,7 @@
 Строка конфигурационных токенов:
 config CFGWyiasdaKrEatWPEVUO@k#CFGGmswKaMWPiweckyPCnUV#CFGaqFceUYwnYgkYRSJIjAu#CFGameMdKaERmacuSRGpqfw#CFGWyOwjOLobEuFOQOFiihE#CFGaqggxGbiZuyJcIPcPosl#CFGquhMFGDGoXGbMSCVmgmY#CFGgMRaIDiSXwgiaSmpWaOe#CFGaUMkpoeaTYWyKJsnMGuf#CFGqumEIGiARCWlkuAJyMKY#CFGgaagKGGqjigmoSEHaOaa#CFGqCUqHuQudokTGPocXoIu#CFGGoaGAhqgqbETCQTQgMaB;
 Строка DMA:
-dma DMAqGgMCIgefAuNwcLMKNir#DMAWGgMvUryBWgKFECRmFuL#DMAGuySWOvaimYdOFqfIdEq#DMAaMLIbqpUZuoZCbqmahoa#DMAqEiU@AVaTiOsXeVSILMj#DMAWGlebeHaPUuiwdytSiDa;
-
-Почему-то неработающие DMA (для 5th):
-dma DMAWGfMKaIKWdMuoxeidOtM;
-dma DMAqCikpGcWSkcgFkKfgPOx;
-
-
-
-
+dma DMAqGgMCIgefAuNwcLMKNir#DMAWGgMvUryBWgKFECRmFuL#DMAGuySWOvaimYdOFqfIdEq#DMAaMLIbqpUZuoZCbqmahoa#DMAqEiU@AVaTiOsXeVSILMj#DMAWGlebeHaPUuiwdytSiDa#DMAWGfMKaIKWdMuoxeidOtM#DMAqCikpGcWSkcgFkKfgPOx;
 
 
 Show me the money (memconfig -> "show me the money"):
