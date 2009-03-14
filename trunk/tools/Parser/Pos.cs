@@ -10,5 +10,12 @@ namespace Parsing
 			X = x;
 			Y = y;
 		}
+
+		public Pos(Reader r)
+		{
+			X = r.ReadNumber();
+			r.Ensure(" ");
+			Y = r.ReadNumber();
+		}
 	}
 }

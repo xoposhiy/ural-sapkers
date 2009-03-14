@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Parsing
 {
@@ -34,13 +35,22 @@ namespace Parsing
 
 		private PlayerResult[] ReadEndGame(Reader r)
 		{
-			throw new NotImplementedException();
+			r.Ensure("GEND ");
+			List<PlayerResult> res = new List<PlayerResult>();
+			res.Add(new PlayerResult(r));
+			if (r.Lookup() == ',')
+			{
+				r.Ensure(",");
+				res.Add(new PlayerResult(r));
+			}
+			return res.ToArray();
 		}
 
 
 		private int ReadEndRound(Reader r)
 		{
-			throw new NotImplementedException();
+			r.Ensure("REND ");
+			return r.ReadNumber();
 		}
 	}
 }

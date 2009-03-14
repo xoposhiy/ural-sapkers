@@ -12,5 +12,15 @@ namespace Parsing
 			Score = score;
 			Rank = rank;
 		}
+
+		public PlayerResult(Reader r)
+		{
+			r.Ensure("P");
+			PlayerNumber = r.ReadNumber();
+			r.Ensure(" ");
+			Score = r.ReadNumber();
+			r.Ensure(" ");
+			Rank = r.ReadNumber();
+		}
 	}
 }
