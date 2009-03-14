@@ -23,3 +23,7 @@ CFGgaagKGGqjigmoSEHaOaa -- За подсоединение спутников (sattelite on)
 DNA:
 CFGGoaGAhqgqbETCQTQgMaB -- ?
 DMAWGlebeHaPUuiwdytSiDa -- ?
+
+FIFTH:
+CFGaUMkpoeaTYWyKJsnMGuf -- "Numerical systems translate" module
+DMAWGfMKaIKWdMuoxeidOtM -- Запомнить, что эта задача решена
