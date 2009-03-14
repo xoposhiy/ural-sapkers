@@ -20,9 +20,12 @@ CFGaqFceUYwnYgkYRSJIjAu -- бо-о-о-о-онусы!
 DMAGuySWOvaimYdOFqfIdEq -- Sattelite control virus erasing has been approved.
 CFGameMdKaERmacuSRGpqfw -- Мир начинает сообщать о нестабильностях. При нестабильностях лучше держаться центра мира.
 CFGgaagKGGqjigmoSEHaOaa -- За подсоединение спутников (sattelite on)
-DNA:
-CFGGoaGAhqgqbETCQTQgMaB -- ?
-DMAWGlebeHaPUuiwdytSiDa -- ?
+см unstable-world.txt
+
+DNA Lab:
+Sensor configuration token : CFGGoaGAhqgqbETCQTQgMaB
+DNA processed token : DMAWGlebeHaPUuiwdytSiDa
+см sensors.txt
 
 FIFTH:
 CFGaUMkpoeaTYWyKJsnMGuf -- "Numerical systems translate" module
