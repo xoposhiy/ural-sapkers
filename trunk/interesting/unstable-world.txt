@@ -1,0 +1,10 @@
+Did you know, that this world is unstable?
+ Warnings about world collapse can be found in sattelites data :
+ info ::= ( <game-info> | <start-round-info> | <map-change-info> | <finish-round-info> | <finish-game-info> ) ';'
+ map-change-info ::= <time-part> '&' <players-part> '&' <changes-part> [ '&' <danger-part>]
+ danger-part ::= 'd' <sep> <danger-level>
+ danger-level ::= <number>
+
+ Watch out of high danger levels. Keep close to the center.
+
+ This will help you to be on the guard :CFGameMdKaERmacuSRGpqfw.
