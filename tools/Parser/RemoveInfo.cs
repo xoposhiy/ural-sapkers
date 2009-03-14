@@ -11,7 +11,12 @@ namespace Parsing
 			Pos = pos;
 		}
 
-		// По-моему это баг и ее быть не должно — нужно проверить...
-		//public readonly int DamagingRange;
+		public RemoveInfo(Reader r)
+		{
+			r.Ensure("-");
+			SubstanceType = r.ReadChar();
+			r.Ensure(" ");
+			Pos = new Pos(r);
+		}
 	}
 }

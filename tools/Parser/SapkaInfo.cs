@@ -20,5 +20,36 @@ namespace Parsing
 			Speed = speed;
 			Infected = infected;
 		}
+
+		public SapkaInfo(Reader r)
+		{
+			r.Ensure("P");
+			SapkaNumber = r.ReadNumber();
+			r.Ensure(" ");
+			if (r.Lookup() == 'd')
+			{
+				r.Ensure("dead");
+				IsDead = true;
+			}
+			else
+			{
+				Pos = new Pos(r);
+				r.Ensure(" ");
+				BombsLeft = r.ReadNumber();
+				r.Ensure(" ");
+				BombsStrength = r.ReadNumber();
+				r.Ensure(" ");
+				Speed = r.ReadNumber();
+				if (r.Lookup() == ' ')
+				{
+					r.Ensure(" i");
+					Infected = true;
+				}
+				else
+				{
+					Infected = false;
+				}
+			}
+		}
 	}
 }

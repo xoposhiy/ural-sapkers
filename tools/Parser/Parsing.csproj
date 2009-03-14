@@ -46,6 +46,7 @@
     <Compile Include="GameInfo_Test.cs" />
     <Compile Include="IParserListener.cs" />
     <Compile Include="MapChangeInfo.cs" />
+    <Compile Include="MapChangeInfo_Test.cs" />
     <Compile Include="MapInfo.cs" />
     <Compile Include="MapInfo_Test.cs" />
     <Compile Include="Parser.cs" />
