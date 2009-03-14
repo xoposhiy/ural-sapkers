@@ -4,6 +4,7 @@
 
 {{{
 Client
+
   command ::= [ <move-command> ] [ <action-command> ] ';'
   move-command ::= 'l' | 'r' | 'u' | 'd' | 's'
   action-command ::= 'b'
@@ -21,6 +22,7 @@ Server
   map-change-info ::= <time-part> '&' <sapkas-part> '&' <changes-part> [ '&' <danger-part>]
   time-part ::= 'T' <number>
 
+
   sapkas-part ::= <sapka-info> [ { ',' <sapka-info> } ]
   sapka-info ::= 'P' <number> <sep> ( <details> | 'dead' )
   details ::= <x-coord> <sep> <y-coord> <sep> <bombs-left> <sep> <bomb-strength> <sep> <speed> [ <sep> <infected> ]
@@ -33,8 +35,7 @@ Server
   changes-part ::= [ <change-info> [ { ',' <change-info> } ] ]
   change-info ::= <add-info> | <remove-info>
 
-  add-info ::= '+' ( <add-dangerous-substance> | <add-bonus-substance> | <add-hightemp-substance> | <add-destr-substance
-> | <add-indestr-substance> )
+  add-info ::= '+' ( <add-dangerous-substance> | <add-bonus-substance> | <add-hightemp-substance> | <add-destr-substance> | <add-indestr-substance> )
   add-dangerous-substance ::= '*' <sep> <cell-position> <sep> <damaging-range> <sep> <boom-time>
   add-bonus-substance ::= <bonus-type> <sep> <cell-position>
   add-destr-substance ::= 'w' <sep> <cell-position>
