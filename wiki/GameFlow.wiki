@@ -7,7 +7,7 @@
 
 
 == Протокол общения игроков с сервером ==
-1. Клиент и сервер посылают друг другу сообщения в строго определенном формате (см. [SapkaProtocol], TODO: подтянуть на страничку протокола все недостающие кусочки грамматики, найденные в различных местах сервера). Каждое сообщение/команда заверщается символом ';'.
+1. Клиент и сервер посылают друг другу сообщения в строго определенном формате (см. [SapkaProtocol]). Каждое сообщение/команда завершается символом ';'.
 
 2. Игра проходит в реальном (или почти реальном) времени. То есть никакой очередности в посылке сообщений нет - сервер живет по своим часам и независимо от действий клиента отправляет ему информацию о происходящих событиях.
 
@@ -26,17 +26,17 @@
 3. Изначально поле заполнено символами '.' (по-видимому, означает пустую клетку), 'w' (уничтожаемая субстанция), или 'X' (неуничтожаемая субстанция).
 
 4. По ходу игры на поле могут появляться и другие предметы:
- * '`*`' - бомба (dangerous substance, has constant life time).
+ * '`*`' - annihilator (dangerous substance, has constant life time).
  * '#' - high-temperature-substance (Extremely dangerous substance with high temperature. Has cross shape. With constant ray length.)
  * Позитивные бонусы:
-  * 'b' - TODO
-  * 'v' - TODO
-  * 'f' - TODO
+  * 'b' - consumable substance, than can be processed into annihilator
+  * 'v' - consumable substance, than affects engine speed
+  * 'f' - consumable substance, than affects annihilator strength
  * Остальные бонусы:
-  * 'r' - TODO
-  * 's' - TODO
-  * 'u' - TODO
-  * 'o' - TODO
+  * 'r' - consumable substance, than temporarly moving controls
+  * 's' - consumable substance, than temporarly decrease engine speed
+  * 'u' - consumable substance, than temporarly blocks ability to place anihilators
+  * 'o' - consumable substance, than temporarly significally decrease anihilator strength
  * '?' - обозначает объект неизвестного типа (в частности, когда игра начинается без включения конфигурационных токенов, то все непустые ячейки поля показываются вопросиками).
 
 
