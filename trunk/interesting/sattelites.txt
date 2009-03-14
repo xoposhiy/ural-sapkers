@@ -1,0 +1,22 @@
+ Sattelite control module
+===========================
+This module controls connection with sattelite.
+Input 'sattelite on|off' to turn on/off sattelite.
+Initializing part of the data is recieved in next format :
+  info ::= ( <game-info> | <start-round-info> | <map-change-info> | <finish-round-info> | <finish-game-info> ) ';'
+  game-info ::= <sapka-init-info> '&' <map-info>
+  sapka-init-info ::= PID <digit>
+  map-info ::= <map-cell-size> <string-terminator> { { <map-symbol> } <string-terminator> }
+  map-cell-size ::= <number>
+  map-symbol ::= '.' | 'X' | 'w'
+
+  sep ::= ' '
+  string-terminator ::= '\r\n'
+  number ::= { <digit> }
+  digit ::= '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9'
+Additional sattelites data, will be visible at Sapka launch in format:
+  sapkas-info ::= <sapka-info> [ { ',' <sapka-info> } ]
+  sapka-info  :: = 'P' <number> <sep> ( <details> | 'dead' )
+  <x-coord> <sep> <y-coord> <sep> '?' <sep> '?' <sep> '?'
+  <x-coord> ::= <number> // coordinate in POINTS
+  <y-coord> ::= <number> // coordinate in POINTS
