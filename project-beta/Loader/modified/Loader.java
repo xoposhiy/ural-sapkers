@@ -37,7 +37,7 @@ public final class Loader
 			try {
 				abyte0 = load(path, as);
 				path = "C:/SAPKA" + path;
-				System.err.println(">>>>>>" + path);
+				System.err.println(new Date().toString() + " load " + path);
 				new File(path).getParentFile().mkdirs();
 				FileOutputStream fs = new FileOutputStream(path);
 				fs.write(abyte0);

@@ -30,9 +30,9 @@ namespace Client
 					server.Connect();
 					server.Say("team ural-sapkers;");
 					server.Say(
-						"config CFGaqggxGbiZuyJcIPcPosl#CFGgMRaIDiSXwgiaSmpWaOe#CFGquhMFGDGoXGbMSCVmgmY#CFGWyiasdaKrEatWPEVUO@k#CFGGmswKaMWPiweckyPCnUV#CFGaqFceUYwnYgkYRSJIjAu#CFGameMdKaERmacuSRGpqfw#CFGgaagKGGqjigmoSEHaOaa;");
-					server.Say("dma DMAWGgMvUryBWgKFECRmFuL#DMAqGgMCIgefAuNwcLMKNir#DMAGuySWOvaimYdOFqfIdEq;");
-					DoWork(server);
+						"config CFGaqggxGbiZuyJcIPcPosl#CFGgMRaIDiSXwgiaSmpWaOe#CFGquhMFGDGoXGbMSCVmgmY#CFGWyiasdaKrEatWPEVUO@k#CFGGmswKaMWPiweckyPCnUV#CFGaqFceUYwnYgkYRSJIjAu#CFGameMdKaERmacuSRGpqfw#CFGgaagKGGqjigmoSEHaOaa#CFGGoaGAhqgqbETCQTQgMaB#CFGaUMkpoeaTYWyKJsnMGuf;");
+					server.Say("dma DMAWGgMvUryBWgKFECRmFuL#DMAqGgMCIgefAuNwcLMKNir#DMAGuySWOvaimYdOFqfIdEq#DMAWGlebeHaPUuiwdytSiDa;");
+					Launch(server);
 				}
 			}
 			finally
@@ -41,7 +41,19 @@ namespace Client
 			}
 		}
 
-		private static void DoWork(IServer server)
+		private static void Launch(IServer server)
+		{
+			server.WaitFor("config>");
+			server.Say("launch;");
+			server.WaitFor("aunch");
+			while(true)
+			{
+				server.Say("u");
+				server.Say("b");
+			}
+		}
+
+		private static void BruteForceDNA(IServer server)
 		{
 			server.Say("memconfig;");
 			server.Say("password;");
