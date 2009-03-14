@@ -26,18 +26,18 @@
 3. Изначально поле заполнено символами '.' (по-видимому, означает пустую клетку), 'w' (уничтожаемая субстанция), или 'X' (неуничтожаемая субстанция).
 
 4. По ходу игры на поле могут появляться и другие предметы:
-* '*' - бомба (dangerous substance, has constant life time).
-* '#' - high-temperature-substance (Extremely dangerous substance with high temperature. Has cross shape. With constant ray length.)
-* Позитивные бонусы:
+ * '`*`' - бомба (dangerous substance, has constant life time).
+ * '#' - high-temperature-substance (Extremely dangerous substance with high temperature. Has cross shape. With constant ray length.)
+ * Позитивные бонусы:
   * 'b' - TODO
   * 'v' - TODO
   * 'f' - TODO
-* Остальные бонусы:
+ * Остальные бонусы:
   * 'r' - TODO
   * 's' - TODO
   * 'u' - TODO
   * 'o' - TODO
-* '?' - обозначает объект неизвестного типа (в частности, когда игра начинается без включения конфигурационных токенов, то все непустые ячейки поля показываются вопросиками).
+ * '?' - обозначает объект неизвестного типа (в частности, когда игра начинается без включения конфигурационных токенов, то все непустые ячейки поля показываются вопросиками).
 
 
 == Команды клиента ==
