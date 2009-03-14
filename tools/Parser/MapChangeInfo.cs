@@ -4,13 +4,22 @@ namespace Parsing
 	{
 		public readonly int DangerLevel;
 		public readonly SapkaInfo[] Sapkas;
+		public readonly AddInfo[] Adds;
+		public readonly RemoveInfo[] Removes;
 		public readonly int Time;
 
-		public MapChangeInfo(int time, SapkaInfo[] sapkas, int dangerLevel)
+		public MapChangeInfo(int dangerLevel, SapkaInfo[] sapkas, AddInfo[] adds, RemoveInfo[] removes, int time)
 		{
-			Time = time;
-			Sapkas = sapkas;
 			DangerLevel = dangerLevel;
+			Sapkas = sapkas;
+			Adds = adds;
+			Removes = removes;
+			Time = time;
+		}
+
+		public MapChangeInfo(Reader r)
+		{
+			throw new System.NotImplementedException();
 		}
 	}
 }
