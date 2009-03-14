@@ -1,0 +1,16 @@
+Internal clock is configured to recognize notifications about starting the new round (START) and finishing the current one (REND).
+Format -->
+info ::= ( <game-info> | <start-round-info> | <map-change-info> | <finish-round-info> | <finish-game-info> ) ';'
+start-round-info ::= 'START' <number> '&' <map-info>
+finish-round-info ::= 'REND' <sep> <score>
+sep ::= ' '
+score ::= <number>
+
+Extended clock routines are synchronized with the remote server and can parse ti
+me of events.
+Format -->
+map-change-info ::= <time-part> '&' <sapkas-part> '&' <changes-part> [ '&' <danger-part>]
+time-part ::= 'T' <number>
+
+Number after 'T' defines the internal server time (in ticks). One tick is about 50 milliseconds.
+Server analyzes data sent from Sapka-clients every tick during the game. After analyzing it sends response to the Sapka-client that starts with 'T' <number> as a rule.
