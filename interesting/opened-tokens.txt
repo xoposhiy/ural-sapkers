@@ -13,9 +13,11 @@ Clock: (clock)
 CFGWyiasdaKrEatWPEVUO@k -- базовые часы
 CFGGmswKaMWPiweckyPCnUV -- расширенные часы
 
+AAR (aar):
+CFGaqFceUYwnYgkYRSJIjAu -- бо-о-о-о-онусы!
+
 Поддавки с богом (sattelite)
 DMAGuySWOvaimYdOFqfIdEq -- Sattelite control virus erasing has been approved.
-
 CFGameMdKaERmacuSRGpqfw -- Мир начинает сообщать о нестабильностях. При нестабильностях лучше держаться центра мира.
-
 CFGgaagKGGqjigmoSEHaOaa -- За подсоединение спутников (sattelite on)
+
