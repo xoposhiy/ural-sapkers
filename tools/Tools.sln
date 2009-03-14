@@ -5,6 +5,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CaesarDecipher", "CaesarDec
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Client", "Client\Client.csproj", "{76BCD694-A7CD-4A53-875B-4768390BB879}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Parsing", "Parser\Parsing.csproj", "{991AA3AA-F4A1-446A-A45C-7FAB4EAEEB87}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -19,6 +21,10 @@ Global
 		{76BCD694-A7CD-4A53-875B-4768390BB879}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{76BCD694-A7CD-4A53-875B-4768390BB879}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{76BCD694-A7CD-4A53-875B-4768390BB879}.Release|Any CPU.Build.0 = Release|Any CPU
+		{991AA3AA-F4A1-446A-A45C-7FAB4EAEEB87}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{991AA3AA-F4A1-446A-A45C-7FAB4EAEEB87}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{991AA3AA-F4A1-446A-A45C-7FAB4EAEEB87}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{991AA3AA-F4A1-446A-A45C-7FAB4EAEEB87}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
