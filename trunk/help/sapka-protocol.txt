@@ -10,14 +10,12 @@ Server
 
   game-info ::= <sapka-init-info> '&' <map-info>
   sapka-init-info ::= PID <digit>
-  map-info ::= <map-cell-size> <string-terminator> { { <map-symbol> } <string-terminator>}
+  map-info ::= <map-cell-size> <string-terminator> { { <map-symbol> } <string-terminator> }
   map-cell-size ::= <number>
   map-symbol ::= '.' | 'X' | 'w'
-//Destructable substance found. Identifier - 'w'.
-//Indestructable substance found. Identifier - 'X'.
 
   start-round-info ::= 'START' <number> '&' <map-info>
-  map-change-info ::= <time-part> '&' <players-part> '&' <changes-part> [ '&' <danger-part>]
+  map-change-info ::= <time-part> '&' <sapkas-part> '&' <changes-part> [ '&' <danger-part>]
   time-part ::= 'T' <number>
 
 
@@ -39,20 +37,16 @@ Server
   add-destr-substance ::= 'w' <sep> <cell-position>
   add-indestr-substance ::= 'X' <sep> <cell-position>
   add-hightemp-substance ::= '#' <sep> <cell-position> <sep> <damaging-range> <sep> <end-time>
-//Extremely dangerous substance with high temperature. Identifier - '#'. Has cross shape. With constant ray length.
   boom-time ::= <number>
   end-time ::= <number>
 
   remove-info ::= '-' ( <remove-dangerous-substance> | <remove-bonus-substance> | <remove-hightemp-substance> | <remove-destr-substance> )
   remove-dangerous-substance ::= '*' <sep> <cell-position>
-//Unknown, possibly dangerous substance found. Identifier - '*'. Has constant life time.
   remove-bonus-substance ::= <bonus-type> <sep> <cell-position>
   remove-hightemp-substance ::= '#' <sep> <cell-position> <sep> <damaging-range>
   remove-destr-substance ::= 'w' <sep> <cell-position>
 
   bonus-type ::= 'b' | 'v' | 'f' | 'r' | 's' | 'u' | 'o' | '?'
-//Potentially positive substance found. Has several types. Identifiers - 'b', 'f', 'v', '?'.
-//'?' - unknown substance type. Possibly positive.  Need deeper analysis through Gryc's Science approach.
   damaging-range ::= <number>
   cell-position ::= <x-cell> <sep> <y-cell>
   x-cell ::= <number>
