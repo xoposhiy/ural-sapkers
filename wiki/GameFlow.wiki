@@ -30,14 +30,14 @@
  * '`*`' - annihilator (dangerous substance, has constant life time).
  * '#' - high-temperature-substance (Extremely dangerous substance with high temperature. Has cross shape. With constant ray length.)
  * Позитивные бонусы:
-  * 'b' - consumable substance, than can be processed into annihilator
-  * 'v' - consumable substance, than affects engine speed
-  * 'f' - consumable substance, than affects annihilator strength
+  * 'b' - consumable substance, that can be processed into annihilator
+  * 'v' - consumable substance, that affects engine speed
+  * 'f' - consumable substance, that affects annihilator strength
  * Остальные бонусы:
-  * 'r' - consumable substance, than temporarly moving controls
-  * 's' - consumable substance, than temporarly decrease engine speed
-  * 'u' - consumable substance, than temporarly blocks ability to place anihilators
-  * 'o' - consumable substance, than temporarly significally decrease anihilator strength
+  * 'r' - consumable substance, that temporarly moving controls
+  * 's' - consumable substance, that temporarly decrease engine speed
+  * 'u' - consumable substance, that temporarly blocks ability to place anihilators
+  * 'o' - consumable substance, that temporarly significally decrease anihilator strength
  * '?' - обозначает объект неизвестного типа (в частности, когда игра начинается без включения конфигурационных токенов, то все непустые ячейки поля показываются вопросиками).
 
 
