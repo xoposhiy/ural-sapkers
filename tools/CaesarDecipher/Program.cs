@@ -10,9 +10,12 @@ namespace CaesarDecipher
 
 		static void Main(string[] args)
 		{
-			DecodeFile("encoded.txt", "decoded.txt");
+			string inputFile = args.Length > 0 ? args[0] : "encoded.txt";
+			string outputFile = args.Length > 1 ? args[1] : "decoded.txt";
+			DecodeFile(inputFile, outputFile);
 			//Console.WriteLine(DecodeString("sJ3:;0VJD:@J69:BVJB3,?J?30Jm,0>,=J.34;0=J4>"));
-			//Console.ReadKey();
+			//Console.WriteLine(DecodeString("Js9J.=D;?:2=,;3DVJ,Jm,0>,=J.4;30=VJ,7>:J69:B9J,>J,Jm,0>,=Q>J.4;30=V"));
+			Console.ReadKey();
 		}
 
         private static string DecodeString(string encoded)
