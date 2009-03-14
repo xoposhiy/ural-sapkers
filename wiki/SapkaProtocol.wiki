@@ -4,7 +4,6 @@
 
 {{{
 Client
-
   command ::= [ <move-command> ] [ <action-command> ] ';'
   move-command ::= 'l' | 'r' | 'u' | 'd' | 's'
   action-command ::= 'b'
