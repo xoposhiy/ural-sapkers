@@ -1,0 +1,2 @@
+Sometimes viruses can turn the world head over heels.
+Especially they like to replace '+' with '-' or '<' with '>'.
