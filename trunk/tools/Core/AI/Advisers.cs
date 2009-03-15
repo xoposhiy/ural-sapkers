@@ -67,7 +67,9 @@ namespace Core.AI
 					if (countWalls > 0)
 					{
 						Console.Write("({0}, {1}) ", i, j);
-						r.Add(new Decision(ds[i, j], new Pos(i, j), ds[i, j].Size() == 0, ds[i, j].Size() + 1, countWalls * 10));
+						var decision = new Decision(ds[i, j], new Pos(i, j), ds[i, j].Size() == 0, ds[i, j].Size() + 1, countWalls * 10);
+						decision.Name = "WallBreaker";
+						r.Add(decision);
 					} else
 					{
 						Console.WriteLine("(bad: ({0}, {1}))", i, j);
