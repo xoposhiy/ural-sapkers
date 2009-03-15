@@ -1,5 +1,6 @@
 using System;
 using Core;
+using Core.AI;
 
 namespace TheSapka
 {
@@ -13,8 +14,11 @@ namespace TheSapka
 
 		public override string GetMove()
 		{
-			const string s = "urdlb";
-			return (s[r.Next(5)]) + ";";
+			Decision decision = new Chief(GameState).MakeDecision();
+			string res = (decision.Path == null ? 's' : decision.Path.FirstMove()).ToString();
+			if(decision.PutBomb) res += "b";
+			return res;
 		}
 	}
+
 }

@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System;
 
-namespace Core
+namespace Core.PathFinding
 {
 	public class Path : IPath
 	{
