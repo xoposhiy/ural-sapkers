@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="3.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -8,7 +8,7 @@
     <ProjectGuid>{70027960-8509-43A9-AD2F-B6F918D243B7}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Sapka</RootNamespace>
+    <RootNamespace>TheSapka</RootNamespace>
     <AssemblyName>Sapka</AssemblyName>
     <TargetFrameworkVersion>v3.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -21,9 +21,6 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <EnvironmentVariables>
-      <EnvironmentVariables />
-    </EnvironmentVariables>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -42,9 +39,12 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Sapka.cs" />
-    <Compile Include="Info.cs" />
-    <Compile Include="Bomb.cs" />
-    <Compile Include="Explosion.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Parser\Parsing.csproj">
+      <Project>{991AA3AA-F4A1-446A-A45C-7FAB4EAEEB87}</Project>
+      <Name>Parsing</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
@@ -54,10 +54,4 @@
   <Target Name="AfterBuild">
   </Target>
   -->
-  <ItemGroup>
-    <ProjectReference Include="..\Parser\Parsing.csproj">
-      <Project>{991AA3AA-F4A1-446A-A45C-7FAB4EAEEB87}</Project>
-      <Name>Parsing</Name>
-    </ProjectReference>
-  </ItemGroup>
 </Project>

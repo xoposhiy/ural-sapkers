@@ -16,6 +16,8 @@ namespace Visualizer
 			InitializeComponent();
 			InitTimer();
 			DoubleBuffered = true;
+			fieldPaddingX = Gap;
+			fieldPaddingY = 100;
 		}
 
 		private void InitTimer()
@@ -65,7 +67,7 @@ namespace Visualizer
 			AddAction(() =>
 				{
 					fieldPaddingX = Gap;
-					fieldPaddingY = (Height - totalHeight)/2;
+					//fieldPaddingY = (Height - totalHeight)/2;
 
 					if (tvInfo == null)
 					{
@@ -74,7 +76,11 @@ namespace Visualizer
 
 					foreach (var sapka in mapChangeInfo.Sapkas)
 					{
-						if (sapka.IsDead) continue;
+						if (sapka.IsDead)
+						{
+							sapkaInfos[sapka.SapkaNumber].IsDead = true;
+							continue;
+						}
 						sapkaInfos[sapka.SapkaNumber] = sapka;
 					}
 					foreach (var remove in mapChangeInfo.Removes)
@@ -140,7 +146,7 @@ namespace Visualizer
 				}
 			}
 			var roundString = currentRound > 0 ? "Раунд " + currentRound : "Игра не идёт";
-			var font = new Font(FontFamily.GenericSansSerif, 72);
+			var font = new Font(FontFamily.GenericSansSerif, 48);
 			var areaNeeded = e.Graphics.MeasureString(roundString, font);
 			e.Graphics.DrawString(roundString, font, Brushes.Black, (Width - areaNeeded.Width)/2, 0);
 			DrawMap(e.Graphics);
@@ -157,6 +163,7 @@ namespace Visualizer
 
 		private void DrawMap(Graphics gr)
 		{
+			if(currentMap == null) return;
 			for (int x = 0; x < currentMap.GetLength(0); x++)
 			{
 				for (int y = 0; y < currentMap.GetLength(1); y++)
@@ -240,6 +247,7 @@ namespace Visualizer
 
 		private void InitPictures()
 		{
+			if(typeToPicture.Count > 0) return;
 			foreach (var key in new[] {'b', 'v', 'f'})
 			{
 				AddPictureForBonus(key, true);
@@ -266,9 +274,13 @@ namespace Visualizer
 				{
 					key = '#';
 				}
-				else if (stripped.StartsWith("asterisk"))
+				else if(stripped.StartsWith("asterisk"))
 				{
 					key = '*';
+				}
+				else if(stripped.StartsWith("unknown"))
+				{
+					key = '?';
 				}
 				else
 				{
@@ -330,7 +342,7 @@ namespace Visualizer
 		private int fieldPaddingX;
 		private int fieldPaddingY;
 
-		private const string PicturesDirectory = @"..\..\Pictures";
+		private const string PicturesDirectory = @"Pictures";
 		private const int MaxSapkaCount = 4;
 		private const int Gap = 30;
 		private int currentRound;
@@ -349,5 +361,11 @@ namespace Visualizer
 				Color.Brown,
 				Color.Yellow
 			};
+	}
+
+	internal class VisualizerSapkaInfo
+	{
+		public int Score;
+		public int Rank;
 	}
 }
