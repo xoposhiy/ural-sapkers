@@ -36,7 +36,7 @@
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(284, 264);
 			this.Name = "Visualizer";
-			this.Text = "Visualizer";
+			this.Text = "— И ещё сапочку!";
 			this.Paint += new System.Windows.Forms.PaintEventHandler(this.Visualizer_Paint);
 			this.ResumeLayout(false);
 
