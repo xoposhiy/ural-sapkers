@@ -14,7 +14,7 @@ namespace Visualizer
 {
 	public partial class Visualizer : Form, IParserListener
 	{
-		private ISapkaServerLogger logger_;
+		private readonly ISapkaServerLogger logger_;
 
 		public Visualizer(ISapkaServerLogger logger)
 		{
@@ -407,6 +407,16 @@ namespace Visualizer
 			StartZombie(20016);
 		}
 
+		private void наПорт20017ToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			StartZombie(20017);
+		}
+
+		private void наПорт20018ToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			StartZombie(20018);
+		}
+
 		private void чёЗаЗомбиЕщё0оToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			MessageBox.Show(this, "Зомби — это сапка, управляемая клавиатурой (курсоры + SPACE)\r\nEnjoy!", "Зомби?!?");
@@ -425,6 +435,16 @@ namespace Visualizer
 		private void на20016ToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			StartDummy(20016);
+		}
+
+		private void на20017ToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			StartDummy(20017);
+		}
+
+		private void на20018ToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			StartDummy(20018);
 		}
 
 	}
