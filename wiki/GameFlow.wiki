@@ -32,15 +32,15 @@
  * '`*`' - Бомба, поставленная одним из игроков. Взрывается через 40 тиков после постановки.
  * '#' - Взрыв бомбы. Держится 3 тика. Распространяется лучами в четыре стороны на заданное расстояние.
  * Позитивные бонусы:
-  * 'b' - consumable substance, that can be processed into annihilator
+  * 'b' - добавляет +1 к оставшимся у игрока бомбам (при этом бомбы видимо выдаются пакетами, поскольку с запасом бомб =1 можно установить несколько бомб).
   * 'v' - consumable substance, that affects engine speed
   * 'f' - consumable substance, that affects annihilator strength
  * Остальные бонусы:
-  * 'r' - consumable substance, that temporarly moving controls
+  * 'r' - временно инвертирует команды движения сапки ('l' приводит к движению вправо).
   * 's' - consumable substance, that temporarly decrease engine speed
   * 'u' - consumable substance, that temporarly blocks ability to place anihilators
   * 'o' - consumable substance, that temporarly significally decrease anihilator strength
- * '?' - обозначает объект неизвестного типа (в частности, когда игра начинается без включения конфигурационных токенов, то все непустые ячейки поля показываются вопросиками).
+ * '?' - обозначает бонус неизвестного типа.
 
 Иногда случается коллапс мира (по таймауту?) — поле сжимается по спирали. Сервер об этом сигнализирует с помощью DangerLevel. Во время коллапса лучше держаться ближе к центру поля.
 
