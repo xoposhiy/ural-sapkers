@@ -17,7 +17,6 @@ namespace Core.StateCalculations
 
 		public void OnGameStart(GameInfo gameInfo)
 		{
-			Time = 0;
 			DangerLevel = 0;
 			Me = gameInfo.PID;
 			CellSize = gameInfo.MapInfo.MapCellSize;
@@ -26,7 +25,6 @@ namespace Core.StateCalculations
 
 		public void OnRoundStart(StartRoundInfo startRoundInfo)
 		{
-			Time = 0;
 			DangerLevel = 0;
 			RoundNumber = startRoundInfo.RoundNumber;
 			CellSize = startRoundInfo.MapInfo.MapCellSize;
@@ -87,7 +85,9 @@ namespace Core.StateCalculations
 					//TODO Не учитывается взаимодетонация бомб
 					int xx = x + dx[dir] * r;
 					int yy = y + dy[dir] * r;
-					if(Map[xx, yy].IsUnbreakableWall) break;
+					if(xx < 0 || xx >= Map.GetLength(0) ||
+					   yy < 0 || yy >= Map.GetLength(1) || 
+					   Map[xx, yy].IsUnbreakableWall) break;
 					if(Map[xx, yy].IsBreakableWall)
 					{
 						Map[xx, yy] = Map[xx, yy].MakeDeadly(startTime, endTime);
