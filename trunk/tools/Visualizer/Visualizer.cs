@@ -14,8 +14,12 @@ namespace Visualizer
 {
 	public partial class Visualizer : Form, IParserListener
 	{
-		public Visualizer()
+		private ISapkaServerLogger logger_;
+
+		public Visualizer(ISapkaServerLogger logger)
 		{
+			logger_ = logger;
+
 			InitializeComponent();
 			InitTimer();
 			DoubleBuffered = true;
@@ -115,6 +119,7 @@ namespace Visualizer
 						scores[playerId] = new VisualizerSapkaInfo();
 					}
 					scores[playerId].Score = score;
+					logger_.Flush();
 				});
 		}
 
@@ -132,6 +137,7 @@ namespace Visualizer
 						scores[result.PlayerNumber].Rank = result.Rank;
 					}
 					currentRound = 0;
+					logger_.Flush();
 				});
 		}
 
