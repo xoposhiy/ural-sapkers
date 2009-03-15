@@ -42,6 +42,7 @@ namespace Visualizer
 				}
 				catch (SocketException)
 				{
+					logger.Flush();
 					Thread.Sleep(500);
 				}
 			}
