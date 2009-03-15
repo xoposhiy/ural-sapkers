@@ -44,7 +44,7 @@ namespace Core.StateCalculations
 				true,
 				true,
 				timeStart < DeadlySince ? timeStart : DeadlySince,
-				timeStart < DeadlySince ? timeEnd : DeadlyTill, //TODO Косяк с равенством Since и не равенством Till
+				timeStart < DeadlySince ? timeEnd : DeadlyTill, //TODO РљРѕСЃСЏРє СЃ СЂР°РІРµРЅСЃС‚РІРѕРј Since Рё РЅРµ СЂР°РІРµРЅСЃС‚РІРѕРј Till
 				timeStart < DeadlySince ? timeEnd : DeadlyTill,
 				Bonus);
 		}
@@ -56,7 +56,7 @@ namespace Core.StateCalculations
 				IsBreakableWall,
 				IsEmpty,
 				timeStart < DeadlySince ? timeStart : DeadlySince,
-				timeStart < DeadlySince ? timeEnd : DeadlyTill, //TODO Косяк с равенством Since и не равенством Till
+				timeStart < DeadlySince ? timeEnd : DeadlyTill, //TODO РљРѕСЃСЏРє СЃ СЂР°РІРµРЅСЃС‚РІРѕРј Since Рё РЅРµ СЂР°РІРµРЅСЃС‚РІРѕРј Till
 				timeStart < DeadlySince ? timeEnd : DeadlyTill,
 				Bonus);
 		}

@@ -26,19 +26,19 @@ namespace Core.PathFinding
 			int n = map.GetLength(0)*cellSize;
 			int m = map.GetLength(1)*cellSize;
 			var dist = new Path[n,m,2];
-			dist[x0, y0, 0] = new Path(null, ' ', 0);
+			dist[x0, y0, 0] = new Path(null, 's', 0);
 			q.Add(new Node(x0, y0, 0, dist[x0, y0, 0]));
 			while (q.Count > 0)
 			{
 				Node node = q.RemoveFirst();
 				MapCell cell0 = map[node.X/cellSize, node.Y/cellSize];
-				//Console.WriteLine("({0}, {1}) {2} {3}", node.X, node.Y, prohibited(cell0), node.Path.Size());
 				for (int d = 0; d < 4; ++d)
 				{
 					int x = node.X + dx[d]*speed;
 					int y = node.Y + dy[d]*speed;
 					while ((x != node.X || y != node.Y) &&
-					       (x < 0 || x >= n || y < 0 || y >= m || prohibited(map[x/cellSize, y/cellSize])))
+					       (x < 0 || x >= n || y < 0 || y >= m || 
+					        prohibited(map[x/cellSize, y/cellSize])))
 					{
 						x -= dx[d];
 						y -= dy[d];
@@ -50,17 +50,17 @@ namespace Core.PathFinding
 					MapCell cell = map[x/cellSize, y/cellSize];
 					int timeCur = time0 + node.Path.Size();
 					int time = timeCur;
-					if (cell.IsBreakableWall)
+					if (cell.IsBreakableWall && cell.EmptySince < int.MaxValue)
 					{
-						time = Math.Min(time, cell.EmptySince);
+						time = Math.Max(time, cell.EmptySince);
 					}
-					if (cell.EmptySince == cell.DeadlySince && cell0 != cell)
+					if (cell.EmptySince < int.MaxValue && cell.EmptySince == cell.DeadlySince && cell0 != cell)
 					{
-						time = Math.Min(time, cell.EmptySince);
+						time = Math.Max(time, cell.EmptySince);
 					}
 					if (time + 1 >= cell.DeadlySince)
 					{
-						time = Math.Min(time, cell.DeadlyTill);
+						time = Math.Max(time, cell.DeadlyTill);
 					}
 					if (time0 <= cell0.DeadlyTill && cell0.DeadlySince <= time)
 					{
