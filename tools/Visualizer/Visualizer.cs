@@ -172,18 +172,39 @@ namespace Visualizer
 		{
 			if(currentMap == null) return;
 			for (int x = 0; x < currentMap.GetLength(0); x++)
-			{
+				for (int y = 0; y < currentMap.GetLength(1); y++)
+					DrawCell(x, y, currentMap[x, y], gr);
+
+			//отрисовка взрыва
+			for (int x = 0; x < currentMap.GetLength(0); x++)
 				for (int y = 0; y < currentMap.GetLength(1); y++)
 				{
-					DrawCell(x, y, currentMap[x, y], gr, true);
+					if (currentMap[x, y] != '#') continue;
+					DrawDamageLine(gr, x, y, 1, 0);
+					DrawDamageLine(gr, x, y, -1, 0);
+					DrawDamageLine(gr, x, y, 0, 1);
+					DrawDamageLine(gr, x, y, 0, -1);
 				}
-			}
+
 			foreach (var pair in sapkaInfos)
 			{
 				DrawCoord(pair.Value.Pos.X, pair.Value.Pos.Y, (char) pair.Key, gr);
 			}
 		}
-		
+
+		private void DrawDamageLine(Graphics gr, int x, int y, int dx, int dy)
+		{
+			for (int d = 1; d <= damagingRanges[x, y]; d++)
+			{
+				int nextX = x + d * dx;
+				int nextY = y + d * dy;
+                if (!GoodPos(nextX, nextY, widthInCells, heightInCells)) break;
+				if (currentMap[nextX, nextY] == 'X') break;
+				DrawCell(nextX, nextY, '#', gr);
+				if (currentMap[nextX, nextY] != '.') break;
+			}
+		}
+
 		private void InitStatsTreeView()
 		{
 			tvInfo = new TreeView
@@ -229,20 +250,10 @@ namespace Visualizer
 			tvInfo.EndUpdate();
 		}
 
-		private void DrawCell(int x, int y, char type, Graphics gr, bool shouldRecurse)
+		private void DrawCell(int x, int y, char type, Graphics gr)
 		{
 			if (!GoodPos(x, y, widthInCells, heightInCells)) return;
 			DrawPicture(type, x*PictureSize, y*PictureSize, PictureSize, PictureSize, gr);
-			if (type == '#' && shouldRecurse)
-			{
-				for (int d = 1; d <= damagingRanges[x, y]; d++)
-				{
-					DrawCell(x + d, y, type, gr, false);
-					DrawCell(x - d, y, type, gr, false);
-					DrawCell(x, y + d, type, gr, false);
-					DrawCell(x, y - d, type, gr, false);
-				}
-			}
 		}
 
 		private void DrawCoord(int x, int y, char type, Graphics gr)
