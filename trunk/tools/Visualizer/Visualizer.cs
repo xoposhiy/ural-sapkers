@@ -261,14 +261,6 @@ namespace Visualizer
 		private void InitPictures()
 		{
 			if(typeToPicture.Count > 0) return;
-			foreach (var key in new[] {'b', 'v', 'f'})
-			{
-				AddPictureForBonus(key, true);
-			}
-			foreach (var key in new[] {'r', 's', 'u', 'o'})
-			{
-				AddPictureForBonus(key, false);
-			}
 			for (int i = 0; i < MaxSapkaCount; i++)
 			{
 				AddPictureForSapka((char) i, sapkaBrushes[i]);
@@ -301,15 +293,6 @@ namespace Visualizer
 				}
 				typeToPicture.Add(key, picture);
 			}
-		}
-
-		private void AddPictureForBonus(char key, bool good)
-		{
-			AddPicture(key, gr =>
-				{
-					gr.FillRectangle(Brushes.Green, new Rectangle(0, 0, PictureSize, PictureSize));
-					gr.DrawString(key.ToString(), DefaultFont, good ? Brushes.Blue : Brushes.Red, PictureSize / 4.0f, PictureSize / 4.0f);
-				}, PictureSize);
 		}
 
 		private void AddPictureForSapka(char key, Brush br)
