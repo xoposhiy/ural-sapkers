@@ -5,7 +5,7 @@ namespace Parsing
 		public readonly int BombsLeft;
 		public readonly int BombsStrength;
 		public readonly bool Infected;
-		public readonly bool IsDead;
+		public bool IsDead;
 		public readonly Pos Pos;
 		public readonly int SapkaNumber;
 		public readonly int Speed;

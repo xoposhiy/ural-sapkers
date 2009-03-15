@@ -58,6 +58,7 @@
     <Compile Include="Reader_Test.cs" />
     <Compile Include="RemoveInfo.cs" />
     <Compile Include="SapkaInfo.cs" />
+    <Compile Include="SapkaServer.cs" />
     <Compile Include="StartRoundInfo.cs" />
   </ItemGroup>
   <ItemGroup>

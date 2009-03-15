@@ -61,7 +61,7 @@ wwwwwwwwwww
 		public void TestParse()
 		{
 			string[] messages = TestInput.Split(';');
-			var parser = new Parser(new ParserListener());
+			var parser = new Parser(new DummyParserListener());
 			foreach (string message in messages)
 			{
 				parser.ParseMessage(message + ';');
@@ -69,7 +69,7 @@ wwwwwwwwwww
 		}
 	}
 
-	internal class ParserListener : IParserListener
+	public class DummyParserListener : IParserListener
 	{
 		#region IParserListener Members
 
