@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{278E2132-B260-4EB1-B11D-AA78E98699EA}</ProjectGuid>
     <OutputType>WinExe</OutputType>
@@ -86,15 +86,22 @@
     <Content Include="Pictures\asterisk.bmp">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Pictures\b.bmp" />
     <Content Include="Pictures\dot.bmp">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Pictures\f.bmp" />
+    <Content Include="Pictures\o.bmp" />
+    <Content Include="Pictures\r.bmp" />
+    <Content Include="Pictures\s.bmp" />
     <Content Include="Pictures\sharp.bmp">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Pictures\u.bmp" />
     <Content Include="Pictures\unknown.bmp">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Pictures\v.bmp" />
     <Content Include="Pictures\w.bmp">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
