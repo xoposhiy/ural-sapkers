@@ -1,6 +1,8 @@
 using System;
 using System.Net.Sockets;
+using System.Threading;
 using Core.Parsing;
+using Core.StateCalculations;
 
 namespace Core
 {
@@ -14,11 +16,15 @@ namespace Core
 		{
 			this.teamName = teamName;
 			sapkaServer = new SapkaServer(host, port);
-			parser = new Parser(new DummyParserListener());
+			GameState = new GameState();
+			parser = new Parser(GameState);
 		}
+
+		public GameState GameState { get; private set; }
 
 		public void Run()
 		{
+			Thread.Sleep(500);
 			sapkaServer.Say("launch " + teamName +
 			                " CFGWyiasdaKrEatWPEVUO@k#CFGGmswKaMWPiweckyPCnUV#CFGaqFceUYwnYgkYRSJIjAu#CFGameMdKaERmacuSRGpqfw#CFGWyOwjOLobEuFOQOFiihE#CFGaqggxGbiZuyJcIPcPosl#CFGquhMFGDGoXGbMSCVmgmY#CFGgMRaIDiSXwgiaSmpWaOe#CFGaUMkpoeaTYWyKJsnMGuf#CFGqumEIGiARCWlkuAJyMKY#CFGgaagKGGqjigmoSEHaOaa#CFGqCUqHuQudokTGPocXoIu#CFGGoaGAhqgqbETCQTQgMaB;");
 			try
@@ -41,6 +47,7 @@ namespace Core
 
 		private void MakeMove()
 		{
+			if (GameState.Sapkas == null) return;
 			sapkaServer.Say(GetMove() + ";");
 		}
 
@@ -53,7 +60,7 @@ namespace Core
 		private void ProcessMessage(string s)
 		{
 			parser.ParseMessage(s);
-			Console.WriteLine(s);
+			Console.WriteLine(this.GetHashCode() + " " + s);
 		}
 	}
 }
