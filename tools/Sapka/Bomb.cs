@@ -1,7 +1,7 @@
 using System;
 using Parsing;
 
-namespace Sapka
+namespace TheSapka
 {
 	public class Bomb
 	{
