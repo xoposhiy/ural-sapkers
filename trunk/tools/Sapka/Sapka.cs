@@ -17,6 +17,7 @@ namespace TheSapka
 			Decision decision = new Chief(GameState).MakeDecision();
 			string res = (decision.Path == null ? 's' : decision.Path.FirstMove()).ToString();
 			if(decision.PutBomb) res += "b";
+			Console.WriteLine("move = {0}, path len = {1}", res, decision.Path == null ? -1 : decision.Path.Size());
 			return res;
 		}
 	}
