@@ -12,7 +12,7 @@ namespace Core.PathFinder
 		
 		private static readonly int[] dx = new int[] {-1, 1, 0, 0};
 		private static readonly int[] dy = new int[] {0, 0, -1, 1};
-		private static readonly string dir = "lrud"; //TODO fix directions
+		private static readonly string dir = "udlr"; //TODO fix directions
 		
 		public PathFinder()
 		{
@@ -26,8 +26,7 @@ namespace Core.PathFinder
 		
 		private bool prohibited(MapCell cell)
 		{
-			return cell.IsUnbreakableWall || cell.IsBreakableWall && cell.EmptySince > 1000000;
-			//TODO нормальное условие на EmptySince
+			return cell.IsUnbreakableWall || cell.IsBreakableWall && cell.EmptySince == int.MaxValue;
 		}
 	
 		public IPath[,] FindPaths(int x0, int y0, int time0, int speed)
@@ -42,6 +41,7 @@ namespace Core.PathFinder
 			{
 				Node node = q.RemoveFirst();
 				MapCell cell0 = map[node.X / cellSize, node.Y / cellSize];
+				//Console.WriteLine("({0}, {1}) {2} {3}", node.X, node.Y, prohibited(cell0), node.Path.Size());
 				for (int d = 0; d < 4; ++d)
 				{
 					int x = node.X + dx[d] * speed;
@@ -63,11 +63,10 @@ namespace Core.PathFinder
 					{
 						time = Math.Min(time, cell.EmptySince);
 					}
-					/*if (cell.Bomb && cell0 != cell)
+					if (cell.EmptySince == cell.DeadlySince && cell0 != cell)
 					{
 						time = Math.Min(time, cell.EmptySince);
-					}*/
-					//TODO
+					}
 					if (time + 1 >= cell.DeadlySince)
 					{
 						time = Math.Min(time, cell.DeadlyTill);
@@ -77,8 +76,8 @@ namespace Core.PathFinder
 						continue;
 					}
 					int after = time >= cell0.DeadlyTill ? 1 : 0;
-					Add(x, y, after, dist, q, new Path(new Path(node.Path, 's', time - time0), dir[d], 1));
-					if (after == 0 && cell.DeadlyTill <= 1000000) //TODO
+					Add(x, y, after, dist, q, new Path(new Path(node.Path, 's', time - timeCur), dir[d], 1));
+					if (after == 0 && cell.DeadlyTill < int.MaxValue)
 					{
 						after = 1;
 						time = Math.Min(time, cell.DeadlyTill);
@@ -86,7 +85,7 @@ namespace Core.PathFinder
 						{
 							continue;
 						}
-						Add(x, y, after, dist, q, new Path(new Path(node.Path, 's', time - time0), dir[d], 1));
+						Add(x, y, after, dist, q, new Path(new Path(node.Path, 's', time - timeCur), dir[d], 1));
 					}
 				}
 			}
