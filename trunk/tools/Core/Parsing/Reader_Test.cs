@@ -1,5 +1,4 @@
-﻿#if DEBUG
-using NUnit.Framework;
+﻿using NUnit.Framework;
 
 namespace Core.Parsing
 {
@@ -34,4 +33,3 @@ namespace Core.Parsing
 	}
 }
 
-#endif

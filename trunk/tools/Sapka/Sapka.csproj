@@ -37,7 +37,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Bomb.cs" />
-    <Compile Include="DummySapka.cs" />
     <Compile Include="Explosion.cs" />
     <Compile Include="Info.cs" />
     <Compile Include="Program.cs" />
