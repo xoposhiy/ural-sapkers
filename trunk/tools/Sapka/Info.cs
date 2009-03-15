@@ -2,9 +2,8 @@ using System;
 using Parsing;
 using System.Collections.Generic;
 
-namespace Sapka
+namespace TheSapka
 {
-	
 	public class Info : IParserListener
 	{
 		public static int[] DX = new int[] {-1, 1, 0, 0};
@@ -100,7 +99,7 @@ namespace Sapka
 			}
 		}
 		
-#region IParserListener members
+		#region IParserListener members
 		
 		public void OnGameStart(GameInfo gameInfo)
 		{
@@ -160,6 +159,6 @@ namespace Sapka
 		{
 		}
 		
-#endregion
+		#endregion
 	}
 }
