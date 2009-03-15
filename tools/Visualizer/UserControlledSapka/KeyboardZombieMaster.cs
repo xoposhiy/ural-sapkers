@@ -2,12 +2,12 @@ using System.Windows.Forms;
 
 namespace Visualizer.UserControlledSapka
 {
-	class KeyboardZombyMaster : IZombyMaster
+	class KeyboardZombieMaster : IZombieMaster
 	{
 		private readonly Control control;
 		private bool isBombing;
 
-		public KeyboardZombyMaster(Control control)
+		public KeyboardZombieMaster(Control control)
 		{
 			this.control = control;
 			control.KeyDown += Form_OnKeyDown;

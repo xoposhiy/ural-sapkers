@@ -1,6 +1,6 @@
 namespace Visualizer.UserControlledSapka
 {
-	internal interface IZombyMaster
+	internal interface IZombieMaster
 	{
 		char Command { get; }
 

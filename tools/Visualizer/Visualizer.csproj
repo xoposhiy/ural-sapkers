@@ -48,9 +48,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="UserControlledSapka\IZombyMaster.cs" />
-    <Compile Include="UserControlledSapka\KeyboardZombyMaster.cs" />
-    <Compile Include="UserControlledSapka\ZombySapka.cs" />
+    <Compile Include="UserControlledSapka\IZombieMaster.cs" />
+    <Compile Include="UserControlledSapka\KeyboardZombieMaster.cs" />
+    <Compile Include="UserControlledSapka\ZombieSapka.cs" />
     <Compile Include="Visualizer.cs">
       <SubType>Form</SubType>
     </Compile>

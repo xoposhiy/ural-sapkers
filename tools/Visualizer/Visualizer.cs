@@ -388,10 +388,10 @@ namespace Visualizer
 			thread.Start();
 		}
 
-		private void StartZombi(int port)
+		private void StartZombie(int port)
 		{
 			var thread = new Thread(
-				() => new ZombySapka("localhost", port, "ural-sapkers", new KeyboardZombyMaster(this)).Run()
+				() => new ZombieSapka("localhost", port, "ural-sapkers", new KeyboardZombieMaster(this)).Run()
 				);
 			thread.IsBackground = true;
 			thread.Start();
@@ -399,12 +399,12 @@ namespace Visualizer
 
 		private void наПорт20015ToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			StartZombi(20015);
+			StartZombie(20015);
 		}
 
 		private void наПорт20016ToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			StartZombi(20016);
+			StartZombie(20016);
 		}
 
 		private void чёЗаЗомбиЕщё0оToolStripMenuItem_Click(object sender, EventArgs e)
