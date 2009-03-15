@@ -4,7 +4,7 @@ using System.Linq;
 using System.Net.Sockets;
 using System.Threading;
 using System.Windows.Forms;
-using Parsing;
+using Core.Parsing;
 
 namespace Visualizer
 {

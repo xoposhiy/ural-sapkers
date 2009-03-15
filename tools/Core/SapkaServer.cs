@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Net.Sockets;
 using System.Text;
 
-namespace Parsing
+namespace Core.Parsing
 {
 	public delegate void ProcessMessageDelegate(string message);
 

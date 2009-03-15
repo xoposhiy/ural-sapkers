@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{70027960-8509-43A9-AD2F-B6F918D243B7}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <ProjectGuid>{991AA3AA-F4A1-446A-A45C-7FAB4EAEEB87}</ProjectGuid>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>TheSapka</RootNamespace>
-    <AssemblyName>Sapka</AssemblyName>
+    <RootNamespace>Core</RootNamespace>
+    <AssemblyName>Core</AssemblyName>
     <TargetFrameworkVersion>v3.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -31,24 +31,40 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="nunit.framework, Version=2.4.1.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\External\nunit.framework.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Bomb.cs" />
     <Compile Include="DummySapka.cs" />
-    <Compile Include="Explosion.cs" />
-    <Compile Include="Info.cs" />
-    <Compile Include="Program.cs" />
+    <Compile Include="Parsing\AddInfo.cs" />
+    <Compile Include="Parsing\Cell.cs" />
+    <Compile Include="Parsing\GameInfo.cs" />
+    <Compile Include="Parsing\GameInfo_Test.cs" />
+    <Compile Include="Parsing\IParserListener.cs" />
+    <Compile Include="Parsing\MapChangeInfo.cs" />
+    <Compile Include="Parsing\MapChangeInfo_Test.cs" />
+    <Compile Include="Parsing\MapInfo.cs" />
+    <Compile Include="Parsing\MapInfo_Test.cs" />
+    <Compile Include="Parsing\Parser.cs" />
+    <Compile Include="Parsing\Parser_Test.cs" />
+    <Compile Include="Parsing\PlayerResult.cs" />
+    <Compile Include="Parsing\Pos.cs" />
+    <Compile Include="Parsing\Reader.cs" />
+    <Compile Include="Parsing\Reader_Test.cs" />
+    <Compile Include="Parsing\RemoveInfo.cs" />
+    <Compile Include="Parsing\SapkaInfo.cs" />
+    <Compile Include="Parsing\StartRoundInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Sapka.cs" />
+    <Compile Include="AbstractSapka.cs" />
+    <Compile Include="SapkaServer.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Core\Core.csproj">
-      <Project>{991AA3AA-F4A1-446A-A45C-7FAB4EAEEB87}</Project>
-      <Name>Core</Name>
-    </ProjectReference>
+    <Content Include="Parsing\readme.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
