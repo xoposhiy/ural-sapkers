@@ -45,6 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AI\Chief.cs" />
+    <Compile Include="AI\Constants.cs" />
     <Compile Include="AI\Decision.cs" />
     <Compile Include="DummySapka.cs" />
     <Compile Include="Parsing\AddInfo.cs" />

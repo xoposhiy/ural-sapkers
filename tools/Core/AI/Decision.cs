@@ -14,6 +14,12 @@ namespace Core.AI
 			Target = target;
 		}
 
+		public override string ToString()
+		{
+			return Name + " — " + (Path == null ? 's' : Path.FirstMove()) + (PutBomb ? "b" : "") + " target: (" + Target.X + "," + Target.Y + ")";
+		}
+
+		public string Name;
 		public readonly IPath Path;
 		public readonly bool PutBomb;
 		public Pos Target;

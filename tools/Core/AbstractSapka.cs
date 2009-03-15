@@ -60,7 +60,7 @@ namespace Core
 		private void ProcessMessage(string s)
 		{
 			parser.ParseMessage(s);
-			Console.WriteLine(this.GetHashCode() + " " + s);
+			//Console.WriteLine(this.GetHashCode() + " " + s);
 		}
 	}
 }
