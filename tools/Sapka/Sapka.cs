@@ -48,7 +48,8 @@ namespace TheSapka
 
 		private void MakeMove()
 		{
-			Say((r.Next(2) > 0 ? "u" : "r") + "b;");
+			const string s = "urdlb";
+			Say((s[r.Next(5)]) + ";");
 		}
 
 		private void ListenToServer()
