@@ -14,9 +14,15 @@ namespace Visualizer
 		public Visualizer()
 		{
 			InitializeComponent();
+			DoubleBuffered = true;
 			var timer = new Timer();
-			timer.Tick += (sender, e) => Refresh();
+			timer.Tick += (sender,e) => Refresh();
 			timer.Start();
+		}
+
+		public int PlayerId
+		{
+			get { return playerId; }
 		}
 
 		public void OnGameStart(GameInfo gameInfo)
@@ -29,12 +35,15 @@ namespace Visualizer
 			heightInCells = gameInfo.MapInfo.Map.GetLength(1);
 			widthInCoords = widthInCells*cellSize;
 			heightInCoords = heightInCells*cellSize;
-			SetBackground(gameInfo.MapInfo.Map);
+			totalWidth = widthInCoords*SmallPictureSize;
+			totalHeight = heightInCoords*SmallPictureSize;
+			currentMap = gameInfo.MapInfo.Map;
 		}
 
 		public void OnRoundStart(StartRoundInfo startRoundInfo)
 		{
-			SetBackground(startRoundInfo.MapInfo.Map);
+			currentMap = startRoundInfo.MapInfo.Map;
+			damagingRanges = new int[widthInCells, heightInCells];
 		}
 
 		public void OnMapChange(MapChangeInfo mapChangeInfo)
@@ -57,6 +66,9 @@ namespace Visualizer
 
 		private void Visualizer_Paint(object sender, PaintEventArgs e)
 		{
+			fieldPaddingX = (Width - totalWidth)/2;
+			fieldPaddingY = (Height - totalHeight)/2;
+			if (currentMap == null) return;
 			MapChangeInfo mapChangeInfo = null;
 			lock (mapChanges)
 			{
@@ -69,61 +81,57 @@ namespace Visualizer
 			foreach (var sapka in mapChangeInfo.Sapkas)
 			{
 				if (sapka.IsDead) continue;
-				if (sapkaPositions.ContainsKey(sapka.SapkaNumber))
-				{
-					var sapkaPos = sapkaPositions[sapka.SapkaNumber];
-					DrawCell(sapkaPos.X / cellSize, sapkaPos.Y / cellSize, '.', e.Graphics);
-				}
-				DrawCoord(sapka.Pos.X, sapka.Pos.Y, (char)sapka.SapkaNumber, e.Graphics);
 				sapkaPositions[sapka.SapkaNumber] = sapka.Pos;
 			}
 			foreach (var remove in mapChangeInfo.Removes)
 			{
-				DrawCell(remove.Pos.X, remove.Pos.Y, '.', e.Graphics);
+				currentMap[remove.Pos.X, remove.Pos.Y] = '.';
 			}
 			foreach (var add in mapChangeInfo.Adds)
 			{
-				DrawCell(add.Pos.X, add.Pos.Y, add.SubstanceType, e.Graphics);
+				currentMap[add.Pos.X, add.Pos.Y] = add.SubstanceType;
 				if (add.SubstanceType == '#')
 				{
-					for (int d = 1; d <= add.DamagingRange; d++)
-					{
-						DrawCell(add.Pos.X + d, add.Pos.Y, add.SubstanceType, e.Graphics);
-						DrawCell(add.Pos.X - d, add.Pos.Y, add.SubstanceType, e.Graphics);
-						DrawCell(add.Pos.X, add.Pos.Y + d, add.SubstanceType, e.Graphics);
-						DrawCell(add.Pos.X, add.Pos.Y - d, add.SubstanceType, e.Graphics);
-					}
+					damagingRanges[add.Pos.X, add.Pos.Y] = add.DamagingRange;
 				}
 			}
+			DrawMap(e.Graphics);
 		}
-		
+
 		private static bool GoodPos(int x, int y, int w, int h)
 		{
 			return x >= 0 && x < w && y >= 0 && y < h;
 		}
 
-		private void SetBackground(char[,] map)
+		private void DrawMap(Graphics gr)
 		{
-			if (map == null) return;
-			var background = new Bitmap(widthInCoords, heightInCoords);
-			using (var gr = Graphics.FromImage(background))
+			for (int x = 0; x < currentMap.GetLength(0); x++)
 			{
-				for (int x = 0; x < map.GetLength(0); x++)
+				for (int y = 0; y < currentMap.GetLength(1); y++)
 				{
-					for (int y = 0; y < map.GetLength(1); y++)
-					{
-						DrawCell(x, y, map[x, y], gr);
-					}
+					DrawCell(x, y, currentMap[x, y], gr, true);
 				}
 			}
-			BackgroundImage = background;
-			BackgroundImageLayout = ImageLayout.None;
+			foreach (var pair in sapkaPositions)
+			{
+				DrawCoord(pair.Value.X, pair.Value.Y, (char) pair.Key, gr);
+			}
 		}
 
-		private void DrawCell(int x, int y, char type, Graphics gr)
+		private void DrawCell(int x, int y, char type, Graphics gr, bool shouldRecurse)
 		{
 			if (!GoodPos(x, y, widthInCells, heightInCells)) return;
 			DrawPicture(type, x*PictureSize, y*PictureSize, PictureSize, PictureSize, gr);
+			/*if (type == '#')
+			{
+				for (int d = 1; d <= damagingRanges[x, y]; d++)
+				{
+					DrawCell(x + d, y, type, gr, false);
+					DrawCell(x - d, y, type, gr, false);
+					DrawCell(x, y + d, type, gr, false);
+					DrawCell(x, y - d, type, gr, false);
+				}
+			}*/
 		}
 
 		private void DrawCoord(int x, int y, char type, Graphics gr)
@@ -136,7 +144,7 @@ namespace Visualizer
 
 		private void DrawPicture(char type, int x, int y, int w, int h, Graphics gr)
 		{
-			gr.DrawImage(typeToPicture[type], x, y, w, h);
+			gr.DrawImage(typeToPicture[type], fieldPaddingX + x, fieldPaddingY + y, w, h);
 		}
 
 		private void InitPictures()
@@ -201,11 +209,17 @@ namespace Visualizer
 		private readonly Queue<MapChangeInfo> mapChanges = new Queue<MapChangeInfo>();
 		private int widthInCells;
 		private int heightInCells;
+		private char[,] currentMap;
+		private int[,] damagingRanges;
 
 		private const int SmallPictureSize = 6;
 		private int PictureSize;
 		private int widthInCoords;
 		private int heightInCoords;
+		private int totalWidth;
+		private int totalHeight;
+		private int fieldPaddingX;
+		private int fieldPaddingY;
 
 		private const string PicturesDirectory = @"..\..\Pictures";
 	}
