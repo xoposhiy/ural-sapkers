@@ -3,8 +3,11 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
+using System.Threading;
 using System.Windows.Forms;
-using Parsing;
+using Core.Parsing;
+using TheSapka;
+using Visualizer.UserControlledSapka;
 using Timer=System.Windows.Forms.Timer;
 
 namespace Visualizer
@@ -23,6 +26,7 @@ namespace Visualizer
 		private void InitTimer()
 		{
 			var timer = new Timer();
+			timer.Interval = 200;
 			timer.Tick += (sender, e) => Refresh();
 			timer.Start();
 		}
@@ -66,6 +70,9 @@ namespace Visualizer
 		{
 			AddAction(() =>
 				{
+					time = mapChangeInfo.Time;
+					dangerLevel = mapChangeInfo.DangerLevel;
+					
 					fieldPaddingX = Gap;
 					//fieldPaddingY = (Height - totalHeight)/2;
 
@@ -140,7 +147,7 @@ namespace Visualizer
 		{
 			lock (actionQueue)
 			{
-				if (actionQueue.Count > 0)
+				while (actionQueue.Count > 0)
 				{
 					actionQueue.Dequeue()();
 				}
@@ -148,7 +155,7 @@ namespace Visualizer
 			var roundString = currentRound > 0 ? "Раунд " + currentRound : "Игра не идёт";
 			var font = new Font(FontFamily.GenericSansSerif, 48);
 			var areaNeeded = e.Graphics.MeasureString(roundString, font);
-			e.Graphics.DrawString(roundString, font, Brushes.Black, (Width - areaNeeded.Width)/2, 0);
+			e.Graphics.DrawString(roundString, font, Brushes.Black, (Width - areaNeeded.Width)/2, mainMenu.Height);
 			DrawMap(e.Graphics);
 			if (tvInfo != null && currentRound > 0)
 			{
@@ -180,21 +187,27 @@ namespace Visualizer
 		private void InitStatsTreeView()
 		{
 			tvInfo = new TreeView
-				{
-					Visible = true,
-					Left = fieldPaddingX + totalWidth + Gap,
-					Top = fieldPaddingY,
-					Height = totalHeight,
+			         	{
+			         		Visible = true,
+							Width = 200,
+							Dock = DockStyle.Right,
+			         		Enabled = false,
 				};
-			tvInfo.Width = Width - tvInfo.Left - Gap;
+			
 			Controls.Add(tvInfo);
 		}
 
 		private void UpdateStatsTreeView()
 		{
+			if (tvInfo.Handle == IntPtr.Zero) return;
 			tvInfo.BeginUpdate();
 			tvInfo.Nodes.Clear();
-			foreach (var sapkaIndex in sapkaInfos.Keys)
+			var infoNode = new TreeNode("Игра");
+			infoNode.Nodes.Add(string.Format("Время игры: {0}", time));
+			infoNode.Nodes.Add(string.Format("Опасность коллапса: {0}", dangerLevel));
+			tvInfo.Nodes.Add(infoNode);
+			
+			foreach(var sapkaIndex in sapkaInfos.Keys)
 			{
 				var sapkaInfo = sapkaInfos[sapkaIndex];
 
@@ -361,6 +374,59 @@ namespace Visualizer
 				Color.Brown,
 				Color.Yellow
 			};
+
+		private int time;
+		private int dangerLevel;
+
+
+		private void StartDummy(int port)
+		{
+			var thread = new Thread(
+				() => new DummySapka("localhost", port, "ural-sapkers").Run()
+				);
+			thread.IsBackground = true;
+			thread.Start();
+		}
+
+		private void StartZombi(int port)
+		{
+			var thread = new Thread(
+				() => new ZombySapka("localhost", port, "ural-sapkers", new KeyboardZombyMaster(this)).Run()
+				);
+			thread.IsBackground = true;
+			thread.Start();
+		}
+
+		private void наПорт20015ToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			StartZombi(20015);
+		}
+
+		private void наПорт20016ToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			StartZombi(20016);
+		}
+
+		private void чёЗаЗомбиЕщё0оToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			MessageBox.Show(this, "Зомби — это сапка, управляемая клавиатурой (курсоры + SPACE)\r\nEnjoy!", "Зомби?!?");
+		}
+
+		private void на20015ToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			StartDummy(20015);
+		}
+
+		private void какойТакойТормозToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			MessageBox.Show(this, "Тормоз — это сапка, которая всегда стоит на месте и ничего не делает\r\nEnjoy!", "Тормоз?!?");
+		}
+
+		private void на20016ToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			StartDummy(20016);
+		}
+
 	}
 
 	internal class VisualizerSapkaInfo

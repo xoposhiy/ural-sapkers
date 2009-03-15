@@ -48,6 +48,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="UserControlledSapka\IZombyMaster.cs" />
+    <Compile Include="UserControlledSapka\KeyboardZombyMaster.cs" />
+    <Compile Include="UserControlledSapka\ZombySapka.cs" />
     <Compile Include="Visualizer.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -80,12 +83,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Parser\Parsing.csproj">
-      <Project>{991AA3AA-F4A1-446A-A45C-7FAB4EAEEB87}</Project>
-      <Name>Parsing</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Pictures\asterisk.bmp">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -104,6 +101,12 @@
     <Content Include="Pictures\X.bmp">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Core\Core.csproj">
+      <Project>{991AA3AA-F4A1-446A-A45C-7FAB4EAEEB87}</Project>
+      <Name>Core</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
