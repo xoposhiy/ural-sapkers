@@ -157,7 +157,7 @@ namespace Visualizer
 			var areaNeeded = e.Graphics.MeasureString(roundString, font);
 			e.Graphics.DrawString(roundString, font, Brushes.Black, (Width - areaNeeded.Width)/2, mainMenu.Height);
 			DrawMap(e.Graphics);
-			if (tvInfo != null && currentRound > 0)
+			if (tvInfo != null)
 			{
 				UpdateStatsTreeView();
 			}
