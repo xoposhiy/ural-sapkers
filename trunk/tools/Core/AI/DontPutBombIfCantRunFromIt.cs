@@ -5,7 +5,7 @@ using Core.StateCalculations;
 
 namespace Core.AI
 {
-	internal class CanNotRunFromBombExpert : IExpert
+	internal class DontPutBombIfCantRunFromIt : IExpert
 	{
 		// TODO pe: Не учитывает собранные при отходе антибонусы.
 		// TODO pe: Не учитывает взаимодетанирование бомб.

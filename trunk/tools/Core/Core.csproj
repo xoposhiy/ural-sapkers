@@ -44,11 +44,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AI\CanNotRunFromBombExpert.cs" />
     <Compile Include="AI\Chief.cs" />
     <Compile Include="AI\Constants.cs" />
     <Compile Include="AI\Decision.cs" />
-    <Compile Include="AI\DontSleepNearBombExpert.cs" />
+    <Compile Include="AI\DontGoToDeadlyCell.cs" />
+    <Compile Include="AI\DontPutBombIfCantRunFromIt.cs" />
+    <Compile Include="AI\DontSleepNearBomb.cs" />
     <Compile Include="AI\IExpert.cs" />
     <Compile Include="AI\PanicAdviser.cs" />
     <Compile Include="AI\Sapka.cs" />
