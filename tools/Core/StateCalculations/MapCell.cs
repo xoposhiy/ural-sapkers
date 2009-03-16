@@ -41,7 +41,7 @@ namespace Core.StateCalculations
 		{
 			return new MapCell(
 				false,
-				true,
+				false,
 				true,
 				timeStart < DeadlySince ? timeStart : DeadlySince,
 				timeStart < DeadlySince ? timeEnd : DeadlyTill, //TODO Косяк с равенством Since и не равенством Till
@@ -85,6 +85,11 @@ namespace Core.StateCalculations
 			return new MapCell(
 				true, false, false,
 				DeadlySince, DeadlyTill, EmptySince, Bonus);
+		}
+
+		public bool IsDeadlyAt(int time)
+		{
+			return time >= DeadlySince && time <= DeadlyTill;
 		}
 	}
 }

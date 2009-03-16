@@ -41,7 +41,7 @@ namespace Core.AI
 					{
 						continue;
 					}
-					Console.Write("({0} {1}) ", i, j);
+					//Console.Write("({0} {1}) ", i, j);
 					int countWalls = 0;
 					for (int d = 0; d < 4; ++d)
 					{
@@ -73,7 +73,7 @@ namespace Core.AI
 					}
 				}
 			}
-			Console.WriteLine(r.Count);
+			//Console.WriteLine(r.Count);
 			return r;
 		}
 	}

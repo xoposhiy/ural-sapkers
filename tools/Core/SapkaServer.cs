@@ -2,18 +2,22 @@
 using System.Collections.Generic;
 using System.Net.Sockets;
 using System.Text;
+using log4net;
 
-namespace Core.Parsing
+namespace Core
 {
 	public delegate void ProcessMessageDelegate(string message);
 
 	public class SapkaServer
 	{
+		private readonly int port;
 		private readonly Socket socket;
 		private string lastChunk = "";
-		
+		private static readonly ILog log = LogManager.GetLogger(typeof(SapkaServer));
+
 		public SapkaServer(string host, int port)
 		{
+			this.port = port;
 			socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 			socket.ReceiveBufferSize = 10000000;
 			socket.Blocking = true;
@@ -21,6 +25,7 @@ namespace Core.Parsing
 			var output = new byte[10000];
 			int bytesReceived = socket.Receive(output);
 			string prefix = Encoding.ASCII.GetString(output, 0, bytesReceived);
+			log.Info(port + " eat prefix " + prefix);
 			if (!prefix.Contains("Loading..."))
 			{
 				lastChunk = prefix;
@@ -58,6 +63,7 @@ namespace Core.Parsing
 			{
 				lastChunk = "";
 			}
+			log.Info(port + " < " +String.Join(";\r\n", messages));
 			for (int i = 0; i < len; i++)
 				yield return messages[i] + ";";
 		}

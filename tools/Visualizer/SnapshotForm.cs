@@ -68,6 +68,7 @@ namespace Visualizer
 			var paths = pathFinder.FindPaths(selectedCoordPos.X, selectedCoordPos.Y, gameStateInfo.Time, selectedSpeed);
 			var path = paths[x/gameStateInfo.SmallPictureSize, y/gameStateInfo.SmallPictureSize];
 			if (path == null) return;
+			Text = new string(path.FullPath().ToArray());
 			using (var gr = Graphics.FromImage(pbBackground.Image))
 			{
 				var curx = selectedCoordPos.X*gameStateInfo.SmallPictureSize;
@@ -88,6 +89,7 @@ namespace Visualizer
 				Fill(gr, curx, cury);
 			}
 		}
+
 
 		private void Fill(Graphics gr, int x, int y)
 		{

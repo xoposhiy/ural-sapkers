@@ -4,8 +4,10 @@ using System.Linq;
 using System.Net.Sockets;
 using System.Threading;
 using System.Windows.Forms;
+using Core;
 using Core.Parsing;
 using Core.StateCalculations;
+using log4net.Config;
 
 namespace Visualizer
 {
@@ -14,6 +16,7 @@ namespace Visualizer
 		[STAThread]
 		static void Main()
 		{
+			XmlConfigurator.Configure();
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
 			Application.Run(CreateMainForm());

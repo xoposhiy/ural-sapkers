@@ -57,7 +57,7 @@ namespace Core.PathFinding
 					}
 					MapCell cell = map[x/cellSize, y/cellSize];
 					if (prohibited(cell, time + time0 + 1) && 
-					    (!prohibited(cell, time + time0) || !prohibited(cell, time + time0)))
+					    (!prohibited(cell0, time + time0) || !prohibited(cell, time + time0)))
 					{
 						continue;
 					}
