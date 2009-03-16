@@ -5,6 +5,7 @@ using System.Net.Sockets;
 using System.Threading;
 using System.Windows.Forms;
 using Core.Parsing;
+using Core.StateCalculations;
 
 namespace Visualizer
 {
@@ -15,16 +16,18 @@ namespace Visualizer
 		{
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
-			var logger = new FileSapkaServerLogger("game.dump");
-			var form = new Visualizer(logger) { WindowState = FormWindowState.Maximized };
-			var parser = new Parser(form);
-			var thread = new Thread(() => ListenToServer(parser, logger));
-			thread.IsBackground = true;
-			thread.Start();
-			Application.Run(form);
+			Application.Run(CreateMainForm());
 		}
 
-		private static void ListenToServer(Parser parser, ISapkaServerLogger logger)
+		private static Form CreateMainForm()
+		{
+			var updatersQueue = new ModelUpdatersQueue();
+			var parser = new Parser(new VisualizerParserListener(updatersQueue));
+			new Thread(() => ListenToServer(parser)) { IsBackground = true }.Start();
+			return new Visualizer(updatersQueue) { WindowState = FormWindowState.Maximized };
+		}
+
+		private static void ListenToServer(Parser parser)
 		{
 			while (true)
 			{
@@ -35,14 +38,12 @@ namespace Visualizer
 					{
 						foreach (var message in sapkaServer.ListenToServer())
 						{
-							logger.Log(message);
 							parser.ParseMessage(message);
 						}
 					}
 				}
 				catch (SocketException)
 				{
-					logger.Flush();
 					Thread.Sleep(500);
 				}
 			}
