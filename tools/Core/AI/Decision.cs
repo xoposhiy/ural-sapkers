@@ -16,7 +16,7 @@ namespace Core.AI
 
 		public override string ToString()
 		{
-			var s = Name + " — " + (Path == null ? 's' : Path.FirstMove()) + (PutBomb ? "b" : "");
+			var s = Name + " - " + (Path == null ? 's' : Path.FirstMove()) + (PutBomb ? "b" : "");
 			if(Target != null)
 				s += " target: (" + Target.X + "," + Target.Y + ")";
 			return s;

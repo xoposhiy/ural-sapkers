@@ -1,6 +1,7 @@
 using System;
+using System.Collections.Generic;
 using Core.StateCalculations;
-using Wintellect.PowerCollections;
+using Core.Parsing;
 
 namespace Core.PathFinding
 {
@@ -9,7 +10,9 @@ namespace Core.PathFinding
 		private const string dir = "lrud";
 		private static readonly int[] dx = new[] {-1, 1, 0, 0};
 		private static readonly int[] dy = new[] {0, 0, -1, 1};
+		private static readonly int MAX_TIME = 50;
 		private int cellSize;
+		private int n, m;
 		private MapCell[,] map;
 
 		#region IPathFinder Members
@@ -18,74 +21,74 @@ namespace Core.PathFinding
 		{
 			map = newMap;
 			cellSize = newCellSize;
+			n = map.GetLength(0)*cellSize;
+			m = map.GetLength(1)*cellSize;
 		}
 
-		public IPath[,] FindPaths(int x0, int y0, int time0, int speed)
+		public IPath[,,] FindPathsWithTime(int x0, int y0, int time0, int speed)
 		{
-			var q = new OrderedSet<Node>();
-			int n = map.GetLength(0)*cellSize;
-			int m = map.GetLength(1)*cellSize;
-			var dist = new Path[n,m,2];
-			dist[x0, y0, 0] = new Path(null, 's', 0);
-			q.Add(new Node(x0, y0, 0, dist[x0, y0, 0]));
-			while (q.Count > 0)
+			var q = new List<Node>();
+			var dist = new Path[n,m,MAX_TIME+1];
+			dist[x0, y0, 0] = new Path(null, 's');
+			q.Add(new Node(x0, y0, 0));
+			for (int it = 0; it < q.Count; ++it)
 			{
-				Node node = q.RemoveFirst();
+				Node node = q[it];
 				MapCell cell0 = map[node.X/cellSize, node.Y/cellSize];
+				int time = node.Time;
+				if (time < MAX_TIME && prohibited(cell0, time + time0) == prohibited(cell0, time + time0 + 1))
+				{
+					Add(node.X, node.Y, time + 1, dist, q, new Path(dist[node.X, node.Y, time], 's'));
+				}
 				for (int d = 0; d < 4; ++d)
 				{
-					int x = node.X + dx[d]*speed;
-					int y = node.Y + dy[d]*speed;
-					while ((x != node.X || y != node.Y) &&
-					       (x < 0 || x >= n || y < 0 || y >= m || 
-					        prohibited(map[x/cellSize, y/cellSize])))
-					{
-						x -= dx[d];
-						y -= dy[d];
-					}
+					int x = node.X;
+					int y = node.Y;
+					Move(ref x, ref y, time + time0, speed, d);
 					if (x == node.X && y == node.Y)
 					{
 						continue;
 					}
 					MapCell cell = map[x/cellSize, y/cellSize];
-					int timeCur = time0 + node.Path.Size();
-					int time = timeCur;
-					if (cell.IsBreakableWall && cell.EmptySince < int.MaxValue)
-					{
-						time = Math.Max(time, cell.EmptySince);
-					}
-					if (cell.EmptySince < int.MaxValue && cell.EmptySince == cell.DeadlySince && cell0 != cell)
-					{
-						time = Math.Max(time, cell.EmptySince);
-					}
-					if (time + 1 >= cell.DeadlySince)
-					{
-						time = Math.Max(time, cell.DeadlyTill);
-					}
-					if (time0 <= cell0.DeadlyTill && cell0.DeadlySince <= time)
+					if (prohibited(cell, time + time0 + 1) && (!prohibited(cell, time + time0)))
 					{
 						continue;
 					}
-					int after = time >= cell0.DeadlyTill ? 1 : 0;
-					Add(x, y, after, dist, q, new Path(new Path(node.Path, 's', time - timeCur), dir[d], 1));
-					if (after == 0 && cell.DeadlyTill < int.MaxValue)
-					{
-						after = 1;
-						time = Math.Min(time, cell.DeadlyTill);
-						if (time0 <= cell0.DeadlyTill && cell0.DeadlySince <= time)
-						{
-							continue;
-						}
-						Add(x, y, after, dist, q, new Path(new Path(node.Path, 's', time - timeCur), dir[d], 1));
-					}
+					Add(x, y, Math.Min(time + 1, MAX_TIME), dist, q, new Path(dist[node.X, node.Y, time], dir[d]));
 				}
 			}
+			return dist;
+		}
+		
+		public void Move(ref int x, ref int y, int time, int speed, int d)
+		{
+			int x0 = x;
+			int y0 = y;
+			MapCell cell0 = map[x0 / cellSize, y0 / cellSize];
+			x += dx[d]*speed;
+			y += dy[d]*speed;
+			while ((x != x0 || y != x0) &&
+			       (x < 0 || x >= n || y < 0 || y >= m || 
+			        cell0 != map[x/cellSize, y/cellSize] && 
+			        	prohibited(map[x/cellSize, y/cellSize], time)))
+			{
+				x -= dx[d];
+				y -= dy[d];
+			}
+		}
+		
+		public IPath[,] FindPaths(int x, int y, int time, int speed)
+		{
+			IPath[,,] dist = FindPathsWithTime(x, y, time, speed);
 			var r = new IPath[n,m];
 			for (int i = 0; i < n; ++i)
 			{
 				for (int j = 0; j < m; ++j)
 				{
-					r[i, j] = dist[i, j, 0] ?? dist[i, j, 1];
+					for (int it = 0; it <= MAX_TIME; ++it)
+					{
+						r[i, j] = r[i, j] ?? dist[i, j, it];
+					}
 				}
 			}
 			return r;
@@ -93,59 +96,33 @@ namespace Core.PathFinding
 
 		#endregion
 
-		private bool prohibited(MapCell cell)
+		private bool prohibited(MapCell cell, int time)
 		{
-			return cell.IsUnbreakableWall || cell.IsBreakableWall && cell.EmptySince == int.MaxValue;
+			return cell.IsUnbreakableWall ||
+				cell.IsBreakableWall && time < cell.EmptySince ||
+				time >=cell.DeadlySince && time < cell.DeadlyTill;
 		}
 
-		private void Add(int x, int y, int after, Path[,,] dist, OrderedSet<Node> q, Path path)
+		private void Add(int x, int y, int time, Path[,,] dist, List<Node> q, Path path)
 		{
-			if (dist[x, y, after] == null || dist[x, y, after].CompareTo(path) > 0)
+			if (dist[x, y, time] == null)
 			{
-				if (dist[x, y, after] != null)
-				{
-					q.Remove(new Node(x, y, after, dist[x, y, after]));
-				}
-				dist[x, y, after] = path;
-				q.Add(new Node(x, y, after, path));
+				dist[x, y, time] = path;
+				q.Add(new Node(x, y, time));
 			}
 		}
 	}
 
-	internal class Node : IComparable<Node>
+	internal class Node
 	{
-		public int After;
-		public Path Path;
+		public int Time;
 		public int X, Y;
 
-		public Node(int x, int y, int after, Path path)
+		public Node(int x, int y, int time)
 		{
 			X = x;
 			Y = y;
-			After = after;
-			Path = path;
+			Time = time;
 		}
-
-		#region IComparable<Node> Members
-
-		public int CompareTo(Node other)
-		{
-			int cmp = Path.CompareTo(other.Path);
-			if (cmp == 0)
-			{
-				cmp = Math.Sign(X - other.X);
-			}
-			if (cmp == 0)
-			{
-				cmp = Math.Sign(Y - other.Y);
-			}
-			if (cmp == 0)
-			{
-				cmp = Math.Sign(After - other.After);
-			}
-			return cmp;
-		}
-
-		#endregion
 	}
 }
