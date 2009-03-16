@@ -38,9 +38,9 @@
 			this.тормозToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.на20015ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.на20016ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.какойТакойТормозToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.на20017ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.на20018ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.какойТакойТормозToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.mainMenu.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -64,41 +64,41 @@
             this.наПорт20018ToolStripMenuItem,
             this.чёЗаЗомбиЕщё0оToolStripMenuItem});
 			this.запуститьЗомбиToolStripMenuItem.Name = "запуститьЗомбиToolStripMenuItem";
-			this.запуститьЗомбиToolStripMenuItem.Size = new System.Drawing.Size(49, 20);
+			this.запуститьЗомбиToolStripMenuItem.Size = new System.Drawing.Size(56, 20);
 			this.запуститьЗомбиToolStripMenuItem.Text = "Зомби";
 			// 
 			// наПорт20015ToolStripMenuItem
 			// 
 			this.наПорт20015ToolStripMenuItem.Name = "наПорт20015ToolStripMenuItem";
-			this.наПорт20015ToolStripMenuItem.Size = new System.Drawing.Size(232, 22);
+			this.наПорт20015ToolStripMenuItem.Size = new System.Drawing.Size(231, 22);
 			this.наПорт20015ToolStripMenuItem.Text = "на порт 20015";
 			this.наПорт20015ToolStripMenuItem.Click += new System.EventHandler(this.наПорт20015ToolStripMenuItem_Click);
 			// 
 			// наПорт20016ToolStripMenuItem
 			// 
 			this.наПорт20016ToolStripMenuItem.Name = "наПорт20016ToolStripMenuItem";
-			this.наПорт20016ToolStripMenuItem.Size = new System.Drawing.Size(232, 22);
+			this.наПорт20016ToolStripMenuItem.Size = new System.Drawing.Size(231, 22);
 			this.наПорт20016ToolStripMenuItem.Text = "на порт 20016";
 			this.наПорт20016ToolStripMenuItem.Click += new System.EventHandler(this.наПорт20016ToolStripMenuItem_Click);
 			// 
 			// наПорт20017ToolStripMenuItem
 			// 
 			this.наПорт20017ToolStripMenuItem.Name = "наПорт20017ToolStripMenuItem";
-			this.наПорт20017ToolStripMenuItem.Size = new System.Drawing.Size(232, 22);
+			this.наПорт20017ToolStripMenuItem.Size = new System.Drawing.Size(231, 22);
 			this.наПорт20017ToolStripMenuItem.Text = "на порт 20017";
 			this.наПорт20017ToolStripMenuItem.Click += new System.EventHandler(this.наПорт20017ToolStripMenuItem_Click);
 			// 
 			// наПорт20018ToolStripMenuItem
 			// 
 			this.наПорт20018ToolStripMenuItem.Name = "наПорт20018ToolStripMenuItem";
-			this.наПорт20018ToolStripMenuItem.Size = new System.Drawing.Size(232, 22);
+			this.наПорт20018ToolStripMenuItem.Size = new System.Drawing.Size(231, 22);
 			this.наПорт20018ToolStripMenuItem.Text = "на порт 20018";
 			this.наПорт20018ToolStripMenuItem.Click += new System.EventHandler(this.наПорт20018ToolStripMenuItem_Click);
 			// 
 			// чёЗаЗомбиЕщё0оToolStripMenuItem
 			// 
 			this.чёЗаЗомбиЕщё0оToolStripMenuItem.Name = "чёЗаЗомбиЕщё0оToolStripMenuItem";
-			this.чёЗаЗомбиЕщё0оToolStripMenuItem.Size = new System.Drawing.Size(232, 22);
+			this.чёЗаЗомбиЕщё0оToolStripMenuItem.Size = new System.Drawing.Size(231, 22);
 			this.чёЗаЗомбиЕщё0оToolStripMenuItem.Text = "Чё за зомби ещё такие?  O_о";
 			this.чёЗаЗомбиЕщё0оToolStripMenuItem.Click += new System.EventHandler(this.чёЗаЗомбиЕщё0оToolStripMenuItem_Click);
 			// 
@@ -111,43 +111,43 @@
             this.на20018ToolStripMenuItem,
             this.какойТакойТормозToolStripMenuItem});
 			this.тормозToolStripMenuItem.Name = "тормозToolStripMenuItem";
-			this.тормозToolStripMenuItem.Size = new System.Drawing.Size(54, 20);
+			this.тормозToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
 			this.тормозToolStripMenuItem.Text = "Тормоз";
 			// 
 			// на20015ToolStripMenuItem
 			// 
 			this.на20015ToolStripMenuItem.Name = "на20015ToolStripMenuItem";
-			this.на20015ToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
+			this.на20015ToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
 			this.на20015ToolStripMenuItem.Text = "на 20015";
 			this.на20015ToolStripMenuItem.Click += new System.EventHandler(this.на20015ToolStripMenuItem_Click);
 			// 
 			// на20016ToolStripMenuItem
 			// 
 			this.на20016ToolStripMenuItem.Name = "на20016ToolStripMenuItem";
-			this.на20016ToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
+			this.на20016ToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
 			this.на20016ToolStripMenuItem.Text = "на 20016";
 			this.на20016ToolStripMenuItem.Click += new System.EventHandler(this.на20016ToolStripMenuItem_Click);
-			// 
-			// какойТакойТормозToolStripMenuItem
-			// 
-			this.какойТакойТормозToolStripMenuItem.Name = "какойТакойТормозToolStripMenuItem";
-			this.какойТакойТормозToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
-			this.какойТакойТормозToolStripMenuItem.Text = "Какой такой тормоз?";
-			this.какойТакойТормозToolStripMenuItem.Click += new System.EventHandler(this.какойТакойТормозToolStripMenuItem_Click);
 			// 
 			// на20017ToolStripMenuItem
 			// 
 			this.на20017ToolStripMenuItem.Name = "на20017ToolStripMenuItem";
-			this.на20017ToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
+			this.на20017ToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
 			this.на20017ToolStripMenuItem.Text = "на 20017";
 			this.на20017ToolStripMenuItem.Click += new System.EventHandler(this.на20017ToolStripMenuItem_Click);
 			// 
 			// на20018ToolStripMenuItem
 			// 
 			this.на20018ToolStripMenuItem.Name = "на20018ToolStripMenuItem";
-			this.на20018ToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
+			this.на20018ToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
 			this.на20018ToolStripMenuItem.Text = "на 20018";
 			this.на20018ToolStripMenuItem.Click += new System.EventHandler(this.на20018ToolStripMenuItem_Click);
+			// 
+			// какойТакойТормозToolStripMenuItem
+			// 
+			this.какойТакойТормозToolStripMenuItem.Name = "какойТакойТормозToolStripMenuItem";
+			this.какойТакойТормозToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
+			this.какойТакойТормозToolStripMenuItem.Text = "Какой такой тормоз?";
+			this.какойТакойТормозToolStripMenuItem.Click += new System.EventHandler(this.какойТакойТормозToolStripMenuItem_Click);
 			// 
 			// Visualizer
 			// 
@@ -155,10 +155,12 @@
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(284, 264);
 			this.Controls.Add(this.mainMenu);
+			this.DoubleBuffered = true;
 			this.MainMenuStrip = this.mainMenu;
 			this.Name = "Visualizer";
 			this.Text = "— И ещё сапочку!";
 			this.Paint += new System.Windows.Forms.PaintEventHandler(this.Visualizer_Paint);
+			this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Visualizer_KeyPress);
 			this.mainMenu.ResumeLayout(false);
 			this.mainMenu.PerformLayout();
 			this.ResumeLayout(false);

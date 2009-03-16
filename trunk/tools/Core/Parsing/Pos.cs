@@ -1,6 +1,8 @@
+using System;
+
 namespace Core.Parsing
 {
-	public class Pos
+	public class Pos : IEquatable<Pos>
 	{
 		public readonly int X;
 		public readonly int Y;
@@ -16,6 +18,21 @@ namespace Core.Parsing
 			X = r.ReadNumber();
 			r.Ensure(" ");
 			Y = r.ReadNumber();
+		}
+
+		public bool Equals(Pos obj)
+		{
+			if (ReferenceEquals(null, obj)) return false;
+			if (ReferenceEquals(this, obj)) return true;
+			return obj.X == X && obj.Y == Y;
+		}
+
+		public override int GetHashCode()
+		{
+			unchecked
+			{
+				return (X*397) ^ Y;
+			}
 		}
 	}
 }

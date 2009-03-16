@@ -5,30 +5,39 @@ namespace Core.Parsing
 {
 	public class Parser
 	{
-		private readonly IParserListener listener;
-
-		public Parser(IParserListener listener)
+		public Parser(params IParserListener[] listeners)
 		{
-			if (listener == null) throw new ArgumentNullException("listener");
-			this.listener = listener;
+			if (listeners == null) throw new ArgumentNullException("listeners");
+			this.listeners = listeners;
 		}
 
 		public void ParseMessage(string message)
 		{
 			var r = new Reader(message);
 			if (message.StartsWith("PID"))
-				listener.OnGameStart(new GameInfo(r));
+			{
+				var gameInfo = new GameInfo(r);
+				ForAllListeners(listener => listener.OnGameStart(gameInfo));
+			}
 			else if (message.StartsWith("START"))
-				listener.OnRoundStart(new StartRoundInfo(r));
+			{
+				var roundStartInfo = new StartRoundInfo(r);
+				ForAllListeners(listener => listener.OnRoundStart(roundStartInfo));
+			}
 			else if (message.StartsWith("T"))
-				listener.OnMapChange(new MapChangeInfo(r));
+			{
+				var mapChangeInfo = new MapChangeInfo(r);
+				ForAllListeners(listener => listener.OnMapChange(mapChangeInfo));
+			}
 			else if (message.StartsWith("REND"))
 			{
-				listener.OnFinishRound(ReadEndRound(r));
+				var endRoundInfo = ReadEndRound(r);
+				ForAllListeners(listener => listener.OnFinishRound(endRoundInfo));
 			}
 			else if (message.StartsWith("GEND"))
 			{
-				listener.OnFinishGame(ReadEndGame(r));
+				var endGameInfo = ReadEndGame(r);
+				ForAllListeners(listener => listener.OnFinishGame(endGameInfo));
 			}
 		}
 
@@ -45,11 +54,17 @@ namespace Core.Parsing
 			return res.ToArray();
 		}
 
-
 		private int ReadEndRound(Reader r)
 		{
 			r.Ensure("REND ");
 			return r.ReadNumber();
 		}
+
+		private void ForAllListeners(Action<IParserListener> action)
+		{
+			Array.ForEach(listeners, action);
+		}
+
+		private readonly IParserListener[] listeners;
 	}
 }
