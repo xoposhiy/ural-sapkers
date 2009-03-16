@@ -43,6 +43,7 @@ namespace Core.StateCalculations
 
 		public void OnMapChange(MapChangeInfo info)
 		{
+			ClearUpDeadlyMarks();
 			DangerLevel = info.HasDangerLevel ? info.DangerLevel : 0;
 			Time = info.Time;
 			Sapkas = info.Sapkas;
@@ -72,6 +73,18 @@ namespace Core.StateCalculations
 					Map[p.X, p.Y].AddBonus(add.SubstanceType);
 				}
 			}
+		}
+
+		private void ClearUpDeadlyMarks()
+		{
+			for(int x=0; x<Map.GetLength(0); x++)
+				for(int y=0; y<Map.GetLength(1); y++)
+				{
+					if (Map[x,y].DeadlyTill < Time)
+					{
+						Map[x,y] = new MapCell(false, false, true, int.MaxValue, int.MaxValue, int.MaxValue, Map[x,y].Bonus);
+					}
+				}
 		}
 
 		public void OnFinishRound(int score)

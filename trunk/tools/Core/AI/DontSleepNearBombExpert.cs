@@ -10,10 +10,13 @@ namespace Core.AI
 	{
 		public byte EstimateDecisionDanger(GameState state, IPath[,] paths, Decision decision)
 		{
-			int tx = decision.Target.X;
-			int ty = decision.Target.Y;
-			if(state.Map[tx, ty].IsDeadlyAt(state.Time + decision.Duration))
-				return 255;
+			if (decision.Path.FirstMove() != 's') return 0;
+
+			var cell = state.Map[state.MyCell.X, state.MyCell.Y];
+			if(cell.DeadlySince < state.Time) return 0;
+			var timeToLive = cell.DeadlySince - state.Time;
+			if(timeToLive < 10) return 255;
+			if(timeToLive <= 2*state.CellSize) return 128;
 			return 0;
 		}
 	}
