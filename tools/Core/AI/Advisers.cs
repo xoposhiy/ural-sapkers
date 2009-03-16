@@ -41,7 +41,6 @@ namespace Core.AI
 					{
 						continue;
 					}
-					//Console.Write("({0} {1}) ", i, j);
 					int countWalls = 0;
 					for (int d = 0; d < 4; ++d)
 					{
@@ -51,7 +50,9 @@ namespace Core.AI
 						{
 							if (x < 0 || x >= ds.GetLength(0) ||
 							    y < 0 || y >= ds.GetLength(1) ||
-							    state.Map[x, y].IsEmpty)
+							    state.Map[x, y].IsEmpty ||
+							    state.Map[x, y].IsBreakableWall &&
+							    	state.Time >= state.Map[x, y].EmptySince)
 							{
 								x += dx[d];
 								y += dy[d];
@@ -65,6 +66,7 @@ namespace Core.AI
 							++countWalls;
 						}
 					}
+					Console.Write("({0} {1}): {2}, ", i, j, countWalls);
 					if (countWalls > 0)
 					{
 						var decision = new Decision(ds[i, j], new Pos(i, j), ds[i, j].Size() == 0, ds[i, j].Size() + 1, countWalls * 10);
@@ -73,7 +75,12 @@ namespace Core.AI
 					}
 				}
 			}
-			//Console.WriteLine(r.Count);
+			Console.WriteLine();
+			if (state.Map != null)
+			{
+				Console.WriteLine("{0} {2} {1} {3}", state.Map[0, 3].EmptySince, state.Map[3, 0].EmptySince,
+				                  state.Map[0, 3].IsBreakableWall, state.Map[3, 0].IsBreakableWall);
+			}
 			return r;
 		}
 	}
