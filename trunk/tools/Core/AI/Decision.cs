@@ -13,6 +13,12 @@ namespace Core.AI
 			PotentialScore = potentialScore;
 			Target = target;
 		}
+		public string GetMove()
+		{
+			string res = (Path == null ? 's' : Path.FirstMove()).ToString();
+			if(PutBomb) res += "b";
+			return res;
+		}
 
 		public override string ToString()
 		{
@@ -29,5 +35,11 @@ namespace Core.AI
 		public int Duration;
 		public int PotentialScore;
 		public static Decision DoNothing = new Decision(null, null, false, 1, 0);
+
+		public string PathString()
+		{
+			if(Path == null) return "";
+			return new string(Path.FullPath().ToArray());
+		}
 	}
 }

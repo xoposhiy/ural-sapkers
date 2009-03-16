@@ -3,6 +3,7 @@ using System.Net.Sockets;
 using System.Threading;
 using Core.Parsing;
 using Core.StateCalculations;
+using log4net;
 
 namespace Core
 {
@@ -18,6 +19,7 @@ namespace Core
 			sapkaServer = new SapkaServer(host, port);
 			GameState = new GameState();
 			parser = new Parser(GameState);
+			log = LogManager.GetLogger(GetType());
 		}
 
 		public GameState GameState { get; private set; }
@@ -59,8 +61,10 @@ namespace Core
 
 		private void ProcessMessage(string s)
 		{
+			log.Info("< " + s);
 			parser.ParseMessage(s);
-			//Console.WriteLine(this.GetHashCode() + " " + s);
 		}
+
+		private ILog log;
 	}
 }

@@ -20,6 +20,11 @@ namespace Core.Parsing
 			Y = r.ReadNumber();
 		}
 
+		public override string ToString()
+		{
+			return "(" + X + ", " + Y +")";
+		}
+
 		public bool Equals(Pos obj)
 		{
 			if (ReferenceEquals(null, obj)) return false;

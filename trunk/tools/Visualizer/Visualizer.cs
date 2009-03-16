@@ -5,6 +5,7 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Threading;
 using System.Windows.Forms;
+using Core.AI;
 using Core.Parsing;
 using Core.StateCalculations;
 using TheSapka;
@@ -15,6 +16,35 @@ namespace Visualizer
 {
 	public partial class Visualizer : Form
 	{
+		private const int Gap = 30;
+		private const int MaxSapkaCount = 4;
+		private const string PicturesDirectory = @"Pictures";
+		private const int SmallPictureSize = 6;
+
+		private static readonly Brush[] sapkaBrushes =
+			{
+				Brushes.Magenta,
+				Brushes.Blue,
+				Brushes.Brown,
+				Brushes.Yellow
+			};
+
+		private static readonly Color[] sapkaColors =
+			{
+				Color.Magenta,
+				Color.Blue,
+				Color.Brown,
+				Color.Yellow
+			};
+
+		private readonly VisualizerModel model = new VisualizerModel();
+		private readonly IDictionary<char, Image> typeToPicture = new Dictionary<char, Image>();
+		private readonly ModelUpdatersQueue updatersQueue;
+		private int fieldPaddingX;
+		private int fieldPaddingY;
+		private volatile bool makeSnapshot;
+		private TreeView tvInfo;
+
 		public Visualizer(ModelUpdatersQueue updatersQueue)
 		{
 			this.updatersQueue = updatersQueue;
@@ -27,9 +57,14 @@ namespace Visualizer
 			fieldPaddingY = 100;
 		}
 
+		private int PictureSize
+		{
+			get { return model.CellSize*SmallPictureSize; }
+		}
+
 		private void InitTimer()
 		{
-			var timer = new Timer { Interval = 200 };
+			var timer = new Timer {Interval = 200};
 			timer.Tick += (sender, e) => Refresh();
 			timer.Start();
 		}
@@ -37,13 +72,13 @@ namespace Visualizer
 		private void InitStatsTreeView()
 		{
 			tvInfo = new TreeView
-				{
-					Visible = true,
-					Width = 200,
-					Dock = DockStyle.Right,
-					Enabled = false,
-				};
-			
+			         	{
+			         		Visible = true,
+			         		Width = 200,
+			         		Dock = DockStyle.Right,
+			         		Enabled = false,
+			         	};
+
 			Controls.Add(tvInfo);
 		}
 
@@ -53,12 +88,12 @@ namespace Visualizer
 			{
 				AddPictureForSapka((char) i, sapkaBrushes[i]);
 			}
-			foreach (var filename in Directory.GetFiles(PicturesDirectory))
+			foreach (string filename in Directory.GetFiles(PicturesDirectory))
 			{
 				if (Path.GetExtension(filename) != ".bmp") continue;
 				Image picture = Image.FromFile(filename);
 				char key;
-				var stripped = Path.GetFileName(filename);
+				string stripped = Path.GetFileName(filename);
 				if (stripped.StartsWith("dot"))
 				{
 					key = '.';
@@ -67,11 +102,11 @@ namespace Visualizer
 				{
 					key = '#';
 				}
-				else if(stripped.StartsWith("asterisk"))
+				else if (stripped.StartsWith("asterisk"))
 				{
 					key = '*';
 				}
-				else if(stripped.StartsWith("unknown"))
+				else if (stripped.StartsWith("unknown"))
 				{
 					key = '?';
 				}
@@ -91,7 +126,7 @@ namespace Visualizer
 		private void AddPicture(char key, Action<Graphics> painter, int size)
 		{
 			using (var bmp = new Bitmap(size, size))
-			using (var gr = Graphics.FromImage(bmp))
+			using (Graphics gr = Graphics.FromImage(bmp))
 			{
 				painter(gr);
 				using (var stream = new MemoryStream())
@@ -119,10 +154,10 @@ namespace Visualizer
 			if (makeSnapshot && model.CurrentMap != null)
 			{
 				var fieldImage = new Bitmap(model.WidthInCoords*SmallPictureSize, model.HeightInCoords*SmallPictureSize);
-				using (var gr = Graphics.FromImage(fieldImage))
+				using (Graphics gr = Graphics.FromImage(fieldImage))
 				{
-					var oldPaddingX = fieldPaddingX;
-					var oldPaddingY = fieldPaddingY;
+					int oldPaddingX = fieldPaddingX;
+					int oldPaddingY = fieldPaddingY;
 					fieldPaddingX = 0;
 					fieldPaddingY = 0;
 					DrawMap(gr);
@@ -141,15 +176,15 @@ namespace Visualizer
 
 		private void DrawRoundString(Graphics gr)
 		{
-			var roundString = model.CurrentRound > 0 ? ("Раунд " + model.CurrentRound) : "Игра не идёт";
+			string roundString = model.CurrentRound > 0 ? ("Раунд " + model.CurrentRound) : "Игра не идёт";
 			var font = new Font(FontFamily.GenericSansSerif, 48);
-			var areaNeeded = gr.MeasureString(roundString, font);
+			SizeF areaNeeded = gr.MeasureString(roundString, font);
 			gr.DrawString(roundString, font, Brushes.Black, (Width - areaNeeded.Width)/2, mainMenu.Height);
 		}
 
 		private void DrawMap(Graphics gr)
 		{
-			if(model.CurrentMap == null) return;
+			if (model.CurrentMap == null) return;
 			for (int x = 0; x < model.CurrentMap.GetLength(0); x++)
 				for (int y = 0; y < model.CurrentMap.GetLength(1); y++)
 					DrawCell(x, y, model.CurrentMap[x, y], gr);
@@ -175,8 +210,8 @@ namespace Visualizer
 		{
 			for (int d = 1; d <= model.DamagingRanges[x, y]; d++)
 			{
-				int nextX = x + d * dx;
-				int nextY = y + d * dy;
+				int nextX = x + d*dx;
+				int nextY = y + d*dy;
 				if (!GoodPos(nextX, nextY, model.WidthInCells, model.HeightInCells)) break;
 				if (model.CurrentMap[nextX, nextY] == 'X') break;
 				DrawCell(nextX, nextY, '#', gr);
@@ -211,12 +246,12 @@ namespace Visualizer
 			infoNode.Nodes.Add(string.Format("Время игры: {0}", model.Time));
 			infoNode.Nodes.Add(string.Format("Опасность коллапса: {0}", model.DangerLevel));
 			tvInfo.Nodes.Add(infoNode);
-			
-			foreach(var sapkaIndex in model.SapkaInfos.Keys)
-			{
-				var sapkaInfo = model.SapkaInfos[sapkaIndex];
 
-				var sapkaNode = new TreeNode("Сапка " + sapkaIndex) { ForeColor = sapkaColors[sapkaIndex] };
+			foreach (int sapkaIndex in model.SapkaInfos.Keys)
+			{
+				SapkaInfo sapkaInfo = model.SapkaInfos[sapkaIndex];
+
+				var sapkaNode = new TreeNode("Сапка " + sapkaIndex) {ForeColor = sapkaColors[sapkaIndex]};
 				sapkaNode.Nodes.Add(string.Format("Осталось бомб: {0}", sapkaInfo.BombsLeft));
 				sapkaNode.Nodes.Add(string.Format("Дальность бомбы: {0}", sapkaInfo.BombsStrength));
 				sapkaNode.Nodes.Add(string.Format("Скорость: {0}", sapkaInfo.Speed));
@@ -224,7 +259,7 @@ namespace Visualizer
 				sapkaNode.Nodes.Add(sapkaInfo.Infected ? "Сапка заражена" : "Сапка здорова");
 				if (model.Scores.ContainsKey(sapkaIndex))
 				{
-					var sapkaScore = model.Scores[sapkaIndex];
+					VisualizerSapkaInfo sapkaScore = model.Scores[sapkaIndex];
 					sapkaNode.Nodes.Add(string.Format("Очки: {0}", sapkaScore.Score));
 					sapkaNode.Nodes.Add(string.Format("Место: {0}", sapkaScore.Rank));
 				}
@@ -233,38 +268,6 @@ namespace Visualizer
 			tvInfo.ExpandAll();
 			tvInfo.EndUpdate();
 		}
-
-		private TreeView tvInfo;
-		private readonly IDictionary<char, Image> typeToPicture = new Dictionary<char, Image>();
-
-		private readonly VisualizerModel model = new VisualizerModel();
-		private readonly ModelUpdatersQueue updatersQueue;
-
-		private const int SmallPictureSize = 6;
-		private int PictureSize { get { return model.CellSize*SmallPictureSize; } }
-		private int fieldPaddingX;
-		private int fieldPaddingY;
-
-		private const string PicturesDirectory = @"Pictures";
-		private const int MaxSapkaCount = 4;
-		private const int Gap = 30;
-
-		private volatile bool makeSnapshot;
-
-		private static readonly Brush[] sapkaBrushes =
-			{
-				Brushes.Magenta,
-				Brushes.Blue,
-				Brushes.Brown,
-				Brushes.Yellow
-			};
-		private static readonly Color[] sapkaColors =
-			{
-				Color.Magenta,
-				Color.Blue,
-				Color.Brown,
-				Color.Yellow
-			};
 
 		private void StartDummy(int port)
 		{
@@ -333,15 +336,44 @@ namespace Visualizer
 		{
 			StartDummy(20018);
 		}
+
+		private void на20015ToolStripMenuItem1_Click(object sender, EventArgs e)
+		{
+			StartAI(20015);
+		}
+
+		private void StartAI(int port)
+		{
+			var thread = new Thread(
+				() => new Sapka("localhost", port, "ural-sapkers").Run()
+				);
+			thread.IsBackground = true;
+			thread.Start();
+		}
+
+		private void на20016ToolStripMenuItem1_Click(object sender, EventArgs e)
+		{
+			StartAI(20016);
+		}
+
+		private void на20017ToolStripMenuItem1_Click(object sender, EventArgs e)
+		{
+			StartAI(20017);
+		}
+
+		private void на20018ToolStripMenuItem1_Click(object sender, EventArgs e)
+		{
+			StartAI(20018);
+		}
 	}
 
 	public class GameStateSnapshot
 	{
 		public readonly MapCell[,] Cells;
 		public readonly int CellSize;
-		public readonly int Time;
 		public readonly int PictureSize;
 		public readonly int SmallPictureSize;
+		public readonly int Time;
 		public IDictionary<Pos, SapkaSnapshotData> SapkasData = new Dictionary<Pos, SapkaSnapshotData>();
 
 		public GameStateSnapshot(VisualizerModel model, int pictureSize, int smallPictureSize)
@@ -351,7 +383,7 @@ namespace Visualizer
 			Time = model.Time;
 			foreach (var sapka in model.SapkaInfos)
 			{
-				var sapkaInfo = sapka.Value;
+				SapkaInfo sapkaInfo = sapka.Value;
 				SapkasData[new Pos(sapkaInfo.Pos.X, sapkaInfo.Pos.Y)] = new SapkaSnapshotData(sapkaInfo.Speed);
 			}
 			PictureSize = pictureSize;
