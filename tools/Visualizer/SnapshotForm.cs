@@ -50,8 +50,8 @@ namespace Visualizer
 		{
 			var pos = new Pos(x/gameStateInfo.SmallPictureSize, y/gameStateInfo.SmallPictureSize);
 			if (!gameStateInfo.SapkasData.ContainsKey(pos)) return;
-			//selectedSpeed = gameStateInfo.SapkasData[pos].Speed;
-			selectedSpeed = 1;
+			selectedSpeed = gameStateInfo.SapkasData[pos].Speed;
+			//selectedSpeed = 1;
 			pbBackground.Image = (Image) initialImage.Clone();
 			using (var gr = Graphics.FromImage(pbBackground.Image))
 			{
