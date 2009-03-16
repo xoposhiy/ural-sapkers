@@ -1,21 +1,21 @@
 using System.Collections.Generic;
 using System;
+using Core.Parsing;
 
 namespace Core.PathFinding
 {
 	public class Path : IPath
 	{
 		private Path parent;
-		private int size, repeat;
+		private int size;
 		private char firstMove;
 		private char move;
 		
-		public Path(Path parent, char move, int repeat)
+		public Path(Path parent, char move)
 		{
 			this.parent = parent;
-			this.repeat = repeat;
 			this.move = move;
-			this.size = (parent == null ? 0 : parent.size) + repeat;
+			this.size = (parent == null ? -1 : parent.size) + 1;
 			this.firstMove = parent == null || parent.size == 0 ? move : parent.firstMove;
 		}
 		
@@ -32,7 +32,7 @@ namespace Core.PathFinding
 		public List<char> FullPath()
 		{
 			List<char> r = parent == null ? new List<char>() : parent.FullPath();
-			for (int it = 0; it < repeat; ++it)
+			if (parent != null)
 			{
 				r.Add(move);
 			}

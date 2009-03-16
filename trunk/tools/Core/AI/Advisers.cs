@@ -41,6 +41,7 @@ namespace Core.AI
 					{
 						continue;
 					}
+					Console.Write("({0} {1}) ", i, j);
 					int countWalls = 0;
 					for (int d = 0; d < 4; ++d)
 					{
@@ -66,25 +67,13 @@ namespace Core.AI
 					}
 					if (countWalls > 0)
 					{
-						Console.Write("({0}, {1}) ", i, j);
 						var decision = new Decision(ds[i, j], new Pos(i, j), ds[i, j].Size() == 0, ds[i, j].Size() + 1, countWalls * 10);
 						decision.Name = "WallBreaker";
 						r.Add(decision);
-					} else
-					{
-						Console.WriteLine("(bad: ({0}, {1}))", i, j);
-						if (i == 2 || i == 8 || j == 2 || j == 8)
-						{
-							foreach (char c in ds[i, j].FullPath())
-							{
-								Console.Write(c);
-							}
-							Console.WriteLine();
-						}
 					}
 				}
 			}
-			Console.WriteLine();
+			Console.WriteLine(r.Count);
 			return r;
 		}
 	}

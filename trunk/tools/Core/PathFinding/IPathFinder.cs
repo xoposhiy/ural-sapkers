@@ -1,4 +1,5 @@
 using System;
+using Core.Parsing;
 using System.Collections.Generic;
 using Core.StateCalculations;
 
@@ -15,5 +16,7 @@ namespace Core.PathFinding
 	{
 		void SetMap(MapCell[,] newMap, int newCellSize);
 		IPath[,] FindPaths(int x, int y, int time, int speed);
+		IPath[,,] FindPathsWithTime(int x, int y, int time, int speed);
+		void Move(ref int x, ref int y, int time, int speed, int d);
 	}
 }

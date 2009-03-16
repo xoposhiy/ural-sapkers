@@ -15,9 +15,9 @@ namespace Core.AI
 
 		static Chief()
 		{
-			// Мусор надо будет удалить. Сейчас он для тестирования.
-			advisers.Add(new SuicideAdviser());
-			advisers.Add(new PanicAdviser());
+			// РњСѓСЃРѕСЂ РЅР°РґРѕ Р±СѓРґРµС‚ СѓРґР°Р»РёС‚СЊ. РЎРµР№С‡Р°СЃ РѕРЅ РґР»СЏ С‚РµСЃС‚РёСЂРѕРІР°РЅРёСЏ.
+			//advisers.Add(new SuicideAdviser());
+			//advisers.Add(new PanicAdviser());
 			advisers.Add(new DestroyWallsAdviser());
 			experts.Add(new CanNotRunFromBombExpert());
 		}
@@ -64,7 +64,7 @@ namespace Core.AI
 		private double CalculateBeauty(Decision decision)
 		{
 			Debug.Assert(decision.Duration > 0);
-			// Эти фиговины нужно будет подобрать...
+			// Р­С‚Рё С„РёРіРѕРІРёРЅС‹ РЅСѓР¶РЅРѕ Р±СѓРґРµС‚ РїРѕРґРѕР±СЂР°С‚СЊ...
 			const double expertWeight = 0.1;
 			double result = (double)decision.PotentialScore/decision.Duration;
 			foreach (var expert in experts)
@@ -72,7 +72,7 @@ namespace Core.AI
 				var expertsEstimate = expert.EstimateDecisionDanger(state, paths, decision);
 				if(expertsEstimate == byte.MaxValue) 
 				{
-					result = int.MinValue; // Эксперт сказал «нет», значит «нет»!
+					result = int.MinValue; // Р­РєСЃРїРµСЂС‚ СЃРєР°Р·Р°Р» В«РЅРµС‚В», Р·РЅР°С‡РёС‚ В«РЅРµС‚В»!
 					Console.WriteLine(expert.GetType().Name + " declined " + decision);
 				}
 				result -= expertsEstimate * expertWeight;
@@ -86,8 +86,8 @@ namespace Core.AI
 
 	internal class CanNotRunFromBombExpert : IExpert
 	{
-		// TODO pe: Не учитывает собранные при отходе антибонусы.
-		// TODO pe: Не учитывает взаимодетанирование бомб.
+		// TODO pe: РќРµ СѓС‡РёС‚С‹РІР°РµС‚ СЃРѕР±СЂР°РЅРЅС‹Рµ РїСЂРё РѕС‚С…РѕРґРµ Р°РЅС‚РёР±РѕРЅСѓСЃС‹.
+		// TODO pe: РќРµ СѓС‡РёС‚С‹РІР°РµС‚ РІР·Р°РёРјРѕРґРµС‚Р°РЅРёСЂРѕРІР°РЅРёРµ Р±РѕРјР±.
 		public byte EstimateDecisionDanger(GameState state, IPath[,] paths, Decision decision)
 		{
 			Pos me = state.MyCell;
@@ -116,7 +116,7 @@ namespace Core.AI
 		{
 			var decision = new Decision(null, state.MyCell, true, 1, -1000);
 			decision.Name = "Suicide";
-			yield return decision; //Убей себя! Выпей яду! Вгазенваген! Неудачнег! Лох — это судьба...
+			yield return decision; //РЈР±РµР№ СЃРµР±СЏ! Р’С‹РїРµР№ СЏРґСѓ! Р’РіР°Р·РµРЅРІР°РіРµРЅ! РќРµСѓРґР°С‡РЅРµРі! Р›РѕС… вЂ” СЌС‚Рѕ СЃСѓРґСЊР±Р°...
 		}
 	}
 
@@ -133,7 +133,7 @@ namespace Core.AI
 
 	internal interface IExpert
 	{
-		// Чем больше, тем хуже решение. 0 — эксперт не имеет ничего против :)
+		// Р§РµРј Р±РѕР»СЊС€Рµ, С‚РµРј С…СѓР¶Рµ СЂРµС€РµРЅРёРµ. 0 вЂ” СЌРєСЃРїРµСЂС‚ РЅРµ РёРјРµРµС‚ РЅРёС‡РµРіРѕ РїСЂРѕС‚РёРІ :)
 		byte EstimateDecisionDanger(GameState state, IPath[,] paths, Decision decision);
 	}
 }

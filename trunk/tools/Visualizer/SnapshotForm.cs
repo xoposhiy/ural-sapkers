@@ -50,7 +50,8 @@ namespace Visualizer
 		{
 			var pos = new Pos(x/gameStateInfo.SmallPictureSize, y/gameStateInfo.SmallPictureSize);
 			if (!gameStateInfo.SapkasData.ContainsKey(pos)) return;
-			selectedSpeed = gameStateInfo.SapkasData[pos].Speed;
+			//selectedSpeed = gameStateInfo.SapkasData[pos].Speed;
+			selectedSpeed = 1;
 			pbBackground.Image = (Image) initialImage.Clone();
 			using (var gr = Graphics.FromImage(pbBackground.Image))
 			{
@@ -73,6 +74,10 @@ namespace Visualizer
 				var cury = selectedCoordPos.Y*gameStateInfo.SmallPictureSize;
 				foreach (var dir in path.FullPath())
 				{
+					if (dir == 's')
+					{
+						continue;
+					}
 					for (int i = 0; i < selectedSpeed; i++)
 					{
 						Fill(gr, curx, cury);
