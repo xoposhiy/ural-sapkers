@@ -1,0 +1,7 @@
+cd contest
+if test -r bin/install ; then
+chmod +x bin/install
+bin/install
+fi
+chmod +x bin/run
+bin/run lit-andrew 20015
