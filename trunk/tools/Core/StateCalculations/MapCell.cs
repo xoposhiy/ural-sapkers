@@ -38,30 +38,6 @@ namespace Core.StateCalculations
 		public int EmptySince { get; private set; }
 		public char Bonus { get; private set; }
 
-		public MapCell AddBomb(int timeStart, int timeEnd)
-		{
-			return new MapCell(
-				false,
-				false,
-				true,
-				timeStart < DeadlySince ? timeStart : DeadlySince,
-				timeStart < DeadlySince ? timeEnd : DeadlyTill, //TODO Косяк с равенством Since и не равенством Till
-				timeStart < DeadlySince ? timeEnd : DeadlyTill,
-				Bonus) {IsBomb = true};
-		}
-
-		public MapCell MakeDeadly(int timeStart, int timeEnd)
-		{
-			return new MapCell(
-				IsUnbreakableWall,
-				IsBreakableWall,
-				IsEmpty,
-				timeStart < DeadlySince ? timeStart : DeadlySince,
-				timeStart < DeadlySince ? timeEnd : DeadlyTill, //TODO Косяк с равенством Since и не равенством Till
-				timeStart < DeadlySince ? timeEnd : DeadlyTill,
-				Bonus);
-		}
-
 		public MapCell AddBonus(char substanceType)
 		{
 			return new MapCell(
