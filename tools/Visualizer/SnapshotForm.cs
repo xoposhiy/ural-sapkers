@@ -65,7 +65,7 @@ namespace Visualizer
 		{
 			if (selectedCoordPos == null) return;
 			pbBackground.Image = (Image) selectedImage.Clone();
-			var paths = pathFinder.FindPaths(selectedCoordPos.X, selectedCoordPos.Y, gameStateInfo.Time, selectedSpeed);
+			var paths = pathFinder.FindPaths(selectedCoordPos.X, selectedCoordPos.Y, gameStateInfo.Time, selectedSpeed, int.MaxValue);
 			var alive = pathFinder.Live(selectedCoordPos.X, selectedCoordPos.Y, gameStateInfo.Time, selectedSpeed);
 			var path = paths[x / gameStateInfo.SmallPictureSize, y / gameStateInfo.SmallPictureSize];
 			if (path == null) return;

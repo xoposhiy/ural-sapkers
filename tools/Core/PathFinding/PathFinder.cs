@@ -82,7 +82,7 @@ namespace Core.PathFinding
 			return time >= cell.DeadlySince && time <= cell.DeadlyTill;
 		}
 
-		public IPath[,,] FindPathsWithTime(int x0, int y0, int time0, int speed)
+		public IPath[,,] FindPathsWithTime(int x0, int y0, int time0, int speed, int radius)
 		{
 			int qe = 1;
 			var dist = new Path[n,m,MAX_TIME+1];
@@ -102,6 +102,10 @@ namespace Core.PathFinding
 			{
 				int X = qx[it];
 				int Y = qy[it];
+				if (Math.Abs(X - x0) > radius || Math.Abs(Y - y0) > radius)
+				{
+					continue;
+				}
 				int time = qt[it];
 				if (minVisitedTime[X, Y] == -1)
 				{
@@ -116,8 +120,7 @@ namespace Core.PathFinding
 				{
 					int x = X;
 					int y = Y;
-					Move(ref x, ref y, time + time0, speed, d);
-					if (x == X && y == Y)
+					if (!Move(ref x, ref y, time + time0, speed, d) || x == X && y == Y)
 					{
 						continue;
 					}
@@ -133,8 +136,9 @@ namespace Core.PathFinding
 			return dist;
 		}
 		
-		public void Move(ref int x, ref int y, int time, int speed, int d)
+		public bool Move(ref int x, ref int y, int time, int speed, int d)
 		{
+			//TODO bug with large speed
 			int x0 = x;
 			int y0 = y;
 			x += dx[d]*speed;
@@ -144,9 +148,14 @@ namespace Core.PathFinding
 			        (cc[x0] != cc[x] || cc[y0] != cc[y]) && 
 			        	prohibited(map[cc[x], cc[y]], time)))
 			{
+				if (InMap(x, y) && map[cc[x], cc[y]].IsDeadlyAt(time))
+				{
+					return false;
+				}
 				x -= dx[d];
 				y -= dy[d];
 			}
+			return true;
 		}
 
 		private bool InMap(int x, int y)
@@ -154,9 +163,9 @@ namespace Core.PathFinding
 			return x >= 0 && x < n && y >= 0 && y < m;
 		}
 
-		public IPath[,] FindPaths(int x, int y, int time, int speed)
+		public IPath[,] FindPaths(int x, int y, int time, int speed, int radius)
 		{
-			IPath[,,] dist = FindPathsWithTime(x, y, time, speed);
+			IPath[,,] dist = FindPathsWithTime(x, y, time, speed, radius);
 			var r = new IPath[n,m];
 			for (int i = 0; i < n; ++i)
 			{

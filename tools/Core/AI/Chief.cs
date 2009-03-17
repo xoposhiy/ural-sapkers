@@ -35,7 +35,7 @@ namespace Core.AI
 				var sw = Stopwatch.StartNew();
 				paths = finder.FindPaths(
 					state.Sapkas[state.Me].Pos.X, state.Sapkas[state.Me].Pos.Y, state.Time,
-					state.Sapkas[state.Me].Speed);
+					state.Sapkas[state.Me].Speed, Constants.Radius);
 				sw.Stop();
 				if (sw.ElapsedMilliseconds > 50)
 					log.Warn("FindPaths spends too much time: " + sw.ElapsedMilliseconds + " ms (should <= 50)");
