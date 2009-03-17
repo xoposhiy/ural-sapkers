@@ -29,5 +29,10 @@ namespace Core.AI
 			if(safePositions < 4) return 128;
 			return 0;
 		}
+
+		public void OnNextMove()
+		{
+			
+		}
 	}
 }

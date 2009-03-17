@@ -13,8 +13,10 @@ namespace Core.StateCalculations
 		public SapkaInfo[] Sapkas { get; private set; }
 		public int Time { get; private set; }
 		public int RoundNumber { get; private set; }
+		public SapkaInfo MySapka { get { return Sapkas[Me]; } }
 		
 		private List<Bomb> bombs;
+		private int lastUsedBomb;
 
 		public Pos MyCell
 		{
@@ -100,7 +102,7 @@ namespace Core.StateCalculations
 
 		#endregion
 
-		private void RecalcDeadly()
+		public void RecalcDeadly()
 		{
 			var dx = new[] {1, -1, 0, 0};
 			var dy = new[] {0, 0, 1, -1};
@@ -278,6 +280,18 @@ namespace Core.StateCalculations
 			for (int x = 0; x < m.GetLength(0); x++)
 				for (int y = 0; y < m.GetLength(1); y++)
 					Map[x, y] = new MapCell(m[x, y]);
+		}
+
+		public int GetWaitForBombTime()
+		{
+			if(MySapka.BombsLeft > 0) return 0;
+			// TODO Если сапка заражена безбомбием, то надо бы как-то это обрабатывать покузявее, чем Math.Min...
+			return Math.Max(0, Constants.BombTimeout - (Time - lastUsedBomb)); 
+		}
+
+		public void UseBomb()
+		{
+			lastUsedBomb = Time;
 		}
 	}
 }

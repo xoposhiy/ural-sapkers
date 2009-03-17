@@ -51,6 +51,10 @@ namespace Core.AI
 			{
 				return Decision.DoNothing;
 			}
+			foreach (var expert in experts)
+			{
+				expert.OnNextMove();
+			}
 			foreach (IAdviser adviser in advisers)
 			{
 				foreach (Decision decision in adviser.Advise(state, paths))
@@ -70,13 +74,17 @@ namespace Core.AI
 			if (state.Sapkas[state.Me].BombsLeft == 0)
 				d = new Decision(d.Path, d.Target, false, d.Duration, d.PotentialScore) { Name = d.Name};
 			if (d.PutBomb)
+			{
+				state.UseBomb();
 				log.Info("BOMB!");
+			}
 			return d;
 		}
 
 		private string DecisionLogString(Decision decision)
 		{
-			return "from " + state.MyCell + " " + state.Sapkas[state.Me].Pos + " " +decision + " cost:" + ((double) decision.PotentialScore/decision.Duration);
+			return "from " + state.MyCell + " " + state.Sapkas[state.Me].Pos + " " +decision +
+				" cost:" + decision.PotentialScore + "/" + decision.Duration + " = " + ((double)decision.PotentialScore / decision.Duration);
 		}
 
 		private double CalculateBeauty(Decision decision)

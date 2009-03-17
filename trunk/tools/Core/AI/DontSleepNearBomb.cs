@@ -19,6 +19,11 @@ namespace Core.AI
 			return 0;
 		}
 
+		public void OnNextMove()
+		{
+			
+		}
+
 		#endregion
 	}
 }
