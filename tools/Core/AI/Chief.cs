@@ -23,7 +23,7 @@ namespace Core.AI
 			advisers.Add(new DestroyWallsAdviser());
 			experts.Add(new DontPutBombIfCantRunFromIt());
 			experts.Add(new DontGoToDeadlyCell());
-			experts.Add(new DontSleepNearBombExpert());
+			experts.Add(new DontSleepNearBomb());
 		}
 
 		public Chief(GameState state)
