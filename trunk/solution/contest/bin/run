@@ -1,0 +1,3 @@
+cd bin
+chmod +x Sapka.exe
+./Sapka.exe $1 $2
