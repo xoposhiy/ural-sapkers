@@ -1,18 +1,10 @@
-using System;
 using System.Collections.Generic;
-using Core;
 using Core.Parsing;
 using Core.PathFinding;
 using Core.StateCalculations;
 
 namespace Core.AI
 {
-
-	internal interface IAdviser
-	{
-		IEnumerable<Decision> Advise(GameState state, IPath[,] paths);
-	}
-	
 	internal class DestroyWallsAdviser : IAdviser
 	{
 		public IEnumerable<Decision> Advise(GameState state, IPath[,] paths)
@@ -52,7 +44,7 @@ namespace Core.AI
 							    y < 0 || y >= ds.GetLength(1) ||
 							    state.Map[x, y].IsEmpty ||
 							    state.Map[x, y].IsBreakableWall &&
-							    	state.Time >= state.Map[x, y].EmptySince)
+							    state.Time >= state.Map[x, y].EmptySince)
 							{
 								x += dx[d];
 								y += dy[d];

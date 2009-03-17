@@ -48,9 +48,11 @@
     <Compile Include="AI\Chief.cs" />
     <Compile Include="AI\Constants.cs" />
     <Compile Include="AI\Decision.cs" />
+    <Compile Include="AI\DestroyWallsAdviser.cs" />
     <Compile Include="AI\DontGoToDeadlyCell.cs" />
     <Compile Include="AI\DontPutBombIfCantRunFromIt.cs" />
     <Compile Include="AI\DontSleepNearBomb.cs" />
+    <Compile Include="AI\IAdviser.cs" />
     <Compile Include="AI\IExpert.cs" />
     <Compile Include="AI\PanicAdviser.cs" />
     <Compile Include="AI\Sapka.cs" />
@@ -82,7 +84,6 @@
     <Compile Include="SapkaServer.cs" />
     <Compile Include="StateCalculations\GameState.cs" />
     <Compile Include="StateCalculations\MapCell.cs" />
-    <Compile Include="AI\Advisers.cs" />
     <Compile Include="StateCalculations\Bomb.cs" />
   </ItemGroup>
   <ItemGroup>
