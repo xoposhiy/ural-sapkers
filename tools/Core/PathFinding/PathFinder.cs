@@ -60,8 +60,8 @@ namespace Core.PathFinding
 				}
 				MapCell cell = map[x/cellSize, y/cellSize];
 				if ((x/cellSize != X/cellSize || y/cellSize != Y/cellSize) &&
-					prohibited(cell, time + time0 + 1)/* && 
-				    (!prohibited(cell0, time + time0) || !prohibited(cell, time + time0))*/)
+					prohibited(cell, time + time0 + 1) && 
+				    (!prohibited(cell0, time + time0) || !prohibited(cell, time + time0)))
 				{
 					continue;
 				}
@@ -156,9 +156,8 @@ namespace Core.PathFinding
 		public bool prohibited(MapCell cell, int time)
 		{
 			return cell.IsUnbreakableWall ||
-				cell.IsBreakableWall && time < cell.EmptySince ||
-				cell.IsBomb && time < cell.DeadlySince ||
-				time >=cell.DeadlySince && time < cell.DeadlyTill;
+				(cell.IsBreakableWall || cell.IsBomb) && time < cell.EmptySince ||
+				time >= cell.DeadlySince && time <= cell.DeadlyTill;
 		}
 
 		private void Add(int x, int y, int time, Path[,,] dist, 

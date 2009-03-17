@@ -1,6 +1,8 @@
 ﻿using System;
 using Core.AI;
 using Core.Parsing;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Core.StateCalculations
 {
@@ -13,6 +15,8 @@ namespace Core.StateCalculations
 		public SapkaInfo[] Sapkas { get; private set; }
 		public int Time { get; private set; }
 		public int RoundNumber { get; private set; }
+		
+		private List<Bomb> bombs;
 
 		public Pos MyCell
 		{
@@ -32,6 +36,7 @@ namespace Core.StateCalculations
 			Me = gameInfo.PID;
 			CellSize = gameInfo.MapInfo.MapCellSize;
 			InitMapFrom(gameInfo.MapInfo.Map);
+			bombs = new List<Bomb>();
 		}
 
 		public void OnRoundStart(StartRoundInfo startRoundInfo)
@@ -40,6 +45,7 @@ namespace Core.StateCalculations
 			RoundNumber = startRoundInfo.RoundNumber;
 			CellSize = startRoundInfo.MapInfo.MapCellSize;
 			InitMapFrom(startRoundInfo.MapInfo.Map);
+			bombs = new List<Bomb>();
 		}
 
 		public void OnMapChange(MapChangeInfo info)
@@ -52,17 +58,10 @@ namespace Core.StateCalculations
 				Pos p = add.Pos;
 				if (add.SubstanceType == '*')
 				{
-					int start = Time + add.Time;
-					int end = start + Constants.ExplosionDuration-1;
-					Map[p.X, p.Y] = Map[p.X, p.Y].AddBomb(start, end);
-					RecalcDeadly(p.X, p.Y, add.DamagingRange, start, end);
+					AddBomb(new Bomb(p.X, p.Y, add.DamagingRange, Time + Constants.BombTimeout - 1));
 				}
 				else if (add.SubstanceType == '#')
 				{
-					int start = Time;
-					int end = Time + add.Time-1;
-					Map[p.X, p.Y] = Map[p.X, p.Y].MakeDeadly(start, end);
-					RecalcDeadly(p.X, p.Y, add.DamagingRange, start, end);
 				}
 				else if (add.SubstanceType == 'w')
 					Map[p.X, p.Y] = Map[p.X, p.Y].AddBreakableWall();
@@ -73,19 +72,17 @@ namespace Core.StateCalculations
 					Map[p.X, p.Y].AddBonus(add.SubstanceType);
 				}
 			}
-			ClearUpDeadlyMarks();
+			RecalcDeadly();
 		}
-
-		private void ClearUpDeadlyMarks()
+		
+		public void AddBomb(Bomb b)
 		{
-			for(int x=0; x<Map.GetLength(0); x++)
-				for(int y=0; y<Map.GetLength(1); y++)
-				{
-					if (Map[x,y].DeadlyTill < Time)
-					{
-						Map[x,y] = new MapCell(false, false, true, int.MaxValue, int.MaxValue, int.MaxValue, Map[x,y].Bonus);
-					}
-				}
+			bombs.Add(b);
+		}
+		
+		public void RemoveBomb(Bomb b)
+		{
+			bombs.Remove(b);
 		}
 
 		public void OnFinishRound(int score)
@@ -98,31 +95,174 @@ namespace Core.StateCalculations
 
 		#endregion
 
-		private void RecalcDeadly(int x, int y, int range, int startTime, int endTime)
+		private void RecalcDeadly()
 		{
 			var dx = new[] {1, -1, 0, 0};
 			var dy = new[] {0, 0, 1, -1};
-			for (int dir = 0; dir < 4; dir++)
+			bombs.RemoveAll(Expired);
+			int[,] bf = new int[Map.GetLength(0), Map.GetLength(1)];
+			for (int i = 0; i < Map.GetLength(0); ++i)
 			{
-				for (int r = 1; r <= range; r++)
+				for (int j = 0; j < Map.GetLength(0); ++j)
 				{
-					//TODO Не учитывается взаимодетонация бомб
-					int xx = x + dx[dir] * r;
-					int yy = y + dy[dir] * r;
-					if(xx < 0 || xx >= Map.GetLength(0) ||
-					   yy < 0 || yy >= Map.GetLength(1) || 
-					   Map[xx, yy].IsUnbreakableWall) break;
-					if(Map[xx, yy].IsBreakableWall)
+					if (Map[i, j].EmptySince < Time)
 					{
-						Map[xx, yy] = Map[xx, yy].MakeDeadly(startTime, endTime);
-						break;
+						Map[i, j] = new MapCell(
+					                        false,
+					                        false,
+					                        true,
+					                        int.MaxValue,
+					                        int.MaxValue,
+					                        int.MaxValue,
+					                        Map[i, j].Bonus);
+					} else {
+						Map[i, j] = new MapCell(
+					                        Map[i, j].IsUnbreakableWall,
+					                        Map[i, j].IsBreakableWall,
+					                        Map[i, j].IsEmpty,
+					                        int.MaxValue,
+					                        int.MaxValue,
+					                        int.MaxValue,
+					                        Map[i, j].Bonus);
 					}
-					if (Map[xx, yy].IsEmpty)
+					bf[i, j] = -1;
+				}
+			}
+			int[] r = new int[bombs.Count];
+			int[] p = new int[bombs.Count];
+			for (int i = 0; i < bombs.Count; ++i)
+			{
+				p[i] = i;
+				bf[bombs[i].X, bombs[i].Y] = i;
+			}
+			for (int i = 0; i < bombs.Count; ++i)
+			{
+				Bomb b = bombs[i];
+				for (int d = 0; d < 4; ++d)
+				{
+					int x = b.X;
+					int y = b.Y;
+					for (int it = 0; it < b.DamagingRange; ++it)
 					{
-						Map[xx, yy] = Map[xx, yy].MakeDeadly(startTime, endTime);
+						if (x >= 0 && x < Map.GetLength(0) &&
+						    y >= 0 && y < Map.GetLength(1) &&
+						    Map[x, y].IsEmpty &&
+						    bf[x, y] == -1)
+						{
+							x += dx[d];
+							y += dy[d];
+						}
+					}
+					if (x >= 0 && x < Map.GetLength(0) &&
+					    y >= 0 && y < Map.GetLength(1) &&
+					    bf[x, y] != -1)
+					{
+						Unite(i, bf[x, y], p, r);
 					}
 				}
 			}
+			int[] detTime = new int[bombs.Count];
+			for (int i = 0; i < bombs.Count; ++i)
+			{
+				detTime[i] = int.MaxValue;
+			}
+			for (int i = 0; i < bombs.Count; ++i)
+			{
+				detTime[GetP(i, p)] = Math.Min(detTime[GetP(i, p)], bombs[i].DetTime);
+			}
+			for (int i = 0; i < bombs.Count; ++i)
+			{
+				p[i] = i;
+				bf[bombs[i].X, bombs[i].Y] = i;
+			}
+			for (int i = 0; i < bombs.Count; ++i)
+			{
+				Bomb b = bombs[i];
+				int dt = detTime[GetP(i, p)];
+				Map[b.X, b.Y] = new MapCell(
+			                            false,
+			                            false,
+			                            true,
+			                            dt,
+			                            dt + Constants.ExplosionDuration - 1,
+			                            dt,
+			                            Map[b.X, b.Y].Bonus);
+				for (int d = 0; d < 4; ++d)
+				{
+					int x = b.X;
+					int y = b.Y;
+					for (int it = 0; it < b.DamagingRange; ++it)
+					{
+						if (x >= 0 && x < Map.GetLength(0) &&
+						    y >= 0 && y < Map.GetLength(1) &&
+						    Map[x, y].IsEmpty &&
+						    bf[x, y] == -1)
+						{
+							x += dx[d];
+							y += dy[d];
+							if (x >= 0 && x < Map.GetLength(0) &&
+							    y >= 0 && y < Map.GetLength(1))
+							{
+								if (Map[x, y].IsEmpty && bf[x, y] == -1)
+								{
+									Map[x, y] = new MapCell(
+								                        false,
+								                        false,
+								                        true,
+								                        dt,
+								                        dt + Constants.ExplosionDuration - 1,
+								                        int.MaxValue,
+								                        Map[x, y].Bonus);
+								}
+								if (Map[x, y].IsBreakableWall)
+								{
+									Map[x, y] = new MapCell(
+								                        false,
+								                        true,
+								                        false,
+								                        int.MaxValue,
+								                        int.MaxValue,
+								                        dt + Constants.ExplosionDuration,
+								                        Map[x, y].Bonus);
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		
+		private int GetP(int i, int[] p)
+		{
+			if (p[i] != i)
+			{
+				p[i] = GetP(p[i], p);
+			}
+			return p[i];
+		}
+		
+		private void Unite(int i, int j, int[] p, int[] r)
+		{
+			i = GetP(i, p);
+			j = GetP(j, p);
+			if (i != j)
+			{
+				if (r[i] < r[j])
+				{
+					p[i] = j;
+				} else {
+					p[j] = i;
+				}
+				if (r[i] == r[j])
+				{
+					++r[i];
+				}
+			}
+		}
+		
+		private bool Expired(Bomb b)
+		{
+			return b.DetTime + Constants.ExplosionDuration - 1 < Time;
 		}
 
 		private void InitMapFrom(char[,] m)
