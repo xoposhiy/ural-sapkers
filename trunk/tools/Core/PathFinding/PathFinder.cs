@@ -44,7 +44,7 @@ namespace Core.PathFinding
 			}
 			if (alreadyVisited[X, Y, dt])
 			{
-				return false; //там уже искали, ничего не нашли...
+				return false; //С‚Р°Рј СѓР¶Рµ РёСЃРєР°Р»Рё, РЅРёС‡РµРіРѕ РЅРµ РЅР°С€Р»Рё...
 			}
 			alreadyVisited[X, Y, dt] = true;
 			MapCell cell0 = map[X / cellSize, Y / cellSize];
@@ -96,7 +96,7 @@ namespace Core.PathFinding
 				int Y = qy[it];
 				int time = qt[it];
 				MapCell cell0 = map[cc[X], cc[Y]];
-				if (time < MAX_TIME && (prohibited(cell0, time + time0) || !prohibited(cell0, time + time0 + 1)))
+				if (time < MAX_TIME && !cell0.IsDeadlyAt(dt + time0 + 1))
 				{
 					Add(X, Y, time + 1, dist, qx, qy, qt, ref qe, new Path(dist[X, Y, time], 's'));
 				}
@@ -110,8 +110,7 @@ namespace Core.PathFinding
 						continue;
 					}
 					MapCell cell = map[cc[x], cc[y]];
-					if (prohibited(cell, time + time0 + 1) && 
-					    (!prohibited(cell0, time + time0) || !prohibited(cell, time + time0)))
+					if (cell.IsDeadlyAt(time0 + dt + 1))
 					{
 						continue;
 					}
