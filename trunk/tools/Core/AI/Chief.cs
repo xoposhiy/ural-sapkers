@@ -17,12 +17,12 @@ namespace Core.AI
 
 		static Chief()
 		{
-			// Мусор надо будет удалить. Сейчас он для тестирования.
+			// РњСѓСЃРѕСЂ РЅР°РґРѕ Р±СѓРґРµС‚ СѓРґР°Р»РёС‚СЊ. РЎРµР№С‡Р°СЃ РѕРЅ РґР»СЏ С‚РµСЃС‚РёСЂРѕРІР°РЅРёСЏ.
 			//advisers.Add(new SuicideAdviser());
 			//advisers.Add(new PanicAdviser());
 			advisers.Add(new DestroyWallsAdviser());
 			experts.Add(new DontPutBombIfCantRunFromIt());
-			experts.Add(new DontGoToDeadlyCell());
+			//experts.Add(new DontGoToDeadlyCell());
 			experts.Add(new DontSleepNearBomb());
 		}
 
@@ -79,7 +79,7 @@ namespace Core.AI
 		private double CalculateBeauty(Decision decision)
 		{
 			Debug.Assert(decision.Duration > 0);
-			// Эти фиговины нужно будет подобрать...
+			// Р­С‚Рё С„РёРіРѕРІРёРЅС‹ РЅСѓР¶РЅРѕ Р±СѓРґРµС‚ РїРѕРґРѕР±СЂР°С‚СЊ...
 			const double expertWeight = 0.1;
 			double result = (double) decision.PotentialScore/decision.Duration;
 			foreach (IExpert expert in experts)
@@ -87,7 +87,7 @@ namespace Core.AI
 				byte expertsEstimate = expert.EstimateDecisionDanger(state, paths, decision);
 				if (expertsEstimate == byte.MaxValue)
 				{
-					result = int.MinValue; // Эксперт сказал «нет», значит «нет»!
+					result = int.MinValue; // Р­РєСЃРїРµСЂС‚ СЃРєР°Р·Р°Р» В«РЅРµС‚В», Р·РЅР°С‡РёС‚ В«РЅРµС‚В»!
 					log.Info(expert.GetType().Name + " declined " + decision);
 				}
 				result -= expertsEstimate*expertWeight;

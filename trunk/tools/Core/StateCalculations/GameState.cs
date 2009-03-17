@@ -105,7 +105,7 @@ namespace Core.StateCalculations
 			{
 				for (int j = 0; j < Map.GetLength(0); ++j)
 				{
-					if (Map[i, j].EmptySince < Time)
+					if (Map[i, j].EmptySince <= Time)
 					{
 						Map[i, j] = new MapCell(
 					                        false,
@@ -147,7 +147,7 @@ namespace Core.StateCalculations
 						if (x >= 0 && x < Map.GetLength(0) &&
 						    y >= 0 && y < Map.GetLength(1) &&
 						    Map[x, y].IsEmpty &&
-						    bf[x, y] == -1)
+						    (bf[x, y] == -1 || x == b.X && y == b.Y))
 						{
 							x += dx[d];
 							y += dy[d];
@@ -158,6 +158,7 @@ namespace Core.StateCalculations
 					    bf[x, y] != -1)
 					{
 						Unite(i, bf[x, y], p, r);
+						Console.WriteLine("({0}, {1})", i, bf[x, y]);
 					}
 				}
 			}
@@ -196,7 +197,7 @@ namespace Core.StateCalculations
 						if (x >= 0 && x < Map.GetLength(0) &&
 						    y >= 0 && y < Map.GetLength(1) &&
 						    Map[x, y].IsEmpty &&
-						    bf[x, y] == -1)
+						    (bf[x, y] == -1 || x == b.X && y == b.Y))
 						{
 							x += dx[d];
 							y += dy[d];
