@@ -44,7 +44,7 @@ namespace Core.PathFinding
 			}
 			col[X, Y, time] = true;
 			MapCell cell0 = map[X, Y];
-			if (time < MAX_TIME && prohibited(cell0, time + time0) == prohibited(cell0, time + time0 + 1) &&
+			if (time < MAX_TIME && (prohibited(cell0, time + time0) || !prohibited(cell0, time + time0 + 1)) &&
 			    dfs(X, Y, time + 1, speed, time0))
 			{
 				return true;
@@ -59,8 +59,7 @@ namespace Core.PathFinding
 					continue;
 				}
 				MapCell cell = map[x/cellSize, y/cellSize];
-				if ((x/cellSize != X/cellSize || y/cellSize != Y/cellSize) &&
-					prohibited(cell, time + time0 + 1) && 
+				if (prohibited(cell, time + time0 + 1) && 
 				    (!prohibited(cell0, time + time0) || !prohibited(cell, time + time0)))
 				{
 					continue;
@@ -90,7 +89,7 @@ namespace Core.PathFinding
 				int Y = qy[it];
 				int time = qt[it];
 				MapCell cell0 = map[X/cellSize, Y/cellSize];
-				if (time < MAX_TIME && prohibited(cell0, time + time0) == prohibited(cell0, time + time0 + 1))
+				if (time < MAX_TIME && (prohibited(cell0, time + time0) || !prohibited(cell0, time + time0 + 1)))
 				{
 					Add(X, Y, time + 1, dist, qx, qy, qt, ref qe, new Path(dist[X, Y, time], 's'));
 				}
@@ -104,9 +103,8 @@ namespace Core.PathFinding
 						continue;
 					}
 					MapCell cell = map[x/cellSize, y/cellSize];
-					if ((x/cellSize != X/cellSize || y/cellSize != Y/cellSize) &&
-						prohibited(cell, time + time0 + 1)/* && 
-					    (!prohibited(cell0, time + time0) || !prohibited(cell, time + time0))*/)
+					if (prohibited(cell, time + time0 + 1) && 
+					    (!prohibited(cell0, time + time0) || !prohibited(cell, time + time0)))
 					{
 						continue;
 					}
