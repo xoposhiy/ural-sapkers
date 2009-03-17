@@ -1,8 +1,6 @@
 ﻿using System;
-using Core.AI;
 using Core.Parsing;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Core.StateCalculations
 {

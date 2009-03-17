@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
@@ -370,6 +371,11 @@ namespace Visualizer
 		private void на20018ToolStripMenuItem1_Click(object sender, EventArgs e)
 		{
 			StartAI(20018);
+		}
+
+		private void отладчекомЕгоToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			Debugger.Launch();
 		}
 	}
 

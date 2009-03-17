@@ -1,7 +1,5 @@
 using System;
-using System.Collections.Generic;
 using Core.StateCalculations;
-using Core.Parsing;
 
 namespace Core.PathFinding
 {
@@ -14,7 +12,7 @@ namespace Core.PathFinding
 		private int cellSize;
 		private int n, m;
 		private MapCell[,] map;
-		private bool[,,] col;
+		private bool[,,] alreadyVisited;
 		private int[] cc;
 
 		#region IPathFinder Members
@@ -34,24 +32,23 @@ namespace Core.PathFinding
 		
 		public bool Live(int x, int y, int time0, int speed)
 		{
-			col = new bool[n, m, MAX_TIME + 1];
+			alreadyVisited = new bool[n, m, MAX_TIME + 1];
 			return dfs(x, y, 0, speed, time0);
 		}
 		
-		bool dfs(int X, int Y, int time, int speed, int time0)
+		bool dfs(int X, int Y, int dt, int speed, int time0)
 		{
-			if (time == MAX_TIME)
+			if (dt >= MAX_TIME)
 			{
 				return true;
 			}
-			if (col[X, Y, time])
+			if (alreadyVisited[X, Y, dt])
 			{
-				return false;
+				return false; //там уже искали, ничего не нашли...
 			}
-			col[X, Y, time] = true;
-			MapCell cell0 = map[X, Y];
-			if (time < MAX_TIME && (prohibited(cell0, time + time0) || !prohibited(cell0, time + time0 + 1)) &&
-			    dfs(X, Y, time + 1, speed, time0))
+			alreadyVisited[X, Y, dt] = true;
+			MapCell cell0 = map[X / cellSize, Y / cellSize];
+			if (!cell0.IsDeadlyAt(dt + time0 + 1) && dfs(X, Y, dt + 1, speed, time0))
 			{
 				return true;
 			}
@@ -59,23 +56,27 @@ namespace Core.PathFinding
 			{
 				int x = X;
 				int y = Y;
-				Move(ref x, ref y, time + time0, speed, d);
+				Move(ref x, ref y, dt + time0, speed, d);
 				if (x == X && y == Y)
 				{
 					continue;
 				}
 				MapCell cell = map[cc[x], cc[y]];
-				if (prohibited(cell, time + time0 + 1) && 
-				    (!prohibited(cell0, time + time0) || !prohibited(cell, time + time0)))
-				{
-					continue;
-				}
-				if (dfs(x, y, time + 1, speed, time0))
-				{
-					return true;
-				}
+				if (!cell.IsDeadlyAt(time0 + dt + 1) && dfs(x, y, dt + 1, speed, time0)) return true;
 			}
 			return false;
+		}
+		/*
+		public bool prohibited(MapCell cell, int time)
+		{
+			return cell.IsUnbreakableWall ||
+				(cell.IsBreakableWall || cell.IsBomb) && time < cell.EmptySince ||
+				time >= cell.DeadlySince && time <= cell.DeadlyTill;
+		}
+		 */
+		private static bool IsFire(MapCell cell, int time)
+		{
+			return time >= cell.DeadlySince && time <= cell.DeadlyTill;
 		}
 
 		public IPath[,,] FindPathsWithTime(int x0, int y0, int time0, int speed)
@@ -129,7 +130,7 @@ namespace Core.PathFinding
 			x += dx[d]*speed;
 			y += dy[d]*speed;
 			while ((x != x0 || y != y0) &&
-			       (x < 0 || x >= n || y < 0 || y >= m || 
+			       (!InMap(x, y) || 
 			        (cc[x0] != cc[x] || cc[y0] != cc[y]) && 
 			        	prohibited(map[cc[x], cc[y]], time)))
 			{
@@ -137,7 +138,12 @@ namespace Core.PathFinding
 				y -= dy[d];
 			}
 		}
-		
+
+		private bool InMap(int x, int y)
+		{
+			return x >= 0 && x < n && y >= 0 && y < m;
+		}
+
 		public IPath[,] FindPaths(int x, int y, int time, int speed)
 		{
 			IPath[,,] dist = FindPathsWithTime(x, y, time, speed);
@@ -161,7 +167,7 @@ namespace Core.PathFinding
 		{
 			return cell.IsUnbreakableWall ||
 				(cell.IsBreakableWall || cell.IsBomb) && time < cell.EmptySince ||
-				time >= cell.DeadlySince && time <= cell.DeadlyTill;
+				cell.IsDeadlyAt(time);
 		}
 
 		private void Add(int x, int y, int time, Path[,,] dist, 

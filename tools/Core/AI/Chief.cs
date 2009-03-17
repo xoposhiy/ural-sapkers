@@ -17,12 +17,11 @@ namespace Core.AI
 
 		static Chief()
 		{
-			// Мусор надо будет удалить. Сейчас он для тестирования.
-			//advisers.Add(new SuicideAdviser());
-			//advisers.Add(new PanicAdviser());
+//			advisers.Add(new SuicideAdviser());
+//			advisers.Add(new PanicAdviser());
 			advisers.Add(new DestroyWallsAdviser());
 			experts.Add(new DontPutBombIfCantRunFromIt());
-			//experts.Add(new DontGoToDeadlyCell());
+			experts.Add(new DontGoToDeadlyCell());
 			experts.Add(new DontSleepNearBomb());
 		}
 

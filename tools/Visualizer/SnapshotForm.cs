@@ -55,7 +55,7 @@ namespace Visualizer
 			pbBackground.Image = (Image) initialImage.Clone();
 			using (var gr = Graphics.FromImage(pbBackground.Image))
 			{
-				Fill(gr, x - x%gameStateInfo.SmallPictureSize, y - y%gameStateInfo.SmallPictureSize);
+				Fill(gr, x - x%gameStateInfo.SmallPictureSize, y - y%gameStateInfo.SmallPictureSize, true);
 				selectedCoordPos = new Pos(x/gameStateInfo.SmallPictureSize, y/gameStateInfo.SmallPictureSize);
 			}
 			selectedImage = (Image) pbBackground.Image.Clone();
@@ -66,7 +66,8 @@ namespace Visualizer
 			if (selectedCoordPos == null) return;
 			pbBackground.Image = (Image) selectedImage.Clone();
 			var paths = pathFinder.FindPaths(selectedCoordPos.X, selectedCoordPos.Y, gameStateInfo.Time, selectedSpeed);
-			var path = paths[x/gameStateInfo.SmallPictureSize, y/gameStateInfo.SmallPictureSize];
+			var alive = pathFinder.Live(selectedCoordPos.X, selectedCoordPos.Y, gameStateInfo.Time, selectedSpeed);
+			var path = paths[x / gameStateInfo.SmallPictureSize, y / gameStateInfo.SmallPictureSize];
 			if (path == null) return;
 			Text = new string(path.FullPath().ToArray());
 			using (var gr = Graphics.FromImage(pbBackground.Image))
@@ -81,19 +82,19 @@ namespace Visualizer
 					}
 					for (int i = 0; i < selectedSpeed; i++)
 					{
-						Fill(gr, curx, cury);
+						Fill(gr, curx, cury, alive);
 						curx += dx[dir] * gameStateInfo.SmallPictureSize;
 						cury += dy[dir] * gameStateInfo.SmallPictureSize;
 					}
 				}
-				Fill(gr, curx, cury);
+				Fill(gr, curx, cury, alive);
 			}
 		}
 
 
-		private void Fill(Graphics gr, int x, int y)
+		private void Fill(Graphics gr, int x, int y, bool alive)
 		{
-			gr.FillRectangle(Brushes.Yellow, x, y, gameStateInfo.SmallPictureSize, gameStateInfo.SmallPictureSize);
+			gr.FillRectangle(alive ? Brushes.Yellow : Brushes.Cyan, x, y, gameStateInfo.SmallPictureSize, gameStateInfo.SmallPictureSize);
 		}
 
 		private IDictionary<char, int> dx = new Dictionary<char, int>
@@ -111,5 +112,6 @@ namespace Visualizer
 				{ 'l', 0 },
 				{ 'r', 0 }
 			};
+
 	}
 }
