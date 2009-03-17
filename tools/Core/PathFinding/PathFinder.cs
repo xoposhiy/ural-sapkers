@@ -47,7 +47,7 @@ namespace Core.PathFinding
 				return false; //там уже искали, ничего не нашли...
 			}
 			alreadyVisited[X, Y, dt] = true;
-			MapCell cell0 = map[X / cellSize, Y / cellSize];
+			MapCell cell0 = map[cc[X], c[Y]];
 			if (!cell0.IsDeadlyAt(dt + time0 + 1) && dfs(X, Y, dt + 1, speed, time0))
 			{
 				return true;
@@ -66,14 +66,7 @@ namespace Core.PathFinding
 			}
 			return false;
 		}
-		/*
-		public bool prohibited(MapCell cell, int time)
-		{
-			return cell.IsUnbreakableWall ||
-				(cell.IsBreakableWall || cell.IsBomb) && time < cell.EmptySince ||
-				time >= cell.DeadlySince && time <= cell.DeadlyTill;
-		}
-		 */
+		
 		private static bool IsFire(MapCell cell, int time)
 		{
 			return time >= cell.DeadlySince && time <= cell.DeadlyTill;
