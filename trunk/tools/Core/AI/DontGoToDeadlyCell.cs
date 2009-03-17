@@ -33,9 +33,15 @@ namespace Core.AI
 				}
 				if (dir != -1)
 				{
-					finder.Move(ref tx, ref ty, state.Time, state.Sapkas[state.Me].Speed, dir);
+					if (!finder.Move(ref tx, ref ty, state.Time, state.Sapkas[state.Me].Speed, dir))
+					{
+						cache[dir + 1, bom] = 1;
+					}
 				}
-				cache[dir + 1, bom] = finder.Live(tx, ty, state.Time + 1, state.Sapkas[state.Me].Speed) ? 1 : 2;
+				if (cache[dir + 1, bom] == 0)
+				{
+					cache[dir + 1, bom] = finder.Live(tx, ty, state.Time + 1, state.Sapkas[state.Me].Speed) ? 1 : 2;
+				}
 				if (bomb != null)
 				{
 					state.RemoveBomb(bomb.Value);
