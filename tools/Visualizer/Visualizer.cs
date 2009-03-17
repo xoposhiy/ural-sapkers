@@ -223,6 +223,12 @@ namespace Visualizer
 		{
 			if (!GoodPos(x, y, model.WidthInCells, model.HeightInCells)) return;
 			DrawPicture(type, x*PictureSize, y*PictureSize, PictureSize, PictureSize, gr);
+			var cell = model.State.Map[x, y];
+			if (cell.DeadlySince != int.MaxValue)
+			{
+				gr.DrawString((cell.DeadlySince - model.State.Time).ToString(), new Font("Arial", 7), Brushes.Black, fieldPaddingX + x * PictureSize, fieldPaddingY + y * PictureSize);
+				gr.DrawString((cell.DeadlyTill - model.State.Time).ToString(), new Font("Arial", 7), Brushes.Black, fieldPaddingX + x * PictureSize + PictureSize / 2, fieldPaddingY + y * PictureSize);
+			}
 		}
 
 		private void DrawCoord(int x, int y, char type, Graphics gr)
