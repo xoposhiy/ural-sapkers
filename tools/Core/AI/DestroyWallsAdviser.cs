@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Text;
 using Core.Parsing;
 using Core.PathFinding;
 using Core.StateCalculations;
@@ -62,11 +63,30 @@ namespace Core.AI
 					{
 						var decision = new Decision(ds[i, j], new Pos(i, j), ds[i, j].Size() == 0, ds[i, j].Size() + 1, countWalls * 10);
 						decision.Name = "WallBreaker";
-						r.Add(decision);
+						if(state.GetWaitForBombTime() <= decision.Duration)
+							r.Add(decision);
+						else
+						{
+							var cell = state.Map[decision.Target.X, decision.Target.Y];
+							if (cell.DeadlySince == int.MaxValue || cell.DeadlySince < state.Time + decision.Duration)
+							{
+								decision = new Decision(AddStops(decision.Path, state.GetWaitForBombTime() - decision.Duration), decision.Target, decision.PutBomb, state.GetWaitForBombTime(), decision.PotentialScore) { Name = decision.Name};
+								r.Add(decision);
+							}
+						}
 					}
 				}
 			}
 			return r;
+		}
+
+		private IPath AddStops(IPath path, int repeat)
+		{
+			for(int i=0; i<repeat; i++)
+			{
+				path = new Path((Path)path, 's');
+			}
+			return path;
 		}
 	}
 }

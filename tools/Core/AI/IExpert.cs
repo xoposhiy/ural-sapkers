@@ -7,5 +7,6 @@ namespace Core.AI
 	{
 		// „ем больше, тем хуже решение. 0 Ч эксперт не имеет ничего против :)
 		byte EstimateDecisionDanger(GameState state, IPath[,] paths, Decision decision);
+		void OnNextMove();
 	}
 }
