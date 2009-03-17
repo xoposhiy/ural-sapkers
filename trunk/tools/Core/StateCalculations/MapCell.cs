@@ -4,7 +4,10 @@ namespace Core.StateCalculations
 {
 	public class MapCell
 	{
-		public bool IsBomb { get; private set;}
+		public bool IsBomb { get {
+				return DeadlySince != int.MaxValue && EmptySince == DeadlySince;
+			}
+		}
 
 		public MapCell(bool isUnbreakableWall, bool isBreakableWall, bool isEmpty, int deadlySince, int deadlyTill,
 		               int emptySince, char bonus)
@@ -27,7 +30,6 @@ namespace Core.StateCalculations
 			DeadlyTill = int.MaxValue;
 			EmptySince = int.MaxValue;
 			Bonus = IsBreakableWall || IsUnbreakableWall ? '.' : c;
-			IsBomb = false;
 		}
 
 		public bool IsUnbreakableWall { get; private set; }

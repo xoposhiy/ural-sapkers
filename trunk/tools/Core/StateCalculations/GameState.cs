@@ -112,10 +112,6 @@ namespace Core.StateCalculations
 			{
 				for (int j = 0; j < Map.GetLength(0); ++j)
 				{
-					if (Map[i, j].IsBreakableWall && Map[i, j].IsEmpty)
-					{
-						throw new Exception();
-					}
 					if (Map[i, j].EmptySince <= Time)
 					{
 						Map[i, j] = new MapCell(
