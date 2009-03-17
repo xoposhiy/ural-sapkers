@@ -18,5 +18,6 @@ namespace Core.PathFinding
 		IPath[,] FindPaths(int x, int y, int time, int speed);
 		IPath[,,] FindPathsWithTime(int x, int y, int time, int speed);
 		void Move(ref int x, ref int y, int time, int speed, int d);
+		bool Live(int x, int y, int time, int speed);
 	}
 }
