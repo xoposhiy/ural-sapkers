@@ -15,6 +15,7 @@ namespace Core.PathFinding
 		private int n, m;
 		private MapCell[,] map;
 		private bool[,,] col;
+		private int[] cc;
 
 		#region IPathFinder Members
 
@@ -24,6 +25,11 @@ namespace Core.PathFinding
 			cellSize = newCellSize;
 			n = map.GetLength(0)*cellSize;
 			m = map.GetLength(1)*cellSize;
+			cc = new int[Math.Max(n, m)];
+			for (int i = 0; i < cc.Length; ++i)
+			{
+				cc[i] = i / cellSize;
+			}
 		}
 		
 		public bool Live(int x, int y, int time0, int speed)
@@ -58,7 +64,7 @@ namespace Core.PathFinding
 				{
 					continue;
 				}
-				MapCell cell = map[x/cellSize, y/cellSize];
+				MapCell cell = map[cc[x], cc[y]];
 				if (prohibited(cell, time + time0 + 1) && 
 				    (!prohibited(cell0, time + time0) || !prohibited(cell, time + time0)))
 				{
@@ -88,7 +94,7 @@ namespace Core.PathFinding
 				int X = qx[it];
 				int Y = qy[it];
 				int time = qt[it];
-				MapCell cell0 = map[X/cellSize, Y/cellSize];
+				MapCell cell0 = map[cc[X], cc[Y]];
 				if (time < MAX_TIME && (prohibited(cell0, time + time0) || !prohibited(cell0, time + time0 + 1)))
 				{
 					Add(X, Y, time + 1, dist, qx, qy, qt, ref qe, new Path(dist[X, Y, time], 's'));
@@ -102,7 +108,7 @@ namespace Core.PathFinding
 					{
 						continue;
 					}
-					MapCell cell = map[x/cellSize, y/cellSize];
+					MapCell cell = map[cc[x], cc[y]];
 					if (prohibited(cell, time + time0 + 1) && 
 					    (!prohibited(cell0, time + time0) || !prohibited(cell, time + time0)))
 					{
@@ -124,8 +130,8 @@ namespace Core.PathFinding
 			y += dy[d]*speed;
 			while ((x != x0 || y != y0) &&
 			       (x < 0 || x >= n || y < 0 || y >= m || 
-			        (x0 / cellSize != x / cellSize || y0 / cellSize != y / cellSize) && 
-			        	prohibited(map[x/cellSize, y/cellSize], time)))
+			        (cc[x0] != cc[x] || cc[y0] != cc[y]) && 
+			        	prohibited(map[cc[x], cc[y]], time)))
 			{
 				x -= dx[d];
 				y -= dy[d];
