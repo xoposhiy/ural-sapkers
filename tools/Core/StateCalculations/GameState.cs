@@ -69,7 +69,14 @@ namespace Core.StateCalculations
 					Map[p.X, p.Y] = Map[p.X, p.Y].AddUnbreakableWall();
 				else
 				{
-					Map[p.X, p.Y].AddBonus(add.SubstanceType);
+					Map[p.X, p.Y] = Map[p.X, p.Y].AddBonus(add.SubstanceType);
+				}
+			}
+			foreach (RemoveInfo rem in info.Removes)
+			{
+				if (rem.SubstanceType != '*' && rem.SubstanceType != '#' && rem.SubstanceType != 'w')
+				{
+					Map[rem.Pos.X, rem.Pos.Y] = Map[rem.Pos.X, rem.Pos.Y].AddBonus('.');
 				}
 			}
 			RecalcDeadly();
@@ -105,6 +112,10 @@ namespace Core.StateCalculations
 			{
 				for (int j = 0; j < Map.GetLength(0); ++j)
 				{
+					if (Map[i, j].IsBreakableWall && Map[i, j].IsEmpty)
+					{
+						throw new Exception();
+					}
 					if (Map[i, j].EmptySince <= Time)
 					{
 						Map[i, j] = new MapCell(
@@ -147,6 +158,7 @@ namespace Core.StateCalculations
 						if (x >= 0 && x < Map.GetLength(0) &&
 						    y >= 0 && y < Map.GetLength(1) &&
 						    Map[x, y].IsEmpty &&
+						    Map[x, y].Bonus == '.' &&
 						    (bf[x, y] == -1 || x == b.X && y == b.Y))
 						{
 							x += dx[d];
@@ -158,7 +170,6 @@ namespace Core.StateCalculations
 					    bf[x, y] != -1)
 					{
 						Unite(i, bf[x, y], p, r);
-						Console.WriteLine("({0}, {1})", i, bf[x, y]);
 					}
 				}
 			}
@@ -197,6 +208,7 @@ namespace Core.StateCalculations
 						if (x >= 0 && x < Map.GetLength(0) &&
 						    y >= 0 && y < Map.GetLength(1) &&
 						    Map[x, y].IsEmpty &&
+						    Map[x, y].Bonus == '.' &&
 						    (bf[x, y] == -1 || x == b.X && y == b.Y))
 						{
 							x += dx[d];
@@ -204,7 +216,7 @@ namespace Core.StateCalculations
 							if (x >= 0 && x < Map.GetLength(0) &&
 							    y >= 0 && y < Map.GetLength(1))
 							{
-								if (Map[x, y].IsEmpty && bf[x, y] == -1)
+								if ((Map[x, y].IsEmpty || Map[x, y].Bonus != '.') && bf[x, y] == -1)
 								{
 									Map[x, y] = new MapCell(
 								                        false,
