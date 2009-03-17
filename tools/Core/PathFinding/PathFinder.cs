@@ -47,7 +47,7 @@ namespace Core.PathFinding
 				return false; //там уже искали, ничего не нашли...
 			}
 			alreadyVisited[X, Y, dt] = true;
-			MapCell cell0 = map[cc[X], c[Y]];
+			MapCell cell0 = map[cc[X], cc[Y]];
 			if (!cell0.IsDeadlyAt(dt + time0 + 1) && dfs(X, Y, dt + 1, speed, time0))
 			{
 				return true;
@@ -89,7 +89,7 @@ namespace Core.PathFinding
 				int Y = qy[it];
 				int time = qt[it];
 				MapCell cell0 = map[cc[X], cc[Y]];
-				if (time < MAX_TIME && !cell0.IsDeadlyAt(dt + time0 + 1))
+				if (time < MAX_TIME && !cell0.IsDeadlyAt(time + time0 + 1))
 				{
 					Add(X, Y, time + 1, dist, qx, qy, qt, ref qe, new Path(dist[X, Y, time], 's'));
 				}
@@ -103,7 +103,7 @@ namespace Core.PathFinding
 						continue;
 					}
 					MapCell cell = map[cc[x], cc[y]];
-					if (cell.IsDeadlyAt(time0 + dt + 1))
+					if (cell.IsDeadlyAt(time0 + time + 1))
 					{
 						continue;
 					}
