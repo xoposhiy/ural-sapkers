@@ -67,6 +67,10 @@ namespace Core.AI
 			Decision d = best ?? Decision.DoNothing;
 			log.Info(state.Time + " chosen move: " + DecisionLogString(d));
 			log.Info(state.Time + " chosen path: " + d.PathString());
+			if (state.Sapkas[state.Me].BombsLeft == 0)
+				d = new Decision(d.Path, d.Target, false, d.Duration, d.PotentialScore) { Name = d.Name};
+			if (d.PutBomb)
+				log.Info("BOMB!");
 			return d;
 		}
 
