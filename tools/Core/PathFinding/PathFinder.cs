@@ -5,7 +5,7 @@ namespace Core.PathFinding
 {
 	public class PathFinder : IPathFinder
 	{
-		private const string dir = "lrud";
+		public const string Dir = "lrud";
 		private static readonly int[] dx = new[] {-1, 1, 0, 0};
 		private static readonly int[] dy = new[] {0, 0, -1, 1};
 		private static readonly int MAX_TIME = 50;
@@ -127,7 +127,7 @@ namespace Core.PathFinding
 						continue;
 					}
 					Add(x, y, Math.Min(time + 1, MAX_TIME), dist, qx, qy, qt, ref qe, 
-					    new Path(dist[X, Y, time], dir[d]));
+					    new Path(dist[X, Y, time], Dir[d]));
 				}
 			}
 			return dist;

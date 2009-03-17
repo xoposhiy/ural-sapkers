@@ -20,9 +20,9 @@ namespace Core.AI
 //			advisers.Add(new SuicideAdviser());
 //			advisers.Add(new PanicAdviser());
 			advisers.Add(new DestroyWallsAdviser());
-			experts.Add(new DontPutBombIfCantRunFromIt());
+			//experts.Add(new DontPutBombIfCantRunFromIt());
 			experts.Add(new DontGoToDeadlyCell());
-			experts.Add(new DontSleepNearBomb());
+			//experts.Add(new DontSleepNearBomb());
 		}
 
 		public Chief(GameState state)

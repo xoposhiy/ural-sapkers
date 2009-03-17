@@ -15,6 +15,7 @@ namespace Core
 
 		protected AbstractSapka(string host, int port, string teamName)
 		{
+			log4net.Config.XmlConfigurator.Configure();
 			this.teamName = teamName;
 			sapkaServer = new SapkaServer(host, port);
 			GameState = new GameState();
