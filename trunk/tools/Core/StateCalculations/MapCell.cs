@@ -26,7 +26,7 @@ namespace Core.StateCalculations
 			DeadlySince = int.MaxValue;
 			DeadlyTill = int.MaxValue;
 			EmptySince = int.MaxValue;
-			Bonus = c;
+			Bonus = IsBreakableWall || IsUnbreakableWall ? '.' : c;
 			IsBomb = false;
 		}
 
