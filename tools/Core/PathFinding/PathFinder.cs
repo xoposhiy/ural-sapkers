@@ -14,6 +14,10 @@ namespace Core.PathFinding
 		private MapCell[,] map;
 		private bool[,,] alreadyVisited;
 		private int[] cc;
+		private static int[] qx;
+		private static int[] qy;
+		private static int[] qt;
+		private int[,] minVisitedTime;
 
 		#region IPathFinder Members
 
@@ -27,6 +31,12 @@ namespace Core.PathFinding
 			for (int i = 0; i < cc.Length; ++i)
 			{
 				cc[i] = i / cellSize;
+			}
+			if (qx == null || qx.Length != n * m * (MAX_TIME + 1))
+			{
+				qx = new int[n * m * (MAX_TIME + 1)];
+				qy = new int[n * m * (MAX_TIME + 1)];
+				qt = new int[n * m * (MAX_TIME + 1)];
 			}
 		}
 		
@@ -74,11 +84,16 @@ namespace Core.PathFinding
 
 		public IPath[,,] FindPathsWithTime(int x0, int y0, int time0, int speed)
 		{
-			int[] qx = new int[n * m * (MAX_TIME + 1)];
-			int[] qy = new int[n * m * (MAX_TIME + 1)];
-			int[] qt = new int[n * m * (MAX_TIME + 1)];
 			int qe = 1;
 			var dist = new Path[n,m,MAX_TIME+1];
+			minVisitedTime = new int[n, m];
+			for (int i = 0; i < n; ++i)
+			{
+				for (int j = 0; j < m; ++j)
+				{
+					minVisitedTime[i, j] = -1;
+				}
+			}
 			dist[x0, y0, 0] = new Path(null, 's');
 			qx[0] = x0;
 			qy[0] = y0;
@@ -88,6 +103,10 @@ namespace Core.PathFinding
 				int X = qx[it];
 				int Y = qy[it];
 				int time = qt[it];
+				if (minVisitedTime[X, Y] == -1)
+				{
+					minVisitedTime[X, Y] = time;
+				}
 				MapCell cell0 = map[cc[X], cc[Y]];
 				if (time < MAX_TIME && !cell0.IsDeadlyAt(time + time0 + 1))
 				{
@@ -111,7 +130,6 @@ namespace Core.PathFinding
 					    new Path(dist[X, Y, time], dir[d]));
 				}
 			}
-			Console.WriteLine("queue size: {0}", qe);
 			return dist;
 		}
 		
@@ -144,9 +162,9 @@ namespace Core.PathFinding
 			{
 				for (int j = 0; j < m; ++j)
 				{
-					for (int it = 0; it <= MAX_TIME; ++it)
+					if (minVisitedTime[i, j] != -1)
 					{
-						r[i, j] = r[i, j] ?? dist[i, j, it];
+						r[i, j] = dist[i, j, minVisitedTime[i, j]];
 					}
 				}
 			}

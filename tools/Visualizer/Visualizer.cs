@@ -189,6 +189,20 @@ namespace Visualizer
 			for (int x = 0; x < model.CurrentMap.GetLength(0); x++)
 				for (int y = 0; y < model.CurrentMap.GetLength(1); y++)
 					DrawCell(x, y, model.CurrentMap[x, y], gr);
+			
+			if (makeSnapshot)
+			{
+				for (int x = 0; x < model.CurrentMap.GetLength(0); x++)
+				{
+					for (int y = 0; y < model.CurrentMap.GetLength(1); y++)
+					{
+						MapCell cell = model.State.Map[x, y];
+						Console.Write(cell.IsUnbreakableWall ? 'X' : cell.IsBreakableWall ? 'w' : cell.IsBomb ? 'b' : cell.Bonus);
+					}
+					Console.WriteLine();
+				}
+				Console.WriteLine();
+			}
 
 			//отрисовка взрыва
 			for (int x = 0; x < model.CurrentMap.GetLength(0); x++)
@@ -227,6 +241,10 @@ namespace Visualizer
 			var cell = model.State.Map[x, y];
 			if (cell.DeadlySince != int.MaxValue)
 			{
+				if (cell.DeadlyTill < model.State.Time)
+				{
+					throw new Exception(string.Format("Game state failed: {0} {1}", cell.DeadlyTill, model.State.Time));
+				}
 				gr.DrawString((cell.DeadlySince - model.State.Time).ToString(), new Font("Arial", 7), Brushes.Black, fieldPaddingX + x * PictureSize, fieldPaddingY + y * PictureSize);
 				gr.DrawString((cell.DeadlyTill - model.State.Time).ToString(), new Font("Arial", 7), Brushes.Black, fieldPaddingX + x * PictureSize + PictureSize / 2, fieldPaddingY + y * PictureSize);
 			}
