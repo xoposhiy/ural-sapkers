@@ -14,6 +14,7 @@ namespace Core.PathFinding
 		private int cellSize;
 		private int n, m;
 		private MapCell[,] map;
+		private bool[,,] col;
 
 		#region IPathFinder Members
 
@@ -23,6 +24,53 @@ namespace Core.PathFinding
 			cellSize = newCellSize;
 			n = map.GetLength(0)*cellSize;
 			m = map.GetLength(1)*cellSize;
+		}
+		
+		public bool Live(int x, int y, int time0, int speed)
+		{
+			col = new bool[n, m, MAX_TIME + 1];
+			return dfs(x, y, 0, speed, time0);
+		}
+		
+		bool dfs(int X, int Y, int time, int speed, int time0)
+		{
+			if (time == MAX_TIME)
+			{
+				return true;
+			}
+			if (col[X, Y, time])
+			{
+				return false;
+			}
+			col[X, Y, time] = true;
+			MapCell cell0 = map[X, Y];
+			if (time < MAX_TIME && prohibited(cell0, time + time0) == prohibited(cell0, time + time0 + 1) &&
+			    dfs(X, Y, time + 1, speed, time0))
+			{
+				return true;
+			}
+			for (int d = 0; d < 4; ++d)
+			{
+				int x = X;
+				int y = Y;
+				Move(ref x, ref y, time + time0, speed, d);
+				if (x == X && y == Y)
+				{
+					continue;
+				}
+				MapCell cell = map[x/cellSize, y/cellSize];
+				if ((x/cellSize != X/cellSize || y/cellSize != Y/cellSize) &&
+					prohibited(cell, time + time0 + 1)/* && 
+				    (!prohibited(cell0, time + time0) || !prohibited(cell, time + time0))*/)
+				{
+					continue;
+				}
+				if (dfs(x, y, time + 1, speed, time0))
+				{
+					return true;
+				}
+			}
+			return false;
 		}
 
 		public IPath[,,] FindPathsWithTime(int x0, int y0, int time0, int speed)
