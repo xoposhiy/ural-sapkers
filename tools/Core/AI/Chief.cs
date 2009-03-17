@@ -20,9 +20,10 @@ namespace Core.AI
 //			advisers.Add(new SuicideAdviser());
 //			advisers.Add(new PanicAdviser());
 			advisers.Add(new DestroyWallsAdviser());
-			//experts.Add(new DontPutBombIfCantRunFromIt());
+			experts.Add(new DontPutBombIfCantRunFromIt());
 			experts.Add(new DontGoToDeadlyCell());
-			//experts.Add(new DontSleepNearBomb());
+			experts.Add(new TargetShouldHaveSense());
+			experts.Add(new DontSleepNearBomb());
 		}
 
 		public Chief(GameState state)
@@ -104,6 +105,35 @@ namespace Core.AI
 				result -= expertsEstimate*expertWeight;
 			}
 			return result;
+		}
+	}
+
+	internal class TargetShouldHaveSense : IExpert
+	{
+		public byte EstimateDecisionDanger(GameState state, IPath[,] paths, Decision decision)
+		{
+			int tx = decision.Target.X;
+			int ty = decision.Target.Y;
+			MapCell cell = state.Map[tx, ty];
+			if(cell.DeadlyTill < state.Time) return 0;
+			if(cell.DeadlySince - state.Time <= 45)
+			{
+				var finder = new PathFinder();
+				finder.SetMap(state.Map, state.CellSize);
+				var targetX = tx * state.CellSize + state.CellSize / 2;
+				var targetY = ty * state.CellSize + state.CellSize / 2;
+				var canLive = finder.Live(targetX, targetY, state.Time + decision.Duration, state.Sapkas[state.Me].Speed);
+				if (!canLive)
+				{
+					return 255;
+				}
+			}
+			return 0;	
+		}
+
+		public void OnNextMove()
+		{
+			
 		}
 	}
 }
