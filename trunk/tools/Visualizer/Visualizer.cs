@@ -245,8 +245,8 @@ namespace Visualizer
 				{
 					throw new Exception(string.Format("Game state failed: {0} {1}", cell.DeadlyTill, model.State.Time));
 				}
-				gr.DrawString((cell.DeadlySince - model.State.Time).ToString(), new Font("Arial", 7), Brushes.Black, fieldPaddingX + x * PictureSize, fieldPaddingY + y * PictureSize);
-				gr.DrawString((cell.DeadlyTill - model.State.Time).ToString(), new Font("Arial", 7), Brushes.Black, fieldPaddingX + x * PictureSize + PictureSize / 2, fieldPaddingY + y * PictureSize);
+				gr.DrawString((cell.DeadlySince - model.State.Time).ToString(), new Font("Arial", 7), Brushes.Black, fieldPaddingX + x * PictureSize, fieldPaddingY + y * PictureSize + PictureSize / 2);
+				gr.DrawString((cell.DeadlyTill - model.State.Time).ToString(), new Font("Arial", 7), Brushes.Black, fieldPaddingX + x * PictureSize + PictureSize / 2, fieldPaddingY + y * PictureSize + PictureSize / 2);
 			}
 		}
 
