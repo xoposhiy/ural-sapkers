@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Core.AI
+namespace Core
 {
 	class Constants
 	{
 		public const decimal BombTimeout = 30;
+		public const int ExplosionDuration = 3;
+
 
 	}
 }

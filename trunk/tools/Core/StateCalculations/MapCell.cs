@@ -4,7 +4,7 @@ namespace Core.StateCalculations
 {
 	public class MapCell
 	{
-		public const int BoomDuration = 3;
+		public bool IsBomb { get; private set;}
 
 		public MapCell(bool isUnbreakableWall, bool isBreakableWall, bool isEmpty, int deadlySince, int deadlyTill,
 		               int emptySince, char bonus)
@@ -27,6 +27,7 @@ namespace Core.StateCalculations
 			DeadlyTill = int.MaxValue;
 			EmptySince = int.MaxValue;
 			Bonus = c;
+			IsBomb = false;
 		}
 
 		public bool IsUnbreakableWall { get; private set; }
@@ -46,7 +47,7 @@ namespace Core.StateCalculations
 				timeStart < DeadlySince ? timeStart : DeadlySince,
 				timeStart < DeadlySince ? timeEnd : DeadlyTill, //TODO Косяк с равенством Since и не равенством Till
 				timeStart < DeadlySince ? timeEnd : DeadlyTill,
-				Bonus);
+				Bonus) {IsBomb = true};
 		}
 
 		public MapCell MakeDeadly(int timeStart, int timeEnd)

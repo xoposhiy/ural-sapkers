@@ -1,4 +1,5 @@
 ﻿using System;
+using Core.AI;
 using Core.Parsing;
 
 namespace Core.StateCalculations
@@ -43,7 +44,6 @@ namespace Core.StateCalculations
 
 		public void OnMapChange(MapChangeInfo info)
 		{
-			ClearUpDeadlyMarks();
 			DangerLevel = info.HasDangerLevel ? info.DangerLevel : 0;
 			Time = info.Time;
 			Sapkas = info.Sapkas;
@@ -53,15 +53,15 @@ namespace Core.StateCalculations
 				if (add.SubstanceType == '*')
 				{
 					int start = Time + add.Time;
-					int end = start + MapCell.BoomDuration;
+					int end = start + Constants.ExplosionDuration-1;
 					Map[p.X, p.Y] = Map[p.X, p.Y].AddBomb(start, end);
 					RecalcDeadly(p.X, p.Y, add.DamagingRange, start, end);
 				}
 				else if (add.SubstanceType == '#')
 				{
 					int start = Time;
-					int end = Time + add.Time;
-					Map[p.X, p.Y] = Map[p.X, p.Y].MakeDeadly(Time, Time + add.Time);
+					int end = Time + add.Time-1;
+					Map[p.X, p.Y] = Map[p.X, p.Y].MakeDeadly(start, end);
 					RecalcDeadly(p.X, p.Y, add.DamagingRange, start, end);
 				}
 				else if (add.SubstanceType == 'w')
@@ -73,6 +73,7 @@ namespace Core.StateCalculations
 					Map[p.X, p.Y].AddBonus(add.SubstanceType);
 				}
 			}
+			ClearUpDeadlyMarks();
 		}
 
 		private void ClearUpDeadlyMarks()
