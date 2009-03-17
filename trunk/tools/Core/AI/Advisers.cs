@@ -66,7 +66,6 @@ namespace Core.AI
 							++countWalls;
 						}
 					}
-					Console.Write("({0} {1}): {2}, ", i, j, countWalls);
 					if (countWalls > 0)
 					{
 						var decision = new Decision(ds[i, j], new Pos(i, j), ds[i, j].Size() == 0, ds[i, j].Size() + 1, countWalls * 10);
@@ -74,12 +73,6 @@ namespace Core.AI
 						r.Add(decision);
 					}
 				}
-			}
-			Console.WriteLine();
-			if (state.Map != null)
-			{
-				Console.WriteLine("{0} {2} {1} {3}", state.Map[0, 3].EmptySince, state.Map[3, 0].EmptySince,
-				                  state.Map[0, 3].IsBreakableWall, state.Map[3, 0].IsBreakableWall);
 			}
 			return r;
 		}
