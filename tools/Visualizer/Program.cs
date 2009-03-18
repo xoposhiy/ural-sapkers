@@ -8,6 +8,7 @@ using Core;
 using Core.Parsing;
 using Core.StateCalculations;
 using log4net.Config;
+using System.IO;
 
 namespace Visualizer
 {
@@ -19,16 +20,34 @@ namespace Visualizer
 			XmlConfigurator.Configure();
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
-			Application.Run(CreateMainForm());
+
+            ChooseDataSourceForm startupDialog = new ChooseDataSourceForm();
+            startupDialog.ShowDialog();
+            DataSource dataSource = startupDialog.DataSource;
+
+			Application.Run(CreateMainForm(dataSource));
 		}
 
-		private static Form CreateMainForm()
+        private static Form CreateMainForm(DataSource dataSource)
 		{
 			var updatersQueue = new ModelUpdatersQueue();
 			var parser = new Parser(new VisualizerParserListener(updatersQueue));
-			new Thread(() => ListenToServer(parser)) { IsBackground = true }.Start();
+
+            if (dataSource == DataSource.Localhost)
+                new Thread(() => ListenToServer(parser)) { IsBackground = true }.Start();
+            else if (dataSource == DataSource.Logs)
+                new Thread(() => ReadLogs(parser)) { IsBackground = true }.Start();
+            else throw new IndexOutOfRangeException("Unknown dataSource");
+
 			return new Visualizer(updatersQueue) { WindowState = FormWindowState.Maximized };
+
 		}
+
+        private static void ReadLogs(Parser parser)
+        {
+            //StreamReader sapkaReader = new StreamReader("sapka.log");
+            //StreamReader chiefReader = new StreamReader("chief.log");
+        }
 
 		private static void ListenToServer(Parser parser)
 		{

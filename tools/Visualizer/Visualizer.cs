@@ -395,7 +395,8 @@ namespace Visualizer
 		{
 			Debugger.Launch();
 		}
-	}
+
+    }
 
 	public class GameStateSnapshot
 	{
