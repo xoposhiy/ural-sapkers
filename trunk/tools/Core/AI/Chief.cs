@@ -18,12 +18,13 @@ namespace Core.AI
 		static Chief()
 		{
 //			advisers.Add(new SuicideAdviser());
-//			advisers.Add(new PanicAdviser());
+			advisers.Add(new RunAwayAdviser());
 			advisers.Add(new DestroyWallsAdviser());
-			experts.Add(new DontPutBombIfCantRunFromIt());
+			advisers.Add(new BonusAdviser());
+			experts.Add(new DontPutBombIfCantRunFromIt()); // Isn't this useless?
 			experts.Add(new DontGoToDeadlyCell());
 			experts.Add(new TargetShouldHaveSense());
-			experts.Add(new DontSleepNearBomb());
+			experts.Add(new DontSleepNearBomb()); // And this
 		}
 
 		public Chief(GameState state)
@@ -60,7 +61,7 @@ namespace Core.AI
 			{
 				foreach (Decision decision in adviser.Advise(state, paths))
 				{
-					//log.Debug(state.Time + " " + DecisionLogString(decision));
+					log.Debug(state.Time + " " + DecisionLogString(decision));
 					double beauty = CalculateBeauty(decision);
 					if (beauty > bestBeauty)
 					{
@@ -77,7 +78,11 @@ namespace Core.AI
 			if (d.PutBomb)
 			{
 				state.UseBomb();
-				//log.Info("BOMB!");
+				log.Info("BOMB!");
+			}
+			if (state.InvertedMe)
+			{
+				d.Inverse = true;
 			}
 			return d;
 		}
@@ -100,7 +105,7 @@ namespace Core.AI
 				if (expertsEstimate == byte.MaxValue)
 				{
 					result = int.MinValue; // Эксперт сказал «нет», значит «нет»!
-					//log.Info(expert.GetType().Name + " declined " + decision);
+					log.Info(expert.GetType().Name + " declined " + decision);
 				}
 				result -= expertsEstimate*expertWeight;
 			}

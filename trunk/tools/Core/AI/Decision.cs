@@ -5,6 +5,8 @@ namespace Core.AI
 {
 	public class Decision
 	{
+		public bool Inverse = false;
+		
 		public Decision(IPath path, Pos target, bool putBomb, int duration, int potentialScore)
 		{
 			Path = path;
@@ -13,9 +15,17 @@ namespace Core.AI
 			PotentialScore = potentialScore;
 			Target = target;
 		}
+		
+		private char norm(char c)
+		{
+			const string s1 = "lrud";
+			const string s2 = "rldu";
+			return !Inverse || c == 's' ? c : s2[s1.IndexOf(c)];
+		}
+		
 		public string GetMove()
 		{
-			string res = (Path == null ? 's' : Path.FirstMove()).ToString();
+			string res = (Path == null ? 's' : norm(Path.FirstMove())).ToString();
 			if(PutBomb) res += "b";
 			return res;
 		}
