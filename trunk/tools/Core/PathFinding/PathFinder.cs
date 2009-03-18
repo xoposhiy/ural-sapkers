@@ -14,6 +14,7 @@ namespace Core.PathFinding
 		private MapCell[,] map;
 		private bool[,,] alreadyVisited;
 		private int[] cc;
+		private static Queues qs;
 
 		#region IPathFinder Members
 
@@ -27,6 +28,10 @@ namespace Core.PathFinding
 			for (int i = 0; i < cc.Length; ++i)
 			{
 				cc[i] = i / cellSize;
+			}
+			if (qs == null || qs.X.Length != n * m * 16)
+			{
+				qs = new Queues(MAX_TIME + 1, n * m * 16);
 			}
 		}
 		
@@ -74,8 +79,7 @@ namespace Core.PathFinding
 
 		public IPath[,] FindPaths(int x0, int y0, int time0, int speed, int radius)
 		{
-			//TODO extract qs in static
-			Queues qs = new Queues(MAX_TIME + 1, n * m * 16);
+			qs.Clear();
 			var dist0 = new Path[n,m];
 			var dist1 = new Path[n,m];
 			dist0[x0, y0] = new Path(null, 's');
@@ -87,7 +91,6 @@ namespace Core.PathFinding
 					int X = qs.X[it];
 					int Y = qs.Y[it];
 					Path p = (time + time0 <= bound1(map[cc[X], cc[Y]]) ? dist0 : dist1)[X, Y];
-					//Console.WriteLine("{0}: ({1}, {2}) - {3}", time, X, Y, p.Size());
 					if (time != MAX_TIME && p.Size() < time)
 					{
 						continue;
@@ -207,7 +210,7 @@ namespace Core.PathFinding
 		}
 	}
 
-	internal struct Queues
+	internal class Queues
 	{
 		public int[] First, Last, Next, X, Y;
 		private int used;
@@ -219,7 +222,6 @@ namespace Core.PathFinding
 			Next = new int[maxCount];
 			X = new int[maxCount];
 			Y = new int[maxCount];
-			used = 0;
 			Clear();
 		}
 		
@@ -229,6 +231,7 @@ namespace Core.PathFinding
 			{
 				First[i] = Last[i] = -1;
 			}
+			used = 0;
 		}
 		
 		public void Add(int queue, int x, int y)
