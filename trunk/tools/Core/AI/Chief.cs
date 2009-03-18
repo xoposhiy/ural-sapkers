@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using Core.AI.Advisers;
+using Core.AI.Experts;
 using Core.PathFinding;
 using Core.StateCalculations;
 using log4net;

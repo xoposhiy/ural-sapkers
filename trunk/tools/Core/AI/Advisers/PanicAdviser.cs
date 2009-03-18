@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using Core.PathFinding;
 using Core.StateCalculations;
 
-namespace Core.AI
+namespace Core.AI.Advisers
 {
 	internal class PanicAdviser : IAdviser
 	{

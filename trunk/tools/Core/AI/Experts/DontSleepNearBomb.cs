@@ -1,7 +1,7 @@
 ﻿using Core.PathFinding;
 using Core.StateCalculations;
 
-namespace Core.AI
+namespace Core.AI.Experts
 {
 	public class DontSleepNearBomb : IExpert
 	{
