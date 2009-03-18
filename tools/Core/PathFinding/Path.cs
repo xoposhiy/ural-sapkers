@@ -58,7 +58,8 @@ namespace Core.PathFinding
 			get { return move; }
 		}
 
-		public Path(Path parent, char move) : this(parent, move, parent == null ? 0 : 1)
+		public Path(Path parent, char move)
+			: this(parent, move, parent == null && move == 's' ? 0 : 1)
 		{
 		}
 		
@@ -75,7 +76,7 @@ namespace Core.PathFinding
 		public List<char> FullPath()
 		{
 			List<char> r = parent == null ? new List<char>() : parent.FullPath();
-			for (int it = 0; it < Math.Max(repeat, 1); ++it)
+			for (int it = 0; it < repeat; ++it)
 			{
 				r.Add(move);
 			}
