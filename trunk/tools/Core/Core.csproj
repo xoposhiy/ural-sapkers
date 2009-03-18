@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -47,15 +47,11 @@
   <ItemGroup>
     <Compile Include="AI\Advisers\BonusAdviser.cs" />
     <Compile Include="AI\Advisers\DestroyWallsAdviser.cs" />
-    <Compile Include="AI\Advisers\PanicAdviser.cs" />
     <Compile Include="AI\Advisers\RunAwayAdviser.cs" />
-    <Compile Include="AI\Advisers\SuicideAdviser.cs" />
     <Compile Include="AI\Chief.cs" />
     <Compile Include="AI\Constants.cs" />
     <Compile Include="AI\Decision.cs" />
     <Compile Include="AI\Experts\DontGoToDeadlyCell.cs" />
-    <Compile Include="AI\Experts\DontPutBombIfCantRunFromIt.cs" />
-    <Compile Include="AI\Experts\DontSleepNearBomb.cs" />
     <Compile Include="AI\IAdviser.cs" />
     <Compile Include="AI\IExpert.cs" />
     <Compile Include="AI\Sapka.cs" />

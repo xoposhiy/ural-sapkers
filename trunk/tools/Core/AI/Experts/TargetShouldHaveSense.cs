@@ -12,6 +12,7 @@ namespace Core.AI.Experts
 			int ty = decision.Target.Y;
 			MapCell cell = state.Map[tx, ty];
 			if(cell.DeadlyTill < state.Time) return 0;
+			if(!decision.WillBomb) return 0;
 			if(cell.DeadlySince - state.Time <= 45)
 			{
 				var targetX = tx * state.CellSize + state.CellSize / 2;

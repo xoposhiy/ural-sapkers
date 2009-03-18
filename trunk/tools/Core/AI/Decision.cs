@@ -6,8 +6,13 @@ namespace Core.AI
 	public class Decision
 	{
 		public bool Inverse = false;
-		
+
 		public Decision(IPath path, Pos target, bool putBomb, int duration, int potentialScore, string name)
+		: this(path, target, putBomb, duration, potentialScore, name, false)
+		{
+		}
+
+		public Decision(IPath path, Pos target, bool putBomb, int duration, int potentialScore, string name, bool willBomb)
 		{
 			Path = path;
 			PutBomb = putBomb;
@@ -15,8 +20,11 @@ namespace Core.AI
 			PotentialScore = potentialScore;
 			Target = target;
 			Name = name;
+			WillBomb = willBomb;
 		}
-		
+
+		public bool WillBomb;
+
 		private char norm(char c)
 		{
 			const string s1 = "lrud";

@@ -60,7 +60,7 @@ namespace Core.AI.Advisers
 					}
 					if (countWalls > 0)
 					{
-						var decision = new Decision(ds[i, j], new Pos(i, j), ds[i, j].Size() == 0, ds[i, j].Size() + 1, countWalls * 10, "WallBreaker");
+						var decision = new Decision(ds[i, j], new Pos(i, j), ds[i, j].Size() == 0, ds[i, j].Size() + 1, countWalls * 10, "WallBreaker", true);
 						if(state.GetWaitForBombTime() <= decision.Duration)
 							r.Add(decision);
 						else
@@ -68,7 +68,7 @@ namespace Core.AI.Advisers
 							var cell = state.Map[decision.Target.X, decision.Target.Y];
 							if (cell.DeadlySince == int.MaxValue || cell.DeadlySince < state.Time + decision.Duration)
 							{
-								decision = new Decision(AddStops(decision.Path, state.GetWaitForBombTime() - decision.Duration), decision.Target, decision.PutBomb, state.GetWaitForBombTime(), decision.PotentialScore, decision.Name);
+								decision = new Decision(AddStops(decision.Path, state.GetWaitForBombTime() - decision.Duration), decision.Target, decision.PutBomb, state.GetWaitForBombTime(), decision.PotentialScore, decision.Name, true);
 								r.Add(decision);
 							}
 						}
