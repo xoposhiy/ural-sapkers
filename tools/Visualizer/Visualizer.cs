@@ -48,7 +48,7 @@ namespace Visualizer
 		private int fieldPaddingY;
 		private volatile bool makeSnapshot;
 		private TreeView tvInfo;
-		private Sapka ai = null;
+		private Sapka ai;
 
 		public Visualizer(ModelUpdatersQueue updatersQueue)
 		{
@@ -319,6 +319,18 @@ namespace Visualizer
 				}
 				tvInfo.Nodes.Add(sapkaNode);
 			}
+			var aiNode = new TreeNode("AI");
+			if(ai != null)
+			{
+				var decision = ai.LastDecision;
+				if (decision != null)
+				{
+					aiNode.Nodes.Add("adviser: " + decision.Name);
+				}
+				else aiNode.Nodes.Add("adviser: NONE!");
+			}
+			tvInfo.Nodes.Add(aiNode);
+
 			tvInfo.ExpandAll();
 			tvInfo.EndUpdate();
 		}

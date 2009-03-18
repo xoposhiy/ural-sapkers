@@ -37,7 +37,7 @@ namespace Core.AI.Advisers
 					char bonus = state.Map[i, j].Bonus;
 					if (goodBonus.IndexOf(bonus) != -1)
 					{
-						r.Add(new Decision(ds[i, j], new Pos(i, j), false, ds[i, j].Size(), cost[goodBonus.IndexOf(bonus)]));
+						r.Add(new Decision(ds[i, j], new Pos(i, j), false, ds[i, j].Size(), cost[goodBonus.IndexOf(bonus)], "Bonuser"));
 					}
 				}
 			}

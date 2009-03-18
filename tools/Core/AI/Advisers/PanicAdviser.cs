@@ -8,9 +8,7 @@ namespace Core.AI.Advisers
 	{
 		public IEnumerable<Decision> Advise(GameState state, IPath[,] paths)
 		{
-			var decision = new Decision(null, state.MyCell, false, 1, 0);
-			decision.Name = "Panic";
-			yield return decision;
+			yield return new Decision(null, state.MyCell, false, 1, 0, "Panic");
 		}
 	}
 }

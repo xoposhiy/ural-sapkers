@@ -75,7 +75,7 @@ namespace Core.AI
 			Decision d = best ?? Decision.DoNothing;
 			log.Info(state.Time + " chosen move: " + DecisionLogString(d));
 			if (state.Sapkas[state.Me].BombsLeft == 0)
-				d = new Decision(d.Path, d.Target, false, d.Duration, d.PotentialScore) { Name = d.Name};
+				d = new Decision(d.Path, d.Target, false, d.Duration, d.PotentialScore, d.Name);
 			if (d.PutBomb)
 			{
 				state.UseBomb();

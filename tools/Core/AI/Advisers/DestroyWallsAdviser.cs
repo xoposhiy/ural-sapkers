@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Text;
 using Core.Parsing;
 using Core.PathFinding;
 using Core.StateCalculations;
@@ -10,7 +9,6 @@ namespace Core.AI.Advisers
 	{
 		public IEnumerable<Decision> Advise(GameState state, IPath[,] paths)
 		{
-			//TODO научить понимать бонусы
 			var dx = new[] {1, -1, 0, 0};
 			var dy = new[] {0, 0, 1, -1};
 			IPath[,] ds = new Path[state.Map.GetLength(0), state.Map.GetLength(1)];
@@ -62,8 +60,7 @@ namespace Core.AI.Advisers
 					}
 					if (countWalls > 0)
 					{
-						var decision = new Decision(ds[i, j], new Pos(i, j), ds[i, j].Size() == 0, ds[i, j].Size() + 1, countWalls * 10);
-						decision.Name = "WallBreaker";
+						var decision = new Decision(ds[i, j], new Pos(i, j), ds[i, j].Size() == 0, ds[i, j].Size() + 1, countWalls * 10, "WallBreaker");
 						if(state.GetWaitForBombTime() <= decision.Duration)
 							r.Add(decision);
 						else
@@ -71,7 +68,7 @@ namespace Core.AI.Advisers
 							var cell = state.Map[decision.Target.X, decision.Target.Y];
 							if (cell.DeadlySince == int.MaxValue || cell.DeadlySince < state.Time + decision.Duration)
 							{
-								decision = new Decision(AddStops(decision.Path, state.GetWaitForBombTime() - decision.Duration), decision.Target, decision.PutBomb, state.GetWaitForBombTime(), decision.PotentialScore) { Name = decision.Name};
+								decision = new Decision(AddStops(decision.Path, state.GetWaitForBombTime() - decision.Duration), decision.Target, decision.PutBomb, state.GetWaitForBombTime(), decision.PotentialScore, decision.Name);
 								r.Add(decision);
 							}
 						}
