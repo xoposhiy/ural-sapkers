@@ -1,17 +1,47 @@
-using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using log4net;
 
 namespace Core.AI
 {
-	public class Sapka : AbstractSapka
+	public interface ISapkaMindView
 	{
+		IList<char> LastDecisionPath { get; }
+		string LastDecisionName { get; }
+	}
+
+	public class Sapka : AbstractSapka, ISapkaMindView
+	{
+		private static readonly ILog log = LogManager.GetLogger("performance");
+		private Decision lastDecision;
+		private int lastTime;
+
 		public Sapka(string host, int port, string teamName) : base(host, port, teamName)
 		{
 		}
 
-		public Decision LastDecision { get; private set; }
-		private int lastTime;
+		#region ISapkaMindView Members
+
+		public IList<char> LastDecisionPath
+		{
+			get
+			{
+				if (lastDecision == null || lastDecision.Path == null) return new char[0];
+				return lastDecision.Path.FullPath();
+			}
+		}
+
+		public string LastDecisionName
+		{
+			get
+			{
+				if (lastDecision == null) return "NULL";
+				return lastDecision.Name;
+			}
+		}
+
+		#endregion
+
 		public override string GetMove()
 		{
 			Stopwatch sw = Stopwatch.StartNew();
@@ -23,8 +53,8 @@ namespace Core.AI
 				if (skipped > 1)
 					log.WarnFormat("Пропуск {0} тиков", skipped);
 				lastTime = GameState.Time;
-				LastDecision = decision;
-				return LastDecision.GetMove();
+				lastDecision = decision;
+				return lastDecision.GetMove();
 			}
 			finally
 			{
@@ -32,7 +62,5 @@ namespace Core.AI
 				log.InfoFormat("{0}\t{1} ms", GameState.Time, sw.ElapsedMilliseconds);
 			}
 		}
-
-		private static readonly ILog log = LogManager.GetLogger("performance");
 	}
 }

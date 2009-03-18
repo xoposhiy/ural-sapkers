@@ -48,7 +48,7 @@ namespace Visualizer
 		private int fieldPaddingY;
 		private volatile bool makeSnapshot;
 		private TreeView tvInfo;
-		private Sapka ai;
+		private ISapkaMindView ai;
 
 		public Visualizer(ModelUpdatersQueue updatersQueue)
 		{
@@ -177,10 +177,10 @@ namespace Visualizer
 
 		private void DrawSapkaTargetPath(Graphics g)
 		{
-			if (ai == null || ai.LastDecision == null || ai.LastDecision.Path == null) return;
-			var path = ai.LastDecision.Path.FullPath();
-			var curX = ai.GameState.MySapka.Pos.X;
-			var curY = ai.GameState.MySapka.Pos.Y;
+			if (ai == null || model.State.Sapkas == null || model.State.MySapka.IsDead) return;
+			var path = ai.LastDecisionPath;
+			var curX = model.State.MySapka.Pos.X;
+			var curY = model.State.MySapka.Pos.Y;
 			foreach(var dir in path)
 			{
 				if(dir == 's')
@@ -188,10 +188,10 @@ namespace Visualizer
 					continue;
 				}
 				var finder = new PathFinder();
-				finder.SetMap(ai.GameState.Map, ai.GameState.CellSize);
+				finder.SetMap(model.State.Map, model.State.CellSize);
 				int endX = curX;
 				int endY = curY;
-				finder.Move(ref endX, ref endY, ai.GameState.Time, ai.GameState.MySapka.Speed, Constants.dirIndex[dir]);
+				finder.Move(ref endX, ref endY, model.State.Time, model.State.MySapka.Speed, Constants.dirIndex[dir]);
 				while(curX != endX || curY != endY)
 				{
 					curX += Constants.dx[dir];
@@ -322,12 +322,8 @@ namespace Visualizer
 			var aiNode = new TreeNode("AI");
 			if(ai != null)
 			{
-				var decision = ai.LastDecision;
-				if (decision != null)
-				{
-					aiNode.Nodes.Add("adviser: " + decision.Name);
-				}
-				else aiNode.Nodes.Add("adviser: NONE!");
+				var decisionName = ai.LastDecisionName;
+				aiNode.Nodes.Add("adviser: " + decisionName);
 			}
 			tvInfo.Nodes.Add(aiNode);
 
@@ -422,7 +418,12 @@ namespace Visualizer
 		private void StartAI(int port)
 		{
 			RunSapka(
-				() => ai = new Sapka("localhost", port, "ural-sapkers")
+				() =>
+					{
+						var s = new Sapka("localhost", port, "ural-sapkers");
+						ai = s;
+						return s;
+					}
 				);
 		}
 
