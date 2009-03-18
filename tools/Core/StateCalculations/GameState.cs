@@ -74,7 +74,18 @@ namespace Core.StateCalculations
 			}
 			foreach (RemoveInfo rem in info.Removes)
 			{
-				if (rem.SubstanceType != '*' && rem.SubstanceType != '#' && rem.SubstanceType != 'w')
+				if (rem.SubstanceType == 'w')
+				{
+					Map[rem.Pos.X, rem.Pos.Y] = new MapCell(
+				                                        false,
+				                                        false,
+				                                        true,
+				                                        int.MaxValue,
+				                                        int.MaxValue,
+				                                        int.MaxValue,
+				                                        Map[rem.Pos.X, rem.Pos.Y].Bonus);
+				} else
+				if (rem.SubstanceType != '*' && rem.SubstanceType != '#')
 				{
 					Map[rem.Pos.X, rem.Pos.Y] = Map[rem.Pos.X, rem.Pos.Y].AddBonus('.');
 				}
@@ -112,26 +123,14 @@ namespace Core.StateCalculations
 			{
 				for (int j = 0; j < Map.GetLength(1); ++j)
 				{
-					if (Map[i, j].EmptySince <= Time)
-					{
-						Map[i, j] = new MapCell(
-					                        false,
-					                        false,
-					                        true,
-					                        int.MaxValue,
-					                        int.MaxValue,
-					                        int.MaxValue,
-					                        Map[i, j].Bonus);
-					} else {
-						Map[i, j] = new MapCell(
-					                        Map[i, j].IsUnbreakableWall,
-					                        Map[i, j].IsBreakableWall,
-					                        Map[i, j].IsEmpty,
-					                        int.MaxValue,
-					                        int.MaxValue,
-					                        int.MaxValue,
-					                        Map[i, j].Bonus);
-					}
+					Map[i, j] = new MapCell(
+				                        Map[i, j].IsUnbreakableWall,
+				                        Map[i, j].IsBreakableWall,
+				                        Map[i, j].IsEmpty,
+				                        int.MaxValue,
+				                        int.MaxValue,
+				                        int.MaxValue,
+				                        Map[i, j].Bonus);
 					bf[i, j] = -1;
 				}
 			}
