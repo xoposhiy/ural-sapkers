@@ -10,6 +10,7 @@ namespace Core.AI
 		{
 		}
 
+		public Decision LastDecision { get; private set; }
 		private int lastTime;
 		public override string GetMove()
 		{
@@ -22,7 +23,8 @@ namespace Core.AI
 				if (skipped > 1)
 					log.WarnFormat("Пропуск {0} тиков", skipped);
 				lastTime = GameState.Time;
-				return decision.GetMove();
+				LastDecision = decision;
+				return LastDecision.GetMove();
 			}
 			finally
 			{

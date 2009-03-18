@@ -9,9 +9,11 @@ using System.Windows.Forms;
 using Core;
 using Core.AI;
 using Core.Parsing;
+using Core.PathFinding;
 using Core.StateCalculations;
 using TheSapka;
 using Visualizer.UserControlledSapka;
+using Path=System.IO.Path;
 using Timer=System.Windows.Forms.Timer;
 
 namespace Visualizer
@@ -46,6 +48,7 @@ namespace Visualizer
 		private int fieldPaddingY;
 		private volatile bool makeSnapshot;
 		private TreeView tvInfo;
+		private Sapka ai = null;
 
 		public Visualizer(ModelUpdatersQueue updatersQueue)
 		{
@@ -152,6 +155,7 @@ namespace Visualizer
 			updatersQueue.ExecuteBatch(model);
 			DrawRoundString(e.Graphics);
 			DrawMap(e.Graphics);
+			DrawSapkaTargetPath(e.Graphics);
 			UpdateStatsTreeView();
 			if (makeSnapshot && model.CurrentMap != null)
 			{
@@ -170,6 +174,42 @@ namespace Visualizer
 				makeSnapshot = false;
 			}
 		}
+
+		private void DrawSapkaTargetPath(Graphics g)
+		{
+			if (ai == null || ai.LastDecision == null || ai.LastDecision.Path == null) return;
+			var path = ai.LastDecision.Path.FullPath();
+			var curX = ai.GameState.MySapka.Pos.X;
+			var curY = ai.GameState.MySapka.Pos.Y;
+			foreach(var dir in path)
+			{
+				if(dir == 's')
+				{
+					continue;
+				}
+				var finder = new PathFinder();
+				finder.SetMap(ai.GameState.Map, ai.GameState.CellSize);
+				int endX = curX;
+				int endY = curY;
+				finder.Move(ref endX, ref endY, ai.GameState.Time, ai.GameState.MySapka.Speed, Constants.dirIndex[dir]);
+				while(curX != endX || curY != endY)
+				{
+					curX += Constants.dx[dir];
+					curY += Constants.dy[dir];
+					Fill(g, curX, curY);
+				}
+			}
+		}
+
+		private void Fill(Graphics gr, int x, int y)
+		{
+			gr.FillRectangle(
+				Brushes.Yellow, 
+				fieldPaddingX + x * SmallPictureSize, 
+				fieldPaddingY + y * SmallPictureSize, 
+				SmallPictureSize, SmallPictureSize);
+		}
+
 
 		private static bool GoodPos(int x, int y, int w, int h)
 		{
@@ -190,20 +230,6 @@ namespace Visualizer
 			for (int x = 0; x < model.CurrentMap.GetLength(0); x++)
 				for (int y = 0; y < model.CurrentMap.GetLength(1); y++)
 					DrawCell(x, y, model.CurrentMap[x, y], gr);
-
-			if (makeSnapshot)
-			{
-				for (int x = 0; x < model.CurrentMap.GetLength(0); x++)
-				{
-					for (int y = 0; y < model.CurrentMap.GetLength(1); y++)
-					{
-						MapCell cell = model.State.Map[x, y];
-						Console.Write(cell.IsUnbreakableWall ? 'X' : cell.IsBreakableWall ? 'w' : cell.IsBomb ? 'b' : cell.Bonus);
-					}
-					Console.WriteLine();
-				}
-				Console.WriteLine();
-			}
 
 			//отрисовка взрыва
 			for (int x = 0; x < model.CurrentMap.GetLength(0); x++)
@@ -384,7 +410,7 @@ namespace Visualizer
 		private void StartAI(int port)
 		{
 			RunSapka(
-				() => new Sapka("localhost", port, "ural-sapkers")
+				() => ai = new Sapka("localhost", port, "ural-sapkers")
 				);
 		}
 

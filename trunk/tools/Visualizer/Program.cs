@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net.Sockets;
 using System.Threading;
@@ -24,7 +25,10 @@ namespace Visualizer
             ChooseDataSourceForm startupDialog = new ChooseDataSourceForm();
             startupDialog.ShowDialog();
             DataSource dataSource = startupDialog.DataSource;
-
+			if (dataSource == DataSource.Localhost)
+			{
+				Process.Start(new ProcessStartInfo() { FileName = @"c:\work\sapka\project-beta-1.5\start.bat", WorkingDirectory = @"c:\work\sapka\project-beta-1.5\"});
+			}
 			Application.Run(CreateMainForm(dataSource));
 		}
 
