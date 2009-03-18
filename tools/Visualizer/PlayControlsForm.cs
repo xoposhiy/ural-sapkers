@@ -38,7 +38,6 @@ namespace Visualizer
             {
                 string message = sapkaLog[trackBar.Value++];
                 parser.ParseMessage(message);
-                textBoxMessage.Text = message;
             }
         }
 
@@ -76,8 +75,7 @@ namespace Visualizer
 
         private void trackBar_ValueChanged(object sender, EventArgs e)
         {
-            string message = sapkaLog[trackBar.Value];
-            textBoxMessage.Text = "Спозиционировались на:\r\n" + message;
+            textBoxMessage.Text = sapkaLog[trackBar.Value];
         }
     }
 }
