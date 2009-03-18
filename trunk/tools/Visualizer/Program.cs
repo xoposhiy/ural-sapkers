@@ -50,7 +50,14 @@ namespace Visualizer
 					});
 				Application.ApplicationExit += (sender,e) =>
 					{
-						if (serverProcess != null) serverProcess.Kill();
+						if (serverProcess != null)
+						try
+						{
+							serverProcess.Kill();
+						}
+						catch
+						{
+						}
 					};
 			}
 			Application.Run(CreateMainForm(dataSource));
