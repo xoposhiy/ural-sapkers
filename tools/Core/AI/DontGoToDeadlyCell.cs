@@ -33,7 +33,19 @@ namespace Core.AI
 				}
 				if (dir != -1)
 				{
-					if (!finder.Move(ref tx, ref ty, state.Time, state.Sapkas[state.Me].Speed, dir))
+					int speed = state.Sapkas[state.Me].Speed;
+					char bonus = state.Map[tx / state.CellSize, ty / state.CellSize].Bonus;
+					if (bonus == 's' || bonus == '?')
+					{
+						speed = 1;
+					}
+					string badBonus = "rsuo?";
+					if (badBonus.IndexOf(bonus) != -1 && state.Sapkas[state.Me].Infected)
+					{
+						//Две инфекции почти всегда фатальны
+						cache[dir + 1, bom] = 1;
+					}
+					if (!finder.Move(ref tx, ref ty, state.Time, speed, dir))
 					{
 						cache[dir + 1, bom] = 1;
 					}
@@ -49,6 +61,9 @@ namespace Core.AI
 				}
 			}
 			return (byte)(cache[dir + 1, bom] == 1 ? 0 : 255);
+			
+			//TODO resurrect this expert
+			
 			/*int tx = decision.Target.X;
 			int ty = decision.Target.Y;
 			MapCell cell = state.Map[tx, ty];

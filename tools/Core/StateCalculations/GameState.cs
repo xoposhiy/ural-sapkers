@@ -218,8 +218,9 @@ namespace Core.StateCalculations
 								                        false,
 								                        false,
 								                        true,
-								                        dt,
-								                        dt + Constants.ExplosionDuration - 1,
+								                        Math.Min(dt, Map[x, y].DeadlySince),
+								                        Math.Max(dt + Constants.ExplosionDuration - 1, 
+									                       Map[x, y].DeadlyTill == int.MaxValue ? 0 : Map[x, y].DeadlyTill),
 								                        int.MaxValue,
 								                        Map[x, y].Bonus);
 								}
@@ -280,6 +281,17 @@ namespace Core.StateCalculations
 			for (int x = 0; x < m.GetLength(0); x++)
 				for (int y = 0; y < m.GetLength(1); y++)
 					Map[x, y] = new MapCell(m[x, y]);
+		}
+		
+		public bool InvertedMe
+		{
+			get
+			{
+				SapkaInfo me = Sapkas[Me];
+				return me.Infected &&
+					(me.BombsLeft > 0 || lastUsedBomb >= Time - Constants.BombTimeout) &&
+						me.BombsStrength > 0 && me.Speed > 1;
+			}
 		}
 
 		public int GetWaitForBombTime()

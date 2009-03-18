@@ -112,10 +112,6 @@ namespace Core.PathFinding
 					minVisitedTime[X, Y] = time;
 				}
 				MapCell cell0 = map[cc[X], cc[Y]];
-				if (time < MAX_TIME && !cell0.IsDeadlyAt(time + time0 + 1))
-				{
-					Add(X, Y, time + 1, dist, qx, qy, qt, ref qe, new Path(dist[X, Y, time], 's'));
-				}
 				for (int d = 0; d < 4; ++d)
 				{
 					int x = X;
@@ -131,6 +127,10 @@ namespace Core.PathFinding
 					}
 					Add(x, y, Math.Min(time + 1, MAX_TIME), dist, qx, qy, qt, ref qe, 
 					    new Path(dist[X, Y, time], Dir[d]));
+				}
+				if (time < MAX_TIME && !cell0.IsDeadlyAt(time + time0 + 1))
+				{
+					Add(X, Y, time + 1, dist, qx, qy, qt, ref qe, new Path(dist[X, Y, time], 's'));
 				}
 			}
 			//Console.WriteLine("queue size: {0}", qe);
