@@ -7,13 +7,14 @@ namespace Core.AI
 	{
 		public bool Inverse = false;
 		
-		public Decision(IPath path, Pos target, bool putBomb, int duration, int potentialScore)
+		public Decision(IPath path, Pos target, bool putBomb, int duration, int potentialScore, string name)
 		{
 			Path = path;
 			PutBomb = putBomb;
 			Duration = duration;
 			PotentialScore = potentialScore;
 			Target = target;
+			Name = name;
 		}
 		
 		private char norm(char c)
@@ -38,13 +39,13 @@ namespace Core.AI
 			return s;
 		}
 
-		public string Name;
+		public readonly string Name;
 		public readonly IPath Path;
 		public readonly bool PutBomb;
 		public Pos Target;
 		public int Duration;
 		public int PotentialScore;
-		public static Decision DoNothing = new Decision(null, null, false, 1, 0);
+		public static Decision DoNothing = new Decision(null, null, false, 1, 0, "NOTHING");
 
 		public string PathString()
 		{
