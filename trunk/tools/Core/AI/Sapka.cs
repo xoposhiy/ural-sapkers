@@ -44,6 +44,7 @@ namespace Core.AI
 
 		public override string GetMove()
 		{
+			if(GameState.Time == 0) return "s";
 			Stopwatch sw = Stopwatch.StartNew();
 			try
 			{

@@ -8,11 +8,10 @@ namespace Core.PathFinding
 		public const string Dir = "lrud";
 		private static readonly int[] dx = new[] {-1, 1, 0, 0};
 		private static readonly int[] dy = new[] {0, 0, -1, 1};
-		private static readonly int MAX_TIME = 50;
+		private const int MAX_TIME = 50;
 		private int cellSize;
 		private int n, m;
 		private MapCell[,] map;
-		private bool[,,] alreadyVisited;
 		private int[] cc;
 		private static Queues qs;
 
@@ -54,42 +53,6 @@ namespace Core.PathFinding
 			return false;
 		}
 		
-		bool dfs(int X, int Y, int dt, int speed, int time0)
-		{
-			if (dt >= MAX_TIME)
-			{
-				return true;
-			}
-			if (alreadyVisited[X, Y, dt])
-			{
-				return false; //там уже искали, ничего не нашли...
-			}
-			alreadyVisited[X, Y, dt] = true;
-			MapCell cell0 = map[cc[X], cc[Y]];
-			if (!cell0.IsDeadlyAt(dt + time0 + 1) && dfs(X, Y, dt + 1, speed, time0))
-			{
-				return true;
-			}
-			for (int d = 0; d < 4; ++d)
-			{
-				int x = X;
-				int y = Y;
-				Move(ref x, ref y, dt + time0, speed, d);
-				if (x == X && y == Y)
-				{
-					continue;
-				}
-				MapCell cell = map[cc[x], cc[y]];
-				if (!cell.IsDeadlyAt(time0 + dt + 1) && dfs(x, y, dt + 1, speed, time0)) return true;
-			}
-			return false;
-		}
-		
-		private static bool IsFire(MapCell cell, int time)
-		{
-			return time >= cell.DeadlySince && time <= cell.DeadlyTill;
-		}
-
 		private void FindPaths(int x0, int y0, int time0, int speed, int radius, out Path[,] dist0, out Path[,] dist1)
 		{
 			qs.Clear();
@@ -112,7 +75,6 @@ namespace Core.PathFinding
 					{
 						continue;
 					}
-					MapCell cell0 = map[cc[X], cc[Y]];
 					for (int d = 0; d < 4; ++d)
 					{
 						int x = X;

@@ -244,7 +244,12 @@ namespace Visualizer
 
 			foreach (var pair in model.SapkaInfos)
 			{
-				DrawCoord(pair.Value.Pos.X, pair.Value.Pos.Y, (char) pair.Key, gr);
+				if (pair.Key == 0 && model.State.Sapkas != null && model.State.InvertedMe)
+				{
+					DrawSapka(pair.Value.Pos.X, pair.Value.Pos.Y, gr, Brushes.Black);
+				}
+				else
+				DrawSapka(pair.Value.Pos.X, pair.Value.Pos.Y, gr, sapkaBrushes[pair.Key]);
 			}
 		}
 
@@ -279,12 +284,12 @@ namespace Visualizer
 			}
 		}
 
-		private void DrawCoord(int x, int y, char type, Graphics gr)
+		private void DrawSapka(int x, int y, Graphics gr, Brush brush)
 		{
 			if (!GoodPos(x, y, model.WidthInCoords, model.HeightInCoords)) return;
 			int realX = (x/model.CellSize)*PictureSize + (x%model.CellSize)*SmallPictureSize;
 			int realY = (y/model.CellSize)*PictureSize + (y%model.CellSize)*SmallPictureSize;
-			DrawPicture(type, realX, realY, SmallPictureSize, SmallPictureSize, gr);
+			gr.FillRectangle(brush, fieldPaddingX + realX, fieldPaddingY + realY, SmallPictureSize, SmallPictureSize);
 		}
 
 		private void DrawPicture(char type, int x, int y, int w, int h, Graphics gr)
@@ -325,6 +330,8 @@ namespace Visualizer
 				var decisionName = ai.LastDecisionName;
 				aiNode.Nodes.Add("adviser: " + decisionName);
 			}
+			if (model.State.Sapkas != null)
+			aiNode.Nodes.Add("Inverted: " + model.State.InvertedMe);
 			tvInfo.Nodes.Add(aiNode);
 
 			tvInfo.ExpandAll();

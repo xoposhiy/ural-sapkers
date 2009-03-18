@@ -44,13 +44,5 @@ namespace Core.AI.Advisers
 			return r;
 		}
 
-		private IPath AddStops(IPath path, int repeat)
-		{
-			for(int i=0; i<repeat; i++)
-			{
-				path = new Path((Path)path, 's');
-			}
-			return path;
-		}
 	}
 }
