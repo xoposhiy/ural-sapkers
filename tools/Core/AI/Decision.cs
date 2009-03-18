@@ -32,7 +32,7 @@ namespace Core.AI
 
 		public override string ToString()
 		{
-			var s = Name + " - " + (Path == null ? 's' : Path.FirstMove()) + (PutBomb ? "b" : "");
+			var s = PathString() + (PutBomb ? "b" : "") + "\t" + Name;
 			if(Target != null)
 				s += " target: (" + Target.X + "," + Target.Y + ")";
 			return s;

@@ -6,6 +6,7 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Threading;
 using System.Windows.Forms;
+using Core;
 using Core.AI;
 using Core.Parsing;
 using Core.StateCalculations;
@@ -189,7 +190,7 @@ namespace Visualizer
 			for (int x = 0; x < model.CurrentMap.GetLength(0); x++)
 				for (int y = 0; y < model.CurrentMap.GetLength(1); y++)
 					DrawCell(x, y, model.CurrentMap[x, y], gr);
-			
+
 			if (makeSnapshot)
 			{
 				for (int x = 0; x < model.CurrentMap.GetLength(0); x++)
@@ -245,8 +246,10 @@ namespace Visualizer
 				{
 					throw new Exception(string.Format("Game state failed: {0} {1}", cell.DeadlyTill, model.State.Time));
 				}
-				gr.DrawString((cell.DeadlySince - model.State.Time).ToString(), new Font("Arial", 7), Brushes.Black, fieldPaddingX + x * PictureSize, fieldPaddingY + y * PictureSize + PictureSize / 2);
-				gr.DrawString((cell.DeadlyTill - model.State.Time).ToString(), new Font("Arial", 7), Brushes.Black, fieldPaddingX + x * PictureSize + PictureSize / 2, fieldPaddingY + y * PictureSize + PictureSize / 2);
+				gr.DrawString((cell.DeadlySince - model.State.Time).ToString(), new Font("Arial", 7), Brushes.Black,
+				              fieldPaddingX + x*PictureSize, fieldPaddingY + y*PictureSize + PictureSize/2);
+				gr.DrawString((cell.DeadlyTill - model.State.Time).ToString(), new Font("Arial", 7), Brushes.Black,
+				              fieldPaddingX + x*PictureSize + PictureSize/2, fieldPaddingY + y*PictureSize + PictureSize/2);
 			}
 		}
 
@@ -294,22 +297,33 @@ namespace Visualizer
 			tvInfo.EndUpdate();
 		}
 
-		private void StartDummy(int port)
+		private void RunSapka(Func<AbstractSapka> create)
 		{
 			var thread = new Thread(
-				() => new DummySapka("localhost", port, "ural-sapkers").Run()
+				() =>
+					{
+						try
+						{
+							create().Run();
+						}
+						catch (Exception e)
+						{
+							MessageBox.Show(e.ToString());
+						}
+					}
 				);
 			thread.IsBackground = true;
 			thread.Start();
 		}
 
+		private void StartDummy(int port)
+		{
+			RunSapka(() => new DummySapka("localhost", port, "ural-sapkers"));
+		}
+
 		private void StartZombie(int port)
 		{
-			var thread = new Thread(
-				() => new ZombieSapka("localhost", port, "ural-sapkers", new KeyboardZombieMaster(this)).Run()
-				);
-			thread.IsBackground = true;
-			thread.Start();
+			RunSapka(() => new ZombieSapka("localhost", port, "ural-sapkers", new KeyboardZombieMaster(this)));
 		}
 
 		private void наПорт20015ToolStripMenuItem_Click(object sender, EventArgs e)
@@ -369,11 +383,9 @@ namespace Visualizer
 
 		private void StartAI(int port)
 		{
-			var thread = new Thread(
-				() => new Sapka("localhost", port, "ural-sapkers").Run()
+			RunSapka(
+				() => new Sapka("localhost", port, "ural-sapkers")
 				);
-			thread.IsBackground = true;
-			thread.Start();
 		}
 
 		private void на20016ToolStripMenuItem1_Click(object sender, EventArgs e)
