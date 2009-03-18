@@ -29,27 +29,41 @@ namespace Core.AI.Experts
 				{
 					bomb = new Bomb(tx / state.CellSize, ty / state.CellSize, state.Sapkas[state.Me].BombsStrength, state.Time + Constants.BombTimeout);
 					state.AddBomb(bomb.Value);
-					state.RecalcDeadly();
 				}
+				MapCell backup = null;
 				if (dir != -1)
 				{
 					int speed = state.Sapkas[state.Me].Speed;
+					if (!finder.Move(ref tx, ref ty, state.Time, speed, dir))
+					{
+						cache[dir + 1, bom] = 1;
+					}
 					char bonus = state.Map[tx / state.CellSize, ty / state.CellSize].Bonus;
 					if (bonus == 's' || bonus == '?')
 					{
 						speed = 1;
+						tx = state.Sapkas[state.Me].Pos.X;
+						ty = state.Sapkas[state.Me].Pos.Y;
+						finder.Move(ref tx, ref ty, state.Time, speed, dir);
 					}
 					string badBonus = "rsuo?";
 					if (badBonus.IndexOf(bonus) != -1 && state.Sapkas[state.Me].Infected)
 					{
 						//Две инфекции почти всегда фатальны
-						cache[dir + 1, bom] = 2;
+						//cache[dir + 1, bom] = 2;
 					}
-					if (!finder.Move(ref tx, ref ty, state.Time, speed, dir))
-					{
-						cache[dir + 1, bom] = 1;
-					}
+					backup = state.Map[tx / state.CellSize, ty / state.CellSize];
+					state.Map[tx / state.CellSize, ty / state.CellSize] =
+						new MapCell(
+                              backup.IsUnbreakableWall,
+                              backup.IsBreakableWall,
+                              backup.IsEmpty,
+                              int.MaxValue,
+                              int.MaxValue,
+                              int.MaxValue,
+                              '.');
 				}
+				state.RecalcDeadly();
 				if (cache[dir + 1, bom] == 0)
 				{
 					cache[dir + 1, bom] = finder.Live(tx, ty, state.Time + 1, state.Sapkas[state.Me].Speed) ? 1 : 2;
@@ -57,8 +71,12 @@ namespace Core.AI.Experts
 				if (bomb != null)
 				{
 					state.RemoveBomb(bomb.Value);
-					state.RecalcDeadly();
 				}
+				if (backup != null)
+				{
+					state.Map[tx / state.CellSize, ty / state.CellSize] = backup;
+				}
+				state.RecalcDeadly();
 			}
 			return (byte)(cache[dir + 1, bom] == 1 ? 0 : 255);
 			
