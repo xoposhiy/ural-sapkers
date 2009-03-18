@@ -45,7 +45,7 @@ namespace Core.PathFinding
 			{
 				for (int j = 0; j < m; ++j)
 				{
-					if (dist1[x, y] != null || dist0[x, y] != null && bound0(map[cc[i], cc[j]]) == int.MaxValue)
+					if (dist1[i, j] != null || dist0[i, j] != null && bound0(map[cc[i], cc[j]]) == int.MaxValue)
 					{
 						return true;
 					}
@@ -194,7 +194,11 @@ namespace Core.PathFinding
 			        (cc[x0] != cc[x] || cc[y0] != cc[y]) && 
 			        	prohibited(map[cc[x], cc[y]], time)))
 			{
-				if (InMap(x, y) && map[cc[x], cc[y]].IsDeadlyAt(time))
+				if (InMap(x, y) && 
+				    (map[cc[x], cc[y]].IsDeadlyAt(time) ||
+				     map[cc[x], cc[y]].Bonus != '.' &&
+				     map[cc[x], cc[y]].DeadlyTill != int.MaxValue &&
+				     time <= map[cc[x], cc[y]].DeadlyTill))
 				{
 					return false;
 				}
@@ -220,7 +224,7 @@ namespace Core.PathFinding
 		
 		private int bound0(MapCell cell)
 		{
-			return cell.EmptySince == int.MaxValue ? cell.DeadlySince : 0;
+			return cell.EmptySince == int.MaxValue || cell.IsBomb ? cell.DeadlySince : 0;
 		}
 		
 		private int bound1(MapCell cell)
