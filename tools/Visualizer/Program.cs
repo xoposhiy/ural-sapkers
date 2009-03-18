@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Diagnostics;
 using System.Linq;
 using System.Net.Sockets;
@@ -27,7 +28,30 @@ namespace Visualizer
             DataSource dataSource = startupDialog.DataSource;
 			if (dataSource == DataSource.Localhost)
 			{
-				Process.Start(new ProcessStartInfo() { FileName = @"c:\work\sapka\project-beta-1.5\start.bat", WorkingDirectory = @"c:\work\sapka\project-beta-1.5\"});
+				var serverDir = ConfigurationManager.AppSettings["serverDir"];
+				if (serverDir == null)
+				{
+					MessageBox.Show(@"Путь к папке с сервером должен быть указан в файлике settings.xml в папке, из которой запускается приложение.
+
+Примерно так:
+<?xml version=""1.0"" encoding=""utf-8"" ?>
+<appSettings>
+  <add key=""serverDir"" value=""D:\Code\Sapka\project-beta\project-beta-1.5\"" />
+</appSettings>
+
+В репозиторий этот файл не кладите!");
+					Environment.Exit(0);
+				}
+				var serverProcess = Process.Start(new ProcessStartInfo
+					{
+						FileName = @"java.exe",
+						Arguments = @"-cp lib/project-beta.jar;lib/log4j-1.2.15.jar loader.Loader server.properties",
+						WorkingDirectory = serverDir
+					});
+				Application.ApplicationExit += (sender,e) =>
+					{
+						if (serverProcess != null) serverProcess.Kill();
+					};
 			}
 			Application.Run(CreateMainForm(dataSource));
 		}
