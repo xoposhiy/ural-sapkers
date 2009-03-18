@@ -52,7 +52,12 @@ namespace Core.PathFinding
 			this.size = (parent == null ? 0 : parent.size) + repeat;
 			this.firstMove = parent == null || parent.size == 0 ? move : parent.firstMove;
 		}
-		
+
+		public char LastMove
+		{
+			get { return move; }
+		}
+
 		public Path(Path parent, char move) : this(parent, move, parent == null ? 0 : 1)
 		{
 		}
