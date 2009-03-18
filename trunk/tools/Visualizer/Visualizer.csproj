@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -57,6 +57,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ChooseDataSourceForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ChooseDataSourceForm.Designer.cs">
+      <DependentUpon>ChooseDataSourceForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DataSource.cs" />
     <Compile Include="Logger\FileSapkaServerLogger.cs" />
     <Compile Include="Logger\ISapkaServerLogger.cs" />
     <Compile Include="ModelUpdatersQueue.cs" />
@@ -77,6 +84,10 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="ChooseDataSourceForm.resx">
+      <DependentUpon>ChooseDataSourceForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <SubType>Designer</SubType>
       <Generator>ResXFileCodeGenerator</Generator>
