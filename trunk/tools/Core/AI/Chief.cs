@@ -72,7 +72,6 @@ namespace Core.AI
 			}
 			Decision d = best ?? Decision.DoNothing;
 			log.Info(state.Time + " chosen move: " + DecisionLogString(d));
-			log.Info(state.Time + " chosen path: " + d.PathString());
 			if (state.Sapkas[state.Me].BombsLeft == 0)
 				d = new Decision(d.Path, d.Target, false, d.Duration, d.PotentialScore) { Name = d.Name};
 			if (d.PutBomb)
@@ -110,35 +109,6 @@ namespace Core.AI
 				result -= expertsEstimate*expertWeight;
 			}
 			return result;
-		}
-	}
-
-	internal class TargetShouldHaveSense : IExpert
-	{
-		public byte EstimateDecisionDanger(GameState state, IPath[,] paths, Decision decision)
-		{
-			int tx = decision.Target.X;
-			int ty = decision.Target.Y;
-			MapCell cell = state.Map[tx, ty];
-			if(cell.DeadlyTill < state.Time) return 0;
-			if(cell.DeadlySince - state.Time <= 45)
-			{
-				var finder = new PathFinder();
-				finder.SetMap(state.Map, state.CellSize);
-				var targetX = tx * state.CellSize + state.CellSize / 2;
-				var targetY = ty * state.CellSize + state.CellSize / 2;
-				var canLive = finder.Live(targetX, targetY, state.Time + decision.Duration, state.Sapkas[state.Me].Speed);
-				if (!canLive)
-				{
-					return 255;
-				}
-			}
-			return 0;	
-		}
-
-		public void OnNextMove()
-		{
-			
 		}
 	}
 }

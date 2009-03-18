@@ -70,7 +70,7 @@ namespace Core.PathFinding
 		public List<char> FullPath()
 		{
 			List<char> r = parent == null ? new List<char>() : parent.FullPath();
-			for (int it = 0; it < repeat; ++it)
+			for (int it = 0; it < Math.Max(repeat, 1); ++it)
 			{
 				r.Add(move);
 			}
