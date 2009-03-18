@@ -37,8 +37,21 @@ namespace Core.PathFinding
 		
 		public bool Live(int x, int y, int time0, int speed)
 		{
-			alreadyVisited = new bool[n, m, MAX_TIME + 1];
-			return dfs(x, y, 0, speed, time0);
+			/*alreadyVisited = new bool[n, m, MAX_TIME + 1];
+			return dfs(x, y, 0, speed, time0);*/
+			Path[,] dist0, dist1;
+			FindPaths(x, y, time0, speed, Constants.Radius, out dist0, out dist1);
+			for (int i = 0; i < n; ++i)
+			{
+				for (int j = 0; j < m; ++j)
+				{
+					if (dist1[x, y] != null || dist0[x, y] != null && bound0(map[cc[i], cc[j]]) == int.MaxValue)
+					{
+						return true;
+					}
+				}
+			}
+			return false;
 		}
 		
 		bool dfs(int X, int Y, int dt, int speed, int time0)
@@ -77,12 +90,12 @@ namespace Core.PathFinding
 			return time >= cell.DeadlySince && time <= cell.DeadlyTill;
 		}
 
-		public IPath[,] FindPaths(int x0, int y0, int time0, int speed, int radius)
+		private void FindPaths(int x0, int y0, int time0, int speed, int radius, out Path[,] dist0, out Path[,] dist1)
 		{
 			qs.Clear();
-			var dist0 = new Path[n,m];
-			var dist1 = new Path[n,m];
-			dist0[x0, y0] = new Path(null, 's');
+			dist0 = new Path[n,m];
+			dist1 = new Path[n,m];
+			(time0 <= bound1(map[cc[x0], cc[y0]]) ? dist0 : dist1)[x0, y0] = new Path(null, 's');
 			qs.Add(0, x0, y0);
 			for (int time = 0; time <= MAX_TIME; ++time)
 			{
@@ -153,6 +166,12 @@ namespace Core.PathFinding
 				}
 			}
 			//Console.WriteLine("queue size: {0}", qe);
+		}
+		
+		public IPath[,] FindPaths(int x0, int y0, int time0, int speed, int radius)
+		{
+			Path[,] dist0, dist1;
+			FindPaths(x0, y0, time0, speed, radius, out dist0, out dist1);
 			for (int i = 0; i < n; ++i)
 			{
 				for (int j = 0; j < m; ++j)
