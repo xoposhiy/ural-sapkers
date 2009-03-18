@@ -110,7 +110,7 @@ namespace Core.StateCalculations
 			int[,] bf = new int[Map.GetLength(0), Map.GetLength(1)];
 			for (int i = 0; i < Map.GetLength(0); ++i)
 			{
-				for (int j = 0; j < Map.GetLength(0); ++j)
+				for (int j = 0; j < Map.GetLength(1); ++j)
 				{
 					if (Map[i, j].EmptySince <= Time)
 					{
@@ -137,6 +137,11 @@ namespace Core.StateCalculations
 			}
 			int[] r = new int[bombs.Count];
 			int[] p = new int[bombs.Count];
+			for (int i = 0; i < bombs.Count; ++i)
+			{
+				p[i] = i;
+				bf[bombs[i].X, bombs[i].Y] = i;
+			}
 			for (int i = 0; i < bombs.Count; ++i)
 			{
 				p[i] = i;
@@ -177,11 +182,6 @@ namespace Core.StateCalculations
 			for (int i = 0; i < bombs.Count; ++i)
 			{
 				detTime[GetP(i, p)] = Math.Min(detTime[GetP(i, p)], bombs[i].DetTime);
-			}
-			for (int i = 0; i < bombs.Count; ++i)
-			{
-				p[i] = i;
-				bf[bombs[i].X, bombs[i].Y] = i;
 			}
 			for (int i = 0; i < bombs.Count; ++i)
 			{
