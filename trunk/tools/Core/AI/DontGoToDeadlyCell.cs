@@ -43,7 +43,7 @@ namespace Core.AI
 					if (badBonus.IndexOf(bonus) != -1 && state.Sapkas[state.Me].Infected)
 					{
 						//Две инфекции почти всегда фатальны
-						cache[dir + 1, bom] = 1;
+						cache[dir + 1, bom] = 2;
 					}
 					if (!finder.Move(ref tx, ref ty, state.Time, speed, dir))
 					{
