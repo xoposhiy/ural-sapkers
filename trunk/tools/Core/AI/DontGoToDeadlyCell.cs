@@ -14,7 +14,7 @@ namespace Core.AI
 			cache = new int[5,2];
 		}
 		
-		public byte EstimateDecisionDanger(GameState state, IPath[,] paths, Decision decision)
+		public byte EstimateDecisionDanger(GameState state, Paths paths, Decision decision)
 		{
 			int dir = PathFinder.Dir.IndexOf(decision.Path.FirstMove());
 			int bom = decision.PutBomb ? 1 : 0;
