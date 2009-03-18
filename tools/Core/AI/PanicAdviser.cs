@@ -6,7 +6,7 @@ namespace Core.AI
 {
 	internal class PanicAdviser : IAdviser
 	{
-		public IEnumerable<Decision> Advise(GameState state, IPath[,] paths)
+		public IEnumerable<Decision> Advise(GameState state, Paths paths)
 		{
 			var decision = new Decision(null, state.MyCell, false, 1, 0);
 			decision.Name = "Panic";

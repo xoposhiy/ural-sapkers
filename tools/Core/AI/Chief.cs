@@ -12,7 +12,7 @@ namespace Core.AI
 		private static readonly IList<IAdviser> advisers = new List<IAdviser>();
 		private static readonly IList<IExpert> experts = new List<IExpert>();
 		private static readonly ILog log = LogManager.GetLogger(typeof (Chief));
-		private readonly IPath[,] paths;
+		private readonly Paths paths;
 		private readonly GameState state;
 
 		static Chief()
@@ -115,7 +115,7 @@ namespace Core.AI
 
 	internal class TargetShouldHaveSense : IExpert
 	{
-		public byte EstimateDecisionDanger(GameState state, IPath[,] paths, Decision decision)
+		public byte EstimateDecisionDanger(GameState state, Paths paths, Decision decision)
 		{
 			int tx = decision.Target.X;
 			int ty = decision.Target.Y;

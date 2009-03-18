@@ -67,7 +67,9 @@ namespace Visualizer
 			pbBackground.Image = (Image) selectedImage.Clone();
 			var paths = pathFinder.FindPaths(selectedCoordPos.X, selectedCoordPos.Y, gameStateInfo.Time, selectedSpeed, int.MaxValue);
 			var alive = pathFinder.Live(selectedCoordPos.X, selectedCoordPos.Y, gameStateInfo.Time, selectedSpeed);
-			var path = paths[x / gameStateInfo.SmallPictureSize, y / gameStateInfo.SmallPictureSize];
+			int time = paths.MinTime[x / gameStateInfo.SmallPictureSize, y / gameStateInfo.SmallPictureSize];
+			if (time == -1) return;
+			var path = paths.GetPath(x / gameStateInfo.SmallPictureSize, y / gameStateInfo.SmallPictureSize, time);
 			if (path == null) return;
 			Text = new string(path.FullPath().ToArray());
 			using (var gr = Graphics.FromImage(pbBackground.Image))

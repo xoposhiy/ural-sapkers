@@ -8,7 +8,7 @@ namespace Core
 	{
 		public const int BombTimeout = 40;
 		public const int ExplosionDuration = 3;
-		public const int Radius = 50;
+		public const int Radius = int.MaxValue;
 
 	}
 }
