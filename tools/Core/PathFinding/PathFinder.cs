@@ -14,10 +14,6 @@ namespace Core.PathFinding
 		private MapCell[,] map;
 		private bool[,,] alreadyVisited;
 		private int[] cc;
-		private static Paths r;
-		private static int[] qx;
-		private static int[] qy;
-		private static int[] qt;
 
 		#region IPathFinder Members
 
@@ -31,13 +27,6 @@ namespace Core.PathFinding
 			for (int i = 0; i < cc.Length; ++i)
 			{
 				cc[i] = i / cellSize;
-			}
-			if (qx == null || qx.Length != n * m * (MAX_TIME + 1))
-			{
-				qx = new int[n * m * (MAX_TIME + 1)];
-				qy = new int[n * m * (MAX_TIME + 1)];
-				qt = new int[n * m * (MAX_TIME + 1)];
-				r = new Paths(n, m, MAX_TIME);
 			}
 		}
 		
@@ -83,60 +72,92 @@ namespace Core.PathFinding
 			return time >= cell.DeadlySince && time <= cell.DeadlyTill;
 		}
 
-		public Paths FindPaths(int x0, int y0, int time0, int speed, int radius)
+		public IPath[,] FindPaths(int x0, int y0, int time0, int speed, int radius)
 		{
-			int qe = 1;
+			//TODO extract qs in static
+			Queues qs = new Queues(MAX_TIME + 1, n * m * 16);
+			var dist0 = new Path[n,m];
+			var dist1 = new Path[n,m];
+			dist0[x0, y0] = new Path(null, 's');
+			qs.Add(0, x0, y0);
+			for (int time = 0; time <= MAX_TIME; ++time)
+			{
+				for (int it = qs.First[time]; it != -1; it = qs.Next[it])
+				{
+					int X = qs.X[it];
+					int Y = qs.Y[it];
+					Path p = (time + time0 <= bound1(map[cc[X], cc[Y]]) ? dist0 : dist1)[X, Y];
+					//Console.WriteLine("{0}: ({1}, {2}) - {3}", time, X, Y, p.Size());
+					if (time != MAX_TIME && p.Size() < time)
+					{
+						continue;
+					}
+					if (Math.Abs(X - x0) > radius || Math.Abs(Y - y0) > radius)
+					{
+						continue;
+					}
+					MapCell cell0 = map[cc[X], cc[Y]];
+					for (int d = 0; d < 4; ++d)
+					{
+						int x = X;
+						int y = Y;
+						if (!Move(ref x, ref y, time + time0, speed, d) || x == X && y == Y)
+						{
+							continue;
+						}
+						MapCell cell = map[cc[x], cc[y]];
+						if (cell.IsDeadlyAt(time0 + time + 1))
+						{
+							continue;
+						}
+						var dist = time + time0 + 1 <= bound1(map[cc[x], cc[y]]) ? dist0 : dist1;
+						if (dist[x, y] != null && (time == MAX_TIME || dist[x, y].Size() <= time + 1))
+						{
+							continue;
+						}
+						dist[x, y] = new Path(p, Dir[d]);
+						qs.Add(Math.Min(time + 1, MAX_TIME), x, y);
+					}
+					for (int d = 0; d < 4; ++d)
+					{
+						int x = X;
+						int y = Y;
+						if (!InMap(x + cellSize * dx[d], y + cellSize * dy[d]))
+						{
+							continue;
+						}
+						int time2 = bound1(map[cc[x] + dx[d], cc[y] + dy[d]]) + 1 - time0;
+						if (time2 - 1 + time0 == int.MaxValue || time2 <= time)
+						{
+							continue;
+						}
+						if (!Move(ref x, ref y, time2 + time0, speed, d) || cc[x] == cc[X] && cc[y] == cc[Y])
+						{
+							continue;
+						}
+						int b0 = bound0(map[cc[X], cc[Y]]);
+						if (time + time0 < b0 && time2 + time0 >= b0)
+						{
+							continue;
+						}
+						if (dist1[x, y] != null && dist1[x, y].Size() <= time2 + 1)
+						{
+							continue;
+						}
+						dist1[x, y] = new Path(new Path(p, 's', time2 - time), Dir[d]);
+						qs.Add(time2 + 1, x, y);
+					}
+				}
+			}
+			//Console.WriteLine("queue size: {0}", qe);
 			for (int i = 0; i < n; ++i)
 			{
 				for (int j = 0; j < m; ++j)
 				{
-					r.MinTime[i, j] = -1;
-					for (int t = 0; t <= MAX_TIME; ++t)
-					{
-						r.Dist[i, j, t] = -1;
-					}
+					dist0[i, j] = dist0[i, j] ?? dist1[i, j];
 				}
 			}
-			r.Dist[x0, y0, 0] = 0;
-			qx[0] = x0;
-			qy[0] = y0;
-			qt[0] = 0;
-			for (int it = 0; it < qe; ++it)
-			{
-				int X = qx[it];
-				int Y = qy[it];
-				if (Math.Abs(X - x0) > radius || Math.Abs(Y - y0) > radius)
-				{
-					continue;
-				}
-				int time = qt[it];
-				if (r.MinTime[X, Y] == -1)
-				{
-					r.MinTime[X, Y] = time;
-				}
-				MapCell cell0 = map[cc[X], cc[Y]];
-				for (int d = 0; d < 4; ++d)
-				{
-					int x = X;
-					int y = Y;
-					if (!Move(ref x, ref y, time + time0, speed, d) || x == X && y == Y)
-					{
-						continue;
-					}
-					MapCell cell = map[cc[x], cc[y]];
-					if (cell.IsDeadlyAt(time0 + time + 1))
-					{
-						continue;
-					}
-					Add(x, y, Math.Min(time + 1, MAX_TIME), r, qx, qy, qt, ref qe, X, Y, time, Dir[d]);
-				}
-				if (time < MAX_TIME && !cell0.IsDeadlyAt(time + time0 + 1))
-				{
-					Add(X, Y, time + 1, r, qx, qy, qt, ref qe, X, Y, time, 's');
-				}
-			}
-			//Console.WriteLine("queue size: {0}", qe);
-			return r;
+			return dist0;
 		}
 		
 		public bool Move(ref int x, ref int y, int time, int speed, int d)
@@ -174,36 +195,57 @@ namespace Core.PathFinding
 				(cell.IsBreakableWall || cell.IsBomb) && time < cell.EmptySince ||
 				cell.IsDeadlyAt(time);
 		}
-
-		private void Add(int x, int y, int time, Paths r, 
-		                 int[] qx, int[] qy, int[] qt, ref int qe,
-		                 int px, int py, int pt, char pc)
+		
+		private int bound0(MapCell cell)
 		{
-			if (r.Dist[x, y, time] == -1)
-			{
-				r.Px[x, y, time] = (short)px;
-				r.Py[x, y, time] = (short)py;
-				r.Pt[x, y, time] =(byte)pt;
-				r.Pc[x, y, time] = pc;
-				r.Dist[x, y, time] = r.Dist[px, py, pt] + 1;
-				qx[qe] = x;
-				qy[qe] = y;
-				qt[qe] = time;
-				++qe;
-			}
+			return cell.EmptySince == int.MaxValue ? cell.DeadlySince : 0;
+		}
+		
+		private int bound1(MapCell cell)
+		{
+			return cell.DeadlyTill;
 		}
 	}
 
-	internal class Node
+	internal struct Queues
 	{
-		public int Time;
-		public int X, Y;
-
-		public Node(int x, int y, int time)
+		public int[] First, Last, Next, X, Y;
+		private int used;
+		
+		public Queues(int queues, int maxCount)
 		{
-			X = x;
-			Y = y;
-			Time = time;
+			First = new int[queues];
+			Last = new int[queues];
+			Next = new int[maxCount];
+			X = new int[maxCount];
+			Y = new int[maxCount];
+			used = 0;
+			Clear();
+		}
+		
+		public void Clear()
+		{
+			for (int i = 0; i < First.Length; ++i)
+			{
+				First[i] = Last[i] = -1;
+			}
+		}
+		
+		public void Add(int queue, int x, int y)
+		{
+			X[used] = x;
+			Y[used] = y;
+			if (Last[queue] != -1)
+			{
+				Next[Last[queue]] = used;
+			}
+			Next[used] = -1;
+			Last[queue] = used;
+			if (First[queue] == -1)
+			{
+				First[queue] = used;
+			}
+			used++;
 		}
 	}
 }

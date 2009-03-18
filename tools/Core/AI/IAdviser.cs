@@ -6,6 +6,6 @@ namespace Core.AI
 {
 	internal interface IAdviser
 	{
-		IEnumerable<Decision> Advise(GameState state, Paths paths);
+		IEnumerable<Decision> Advise(GameState state, IPath[,] paths);
 	}
 }

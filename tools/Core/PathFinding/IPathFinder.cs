@@ -15,7 +15,7 @@ namespace Core.PathFinding
 	public interface IPathFinder
 	{
 		void SetMap(MapCell[,] newMap, int newCellSize);
-		Paths FindPaths(int x, int y, int time, int speed, int radius);
+		IPath[,] FindPaths(int x, int y, int time, int speed, int radius);
 		bool Move(ref int x, ref int y, int time, int speed, int d);
 		bool Live(int x, int y, int time, int speed);
 	}

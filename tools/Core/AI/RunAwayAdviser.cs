@@ -12,7 +12,7 @@ namespace Core
 		{
 		}
 		
-		public IEnumerable<Decision> Advise(GameState state, Paths paths)
+		public IEnumerable<Decision> Advise(GameState state, IPath[,] paths)
 		{
 			for (int d = 0; d < 4; ++d)
 			{

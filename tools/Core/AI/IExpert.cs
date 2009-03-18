@@ -5,8 +5,8 @@ namespace Core.AI
 {
 	internal interface IExpert
 	{
-		// Р§РµРј Р±РѕР»СЊС€Рµ, С‚РµРј С…СѓР¶Рµ СЂРµС€РµРЅРёРµ. 0 вЂ” СЌРєСЃРїРµСЂС‚ РЅРµ РёРјРµРµС‚ РЅРёС‡РµРіРѕ РїСЂРѕС‚РёРІ :)
-		byte EstimateDecisionDanger(GameState state, Paths paths, Decision decision);
+		// Чем больше, тем хуже решение. 0 — эксперт не имеет ничего против :)
+		byte EstimateDecisionDanger(GameState state, IPath[,] paths, Decision decision);
 		void OnNextMove();
 	}
 }
