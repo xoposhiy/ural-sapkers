@@ -6,11 +6,11 @@ namespace Core.AI
 {
 	internal class SuicideAdviser : IAdviser
 	{
-		public IEnumerable<Decision> Advise(GameState state, Paths paths)
+		public IEnumerable<Decision> Advise(GameState state, IPath[,] paths)
 		{
 			var decision = new Decision(null, state.MyCell, true, 1, -1000);
 			decision.Name = "Suicide";
-			yield return decision; //РЈР±РµР№ СЃРµР±СЏ! Р’С‹РїРµР№ СЏРґСѓ! Р’РіР°Р·РµРЅРІР°РіРµРЅ! РќРµСѓРґР°С‡РЅРµРі! Р›РѕС… вЂ” СЌС‚Рѕ СЃСѓРґСЊР±Р°...
+			yield return decision; //Убей себя! Выпей яду! Вгазенваген! Неудачнег! Лох — это судьба...
 		}
 	}
 }

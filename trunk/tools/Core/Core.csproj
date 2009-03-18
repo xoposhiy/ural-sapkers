@@ -86,7 +86,7 @@
     <Compile Include="StateCalculations\MapCell.cs" />
     <Compile Include="StateCalculations\Bomb.cs" />
     <Compile Include="AI\RunAwayAdviser.cs" />
-    <Compile Include="BonusAdviser.cs" />
+    <Compile Include="AI\BonusAdviser.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Parsing\readme.txt" />

@@ -40,16 +40,21 @@ namespace Core.PathFinding
 	public class Path : IPath
 	{
 		private Path parent;
-		private int size;
+		private int size, repeat;
 		private char firstMove;
 		private char move;
 		
-		public Path(Path parent, char move)
+		public Path(Path parent, char move, int repeat)
 		{
 			this.parent = parent;
 			this.move = move;
-			this.size = (parent == null ? -1 : parent.size) + 1;
+			this.repeat = repeat;
+			this.size = (parent == null ? 0 : parent.size) + repeat;
 			this.firstMove = parent == null || parent.size == 0 ? move : parent.firstMove;
+		}
+		
+		public Path(Path parent, char move) : this(parent, move, parent == null ? 0 : 1)
+		{
 		}
 		
 		public int Size()
@@ -65,7 +70,7 @@ namespace Core.PathFinding
 		public List<char> FullPath()
 		{
 			List<char> r = parent == null ? new List<char>() : parent.FullPath();
-			if (parent != null)
+			for (int it = 0; it < repeat; ++it)
 			{
 				r.Add(move);
 			}

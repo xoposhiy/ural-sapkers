@@ -7,7 +7,7 @@ namespace Core.AI
 	{
 		#region IExpert Members
 
-		public byte EstimateDecisionDanger(GameState state, Paths paths, Decision decision)
+		public byte EstimateDecisionDanger(GameState state, IPath[,] paths, Decision decision)
 		{
 			if (decision.Path.FirstMove() != 's') return 0;
 
