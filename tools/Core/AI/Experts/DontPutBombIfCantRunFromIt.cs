@@ -3,7 +3,7 @@ using Core.Parsing;
 using Core.PathFinding;
 using Core.StateCalculations;
 
-namespace Core.AI
+namespace Core.AI.Experts
 {
 	internal class DontPutBombIfCantRunFromIt : IExpert
 	{

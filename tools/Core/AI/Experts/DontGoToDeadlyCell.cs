@@ -3,7 +3,7 @@ using Core.PathFinding;
 using Core.StateCalculations;
 using log4net;
 
-namespace Core.AI
+namespace Core.AI.Experts
 {
 	internal class DontGoToDeadlyCell : IExpert
 	{
