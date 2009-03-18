@@ -10,6 +10,7 @@ namespace Core.AI
 	{
 		public IEnumerable<Decision> Advise(GameState state, IPath[,] paths)
 		{
+			//TODO научить понимать бонусы
 			var dx = new[] {1, -1, 0, 0};
 			var dy = new[] {0, 0, 1, -1};
 			IPath[,] ds = new Path[state.Map.GetLength(0), state.Map.GetLength(1)];
