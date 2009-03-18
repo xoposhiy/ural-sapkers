@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using Core.AI.Advisers;
@@ -19,14 +18,11 @@ namespace Core.AI
 
 		static Chief()
 		{
-//			advisers.Add(new SuicideAdviser());
 			advisers.Add(new RunAwayAdviser());
 			advisers.Add(new DestroyWallsAdviser());
 			advisers.Add(new BonusAdviser());
-			experts.Add(new DontPutBombIfCantRunFromIt()); // Isn't this useless?
 			experts.Add(new DontGoToDeadlyCell());
 			experts.Add(new TargetShouldHaveSense());
-			experts.Add(new DontSleepNearBomb()); // And this
 		}
 
 		public Chief(GameState state)
@@ -75,7 +71,7 @@ namespace Core.AI
 			Decision d = best ?? Decision.DoNothing;
 			log.Info(state.Time + " chosen move: " + DecisionLogString(d));
 			if (state.Sapkas[state.Me].BombsLeft == 0)
-				d = new Decision(d.Path, d.Target, false, d.Duration, d.PotentialScore, d.Name);
+				d = new Decision(d.Path, d.Target, false, d.Duration, d.PotentialScore, d.Name, d.WillBomb);
 			if (d.PutBomb)
 			{
 				state.UseBomb();
