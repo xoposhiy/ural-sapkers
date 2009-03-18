@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.30729</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{278E2132-B260-4EB1-B11D-AA78E98699EA}</ProjectGuid>
     <OutputType>WinExe</OutputType>
@@ -68,6 +68,12 @@
     <Compile Include="Logger\FileSapkaServerLogger.cs" />
     <Compile Include="Logger\ISapkaServerLogger.cs" />
     <Compile Include="ModelUpdatersQueue.cs" />
+    <Compile Include="PlayControlsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PlayControlsForm.Designer.cs">
+      <DependentUpon>PlayControlsForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="SnapshotForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -87,6 +93,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="ChooseDataSourceForm.resx">
       <DependentUpon>ChooseDataSourceForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PlayControlsForm.resx">
+      <DependentUpon>PlayControlsForm.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">

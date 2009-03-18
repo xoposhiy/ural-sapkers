@@ -19,16 +19,21 @@ namespace Visualizer
         private void buttonLocalhost_Click(object sender, EventArgs e)
         {
             dataSource = DataSource.Localhost;
+            cancel = false;
             Close();
         }
 
         private void buttonLogs_Click(object sender, EventArgs e)
         {
             dataSource = DataSource.Logs;
+            cancel = false;
             Close();
         }
 
         internal DataSource DataSource { get { return dataSource; } }
         private DataSource dataSource;
+
+        internal bool Cancel { get { return cancel; } }
+        private bool cancel = true;
     }
 }
