@@ -133,6 +133,7 @@ namespace Core.PathFinding
 					    new Path(dist[X, Y, time], Dir[d]));
 				}
 			}
+			//Console.WriteLine("queue size: {0}", qe);
 			return dist;
 		}
 		

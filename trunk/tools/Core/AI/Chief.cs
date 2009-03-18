@@ -60,7 +60,7 @@ namespace Core.AI
 			{
 				foreach (Decision decision in adviser.Advise(state, paths))
 				{
-					log.Debug(state.Time + " " + DecisionLogString(decision));
+					//log.Debug(state.Time + " " + DecisionLogString(decision));
 					double beauty = CalculateBeauty(decision);
 					if (beauty > bestBeauty)
 					{
@@ -77,7 +77,7 @@ namespace Core.AI
 			if (d.PutBomb)
 			{
 				state.UseBomb();
-				log.Info("BOMB!");
+				//log.Info("BOMB!");
 			}
 			return d;
 		}
@@ -100,7 +100,7 @@ namespace Core.AI
 				if (expertsEstimate == byte.MaxValue)
 				{
 					result = int.MinValue; // Эксперт сказал «нет», значит «нет»!
-					log.Info(expert.GetType().Name + " declined " + decision);
+					//log.Info(expert.GetType().Name + " declined " + decision);
 				}
 				result -= expertsEstimate*expertWeight;
 			}
