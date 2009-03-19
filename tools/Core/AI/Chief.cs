@@ -10,14 +10,11 @@ namespace Core.AI
 {
 	public class Chief
 	{
-		private static readonly IList<IAdviser> advisers = new List<IAdviser>();
-		private static readonly IList<IExpert> experts = new List<IExpert>();
+		private readonly IList<IAdviser> advisers = new List<IAdviser>();
+		private readonly IList<IExpert> experts = new List<IExpert>();
 		private static readonly ILog log = LogManager.GetLogger(typeof (Chief));
-		private readonly IInversionDetector inversionDetector;
-		private readonly IPath[,] paths;
-		private readonly GameState state;
 
-		static Chief()
+		public Chief()
 		{
 			advisers.Add(new DestroyWallsAdviser());
 			advisers.Add(new BonusAdviser());
@@ -26,28 +23,19 @@ namespace Core.AI
 			experts.Add(new CanLiveAfterTarget());
 		}
 
-		public Chief(GameState state, IInversionDetector inversionDetector)
+		public Decision MakeDecision(GameState state, IInversionDetector inversionDetector)
 		{
-			this.state = state;
-			this.inversionDetector = inversionDetector;
+			Stopwatch sw = Stopwatch.StartNew();
 			var finder = new PathFinder();
 			finder.SetMap(state.Map, state.CellSize);
-			if (state.Sapkas[state.Me] != null && !state.Sapkas[state.Me].IsDead)
+			IPath[,] paths = null;
+			if(state.Sapkas[state.Me] != null && !state.Sapkas[state.Me].IsDead)
 			{
-				var sw = Stopwatch.StartNew();
 				paths = finder.FindPaths(
 					state.Sapkas[state.Me].Pos.X, state.Sapkas[state.Me].Pos.Y, state.Time,
 					state.Sapkas[state.Me].Speed, Commons.Radius);
-				sw.Stop();
-				if (sw.ElapsedMilliseconds > 50)
-					log.Warn(state.RoundNumber + " " + state.Time +
-					         "FindPaths spends too much time: " + sw.ElapsedMilliseconds + " ms (should <= 50)");
 			}
-		}
-
-		public Decision MakeDecision()
-		{
-			Stopwatch sw = Stopwatch.StartNew();
+	
 			if(state.Sapkas[state.Me].IsDead)
 			{
 				if (inversionDetector.Inverted)
@@ -68,20 +56,28 @@ namespace Core.AI
 			{
 				foreach (Decision decision in adviser.Advise(state, paths))
 				{
-					log.Debug(state.RoundNumber + " " + state.Time + " " + DecisionLogString(decision));
-					double beauty = CalculateBeauty(decision, bestBeauty);
+					log.Debug(state.RoundNumber + " " + state.Time + " " + DecisionLogString(decision, state));
+					double beauty = CalculateBeauty(decision, bestBeauty, state, paths);
 					if (beauty > bestBeauty)
 					{
 						best = decision;
 						bestBeauty = beauty;
 					}
-					if (sw.ElapsedMilliseconds > 40) break;
+					if (sw.ElapsedMilliseconds > 40)
+					{
+						log.Info("Отсечка по времени!");
+						break;
+					}
 				}
-				if(sw.ElapsedMilliseconds > 40) break;
+				if(sw.ElapsedMilliseconds > 40)
+				{
+					log.Info("Отсечка по времени!");
+					break;
+				}
 			}
 			Decision d = best ?? Decision.DoNothing;
 			if(bestBeauty == 0) d = Decision.DoNothing;
-			log.Info(state.RoundNumber + " " + state.Time + " chosen move: " + DecisionLogString(d));
+			log.Info(state.RoundNumber + " " + state.Time + " chosen move: " + DecisionLogString(d, state));
 			if (state.Sapkas[state.Me].BombsLeft == 0)
 				d = new Decision(d.Path, d.Target, d.TargetPt, false, d.Duration, d.PotentialScore, d.Name, d.WillBomb);
 			if (d.PutBomb)
@@ -102,18 +98,18 @@ namespace Core.AI
 
 		private static readonly ILog performanceLog = LogManager.GetLogger("performance");
 
-		private string DecisionLogString(Decision decision)
+		private string DecisionLogString(Decision decision, GameState state)
 		{
 			return "from " + state.MyCell + " " + state.Sapkas[state.Me].Pos + " " + decision +
 			       " cost:" + decision.PotentialScore + "/" + decision.Duration + " = " +
-			       ((double) decision.PotentialScore/decision.Duration);
+			       (decision.PotentialScore/decision.Duration);
 		}
 
-		private double CalculateBeauty(Decision decision, double bestBeauty)
+		private double CalculateBeauty(Decision decision, double bestBeauty, GameState state, IPath[,] paths)
 		{
 			Debug.Assert(decision.Duration > 0);
 			// Эти фиговины нужно будет подобрать...
-			double result = (double) decision.PotentialScore/decision.Duration;
+			double result = decision.PotentialScore/decision.Duration;
 			if (result <= bestBeauty) return 0;
 			foreach (IExpert expert in experts)
 			{

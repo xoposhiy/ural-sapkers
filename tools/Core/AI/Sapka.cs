@@ -7,6 +7,7 @@ namespace Core.AI
 	{
 		private static readonly ILog log = LogManager.GetLogger("performance");
 		private readonly IInversionDetector inversionDetector = new InversionDetector();
+		private readonly Chief chief = new Chief();
 		private Decision lastDecision;
 		private int lastTime;
 
@@ -44,7 +45,7 @@ namespace Core.AI
 		public override string GetMove()
 		{
 			if (GameState.Time == 0) return "s";
-			Decision decision = new Chief(GameState, inversionDetector).MakeDecision();
+			Decision decision = chief.MakeDecision(GameState, inversionDetector);
 
 			int skipped = GameState.Time - lastTime;
 			if (skipped > 1)
