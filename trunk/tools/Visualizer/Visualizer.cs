@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
+using System.Collections;
 using System.Threading;
 using System.Windows.Forms;
 using Core;
@@ -311,9 +312,11 @@ namespace Visualizer
 			infoNode.Nodes.Add(string.Format("Опасность коллапса: {0}", model.DangerLevel));
 			tvInfo.Nodes.Add(infoNode);
 
-			foreach (int sapkaIndex in model.SapkaInfos.Keys)
+
+            Dictionary<int, SapkaInfo> infos = new Dictionary<int,SapkaInfo>(model.SapkaInfos);
+			foreach (int sapkaIndex in infos.Keys)
 			{
-				SapkaInfo sapkaInfo = model.SapkaInfos[sapkaIndex];
+				SapkaInfo sapkaInfo = infos[sapkaIndex];
 
 				var sapkaNode = new TreeNode("Сапка " + sapkaIndex) {ForeColor = sapkaColors[sapkaIndex]};
 				sapkaNode.Nodes.Add(string.Format("Осталось бомб: {0}", sapkaInfo.BombsLeft));
