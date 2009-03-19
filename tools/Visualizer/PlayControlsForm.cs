@@ -90,6 +90,38 @@ namespace Visualizer
             //RemoveNotChosenDuplicates(chiefLog);
         }
 
+        private void RefreshWayListBox()
+        {
+            int round = visualizer.model.State.RoundNumber;
+            int time = visualizer.model.State.Time;
+            Text = String.Format("Round {0}, time {1}", round, time);
+
+            List<ChiefLogLine> currentTimeLines = new List<ChiefLogLine>();
+            ChiefLogLine chosen = null;
+            foreach (ChiefLogLine line in chiefLog)
+                if (line.Round == round && line.Time == time)
+                {
+                    currentTimeLines.Add(line);
+                    if (line.IsChosen)
+                        chosen = line;
+                }
+            if (chosen != null)
+            {
+                sapka.LastDecisionPath = chosen.Target.path.ToCharArray();
+                sapka.LastDecisionName = chosen.Target.adviser;
+                // Удалим не-Chosen строчку
+                for (int i = 0; i < currentTimeLines.Count; ++i)
+                    if (chosen.Target.ToString() == currentTimeLines[i].Target.ToString() && !currentTimeLines[i].IsChosen)
+                    {
+                        currentTimeLines.RemoveAt(i);
+                        break;
+                    }
+            }
+            listBoxTargets.Items.Clear();
+            foreach (ChiefLogLine line in currentTimeLines)
+                listBoxTargets.Items.Add(line);
+        }
+
         private void NextStep()
         {
 			if(trackBar.InvokeRequired)
@@ -104,34 +136,7 @@ namespace Visualizer
                 parser.ParseMessage(message);
                 visualizer.UpdateModel();
 
-                int round = visualizer.model.State.RoundNumber;
-                int time = visualizer.model.State.Time;
-                Text = String.Format("Round {0}, time {1}", round, time);
-
-                List<ChiefLogLine> currentTimeLines = new List<ChiefLogLine>();
-                ChiefLogLine chosen = null;
-                foreach (ChiefLogLine line in chiefLog)
-                    if (line.Round == round && line.Time == time)
-                    {
-                        currentTimeLines.Add(line);
-                        if (line.IsChosen)
-                            chosen = line;
-                    }
-                if (chosen != null)
-                {
-                    sapka.LastDecisionPath = chosen.Target.path.ToCharArray();
-                    sapka.LastDecisionName = chosen.Target.adviser;
-                    // Удалим не-Chosen строчку
-                    for (int i = 0; i < currentTimeLines.Count; ++i)
-                        if (chosen.Target.ToString() == currentTimeLines[i].Target.ToString() && !currentTimeLines[i].IsChosen)
-                        {
-                            currentTimeLines.RemoveAt(i);
-                            break;
-                        }
-                }
-                listBoxTargets.Items.Clear();
-                foreach (ChiefLogLine line in currentTimeLines)
-                    listBoxTargets.Items.Add(line);
+                RefreshWayListBox();
             }
         }
 
@@ -158,7 +163,21 @@ namespace Visualizer
 
         private void trackBar_ValueChanged(object sender, EventArgs e)
         {
+            if (trackBar.Value < oldTrackbarValue)
+            {
+                for (int i = 0; i < trackBar.Value; ++i)
+                    parser.ParseMessage(sapkaLog[i]);
+            }
+            else if (trackBar.Value > oldTrackbarValue)
+            {
+                for (int i = oldTrackbarValue; i < trackBar.Value; ++i )
+                    parser.ParseMessage(sapkaLog[i]);
+            }
+            RefreshWayListBox();
+            visualizer.UpdateModel();
+
             textBoxMessage.Text = sapkaLog[trackBar.Value];
+            oldTrackbarValue = trackBar.Value;
         }
 
         private static void AutoPlay(PlayControlsForm form)
@@ -170,6 +189,7 @@ namespace Visualizer
             }
         }
 
+        private int oldTrackbarValue = 0;
         private static Regex sapkaTickRegex = new Regex(@"^T\d+&");
 
         private void listBoxTargets_SelectedIndexChanged(object sender, EventArgs e)
@@ -177,6 +197,12 @@ namespace Visualizer
             ChiefLogLine line = (ChiefLogLine) listBoxTargets.SelectedItem;
             sapka.LastDecisionPath = line.Target.path.ToCharArray();
             sapka.LastDecisionName = line.Target.adviser ;
+        }
+
+        private void PlayControlsForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (threadAutoPlay!=null)
+                threadAutoPlay.Abort();
         }
     }
 }

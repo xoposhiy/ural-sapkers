@@ -35,8 +35,6 @@
             this.labelMax = new System.Windows.Forms.Label();
             this.textBoxMessage = new System.Windows.Forms.TextBox();
             this.listBoxTargets = new System.Windows.Forms.ListBox();
-            this.labelBest = new System.Windows.Forms.Label();
-            this.labelChosen = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar)).BeginInit();
             this.SuspendLayout();
             // 
@@ -46,13 +44,13 @@
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.trackBar.Location = new System.Drawing.Point(12, 12);
             this.trackBar.Name = "trackBar";
-            this.trackBar.Size = new System.Drawing.Size(813, 42);
+            this.trackBar.Size = new System.Drawing.Size(900, 42);
             this.trackBar.TabIndex = 1;
             this.trackBar.ValueChanged += new System.EventHandler(this.trackBar_ValueChanged);
             // 
             // buttonStep
             // 
-            this.buttonStep.Location = new System.Drawing.Point(15, 99);
+            this.buttonStep.Location = new System.Drawing.Point(15, 64);
             this.buttonStep.Name = "buttonStep";
             this.buttonStep.Size = new System.Drawing.Size(74, 23);
             this.buttonStep.TabIndex = 3;
@@ -62,7 +60,7 @@
             // 
             // buttonPlay
             // 
-            this.buttonPlay.Location = new System.Drawing.Point(15, 128);
+            this.buttonPlay.Location = new System.Drawing.Point(95, 64);
             this.buttonPlay.Name = "buttonPlay";
             this.buttonPlay.Size = new System.Drawing.Size(74, 23);
             this.buttonPlay.TabIndex = 4;
@@ -83,7 +81,7 @@
             // 
             this.labelMax.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.labelMax.AutoSize = true;
-            this.labelMax.Location = new System.Drawing.Point(790, 41);
+            this.labelMax.Location = new System.Drawing.Point(877, 41);
             this.labelMax.Name = "labelMax";
             this.labelMax.Size = new System.Drawing.Size(35, 13);
             this.labelMax.TabIndex = 6;
@@ -94,12 +92,12 @@
             this.textBoxMessage.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)));
             this.textBoxMessage.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.textBoxMessage.Location = new System.Drawing.Point(95, 99);
+            this.textBoxMessage.Location = new System.Drawing.Point(15, 93);
             this.textBoxMessage.Multiline = true;
             this.textBoxMessage.Name = "textBoxMessage";
             this.textBoxMessage.ReadOnly = true;
             this.textBoxMessage.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.textBoxMessage.Size = new System.Drawing.Size(273, 52);
+            this.textBoxMessage.Size = new System.Drawing.Size(284, 98);
             this.textBoxMessage.TabIndex = 7;
             // 
             // listBoxTargets
@@ -110,38 +108,17 @@
             this.listBoxTargets.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.listBoxTargets.FormattingEnabled = true;
             this.listBoxTargets.ItemHeight = 14;
-            this.listBoxTargets.Location = new System.Drawing.Point(374, 70);
+            this.listBoxTargets.Location = new System.Drawing.Point(305, 61);
             this.listBoxTargets.Name = "listBoxTargets";
-            this.listBoxTargets.Size = new System.Drawing.Size(461, 88);
+            this.listBoxTargets.Size = new System.Drawing.Size(617, 130);
             this.listBoxTargets.TabIndex = 11;
             this.listBoxTargets.SelectedIndexChanged += new System.EventHandler(this.listBoxTargets_SelectedIndexChanged);
-            // 
-            // labelBest
-            // 
-            this.labelBest.AutoSize = true;
-            this.labelBest.Location = new System.Drawing.Point(316, 54);
-            this.labelBest.Name = "labelBest";
-            this.labelBest.Size = new System.Drawing.Size(52, 13);
-            this.labelBest.TabIndex = 12;
-            this.labelBest.Text = "Chosen =";
-            // 
-            // labelChosen
-            // 
-            this.labelChosen.AutoSize = true;
-            this.labelChosen.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.labelChosen.Location = new System.Drawing.Point(374, 54);
-            this.labelChosen.Name = "labelChosen";
-            this.labelChosen.Size = new System.Drawing.Size(14, 14);
-            this.labelChosen.TabIndex = 13;
-            this.labelChosen.Text = "?";
             // 
             // PlayControlsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(837, 159);
-            this.Controls.Add(this.labelChosen);
-            this.Controls.Add(this.labelBest);
+            this.ClientSize = new System.Drawing.Size(924, 194);
             this.Controls.Add(this.listBoxTargets);
             this.Controls.Add(this.textBoxMessage);
             this.Controls.Add(this.labelMax);
@@ -149,10 +126,12 @@
             this.Controls.Add(this.buttonPlay);
             this.Controls.Add(this.buttonStep);
             this.Controls.Add(this.trackBar);
+            this.Location = new System.Drawing.Point(10, 780);
             this.Name = "PlayControlsForm";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "PlayControlsForm";
             this.TopMost = true;
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.PlayControlsForm_FormClosing);
             ((System.ComponentModel.ISupportInitialize)(this.trackBar)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -168,7 +147,5 @@
         private System.Windows.Forms.Label labelMax;
         private System.Windows.Forms.TextBox textBoxMessage;
         private System.Windows.Forms.ListBox listBoxTargets;
-        private System.Windows.Forms.Label labelBest;
-        private System.Windows.Forms.Label labelChosen;
     }
 }
