@@ -19,7 +19,7 @@ namespace Core.AI.Experts
 				Bomb? b = null;
 				if(decision.WillBomb)
 				{
-					b = new Bomb(tx, ty, state.MySapka.BombsStrength, state.Time + decision.Duration + Constants.BombTimeout);
+					b = new Bomb(tx, ty, state.MySapka.BombsStrength, state.Time + decision.Duration + Commons.BombTimeout);
 					state.AddBomb(b.Value);
 					state.RecalcDeadly();
 				}
@@ -38,7 +38,7 @@ namespace Core.AI.Experts
 					return 255;
 				}
 			}
-			return 0;	
+			return 0;
 		}
 	}
 }

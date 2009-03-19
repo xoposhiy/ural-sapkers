@@ -13,6 +13,7 @@ namespace Core.AI
 		private static readonly IList<IAdviser> advisers = new List<IAdviser>();
 		private static readonly IList<IExpert> experts = new List<IExpert>();
 		private static readonly ILog log = LogManager.GetLogger(typeof (Chief));
+		private readonly IInversionDetector inversionDetector;
 		private readonly IPath[,] paths;
 		private readonly GameState state;
 
@@ -25,9 +26,10 @@ namespace Core.AI
 			experts.Add(new TargetShouldHaveSense());
 		}
 
-		public Chief(GameState state)
+		public Chief(GameState state, IInversionDetector inversionDetector)
 		{
 			this.state = state;
+			this.inversionDetector = inversionDetector;
 			var finder = new PathFinder();
 			finder.SetMap(state.Map, state.CellSize);
 			if (state.Sapkas[state.Me] != null && !state.Sapkas[state.Me].IsDead)
@@ -35,11 +37,11 @@ namespace Core.AI
 				var sw = Stopwatch.StartNew();
 				paths = finder.FindPaths(
 					state.Sapkas[state.Me].Pos.X, state.Sapkas[state.Me].Pos.Y, state.Time,
-					state.Sapkas[state.Me].Speed, Constants.Radius);
+					state.Sapkas[state.Me].Speed, Commons.Radius);
 				sw.Stop();
 				if (sw.ElapsedMilliseconds > 50)
-					log.Warn(state.RoundNumber + " " + state.Time + 
-                            "FindPaths spends too much time: " + sw.ElapsedMilliseconds + " ms (should <= 50)");
+					log.Warn(state.RoundNumber + " " + state.Time +
+					         "FindPaths spends too much time: " + sw.ElapsedMilliseconds + " ms (should <= 50)");
 			}
 		}
 
@@ -47,8 +49,8 @@ namespace Core.AI
 		{
 			if (state.Sapkas[state.Me].IsDead)
 			{
-				if (state.InvertedMe)
-                    log.Info(state.RoundNumber + " " + state.Time + " SAPKA DIED INVERSED!");
+				if (inversionDetector.Inverted)
+					log.Info(state.RoundNumber + " " + state.Time + " SAPKA DIED INVERTED!");
 				return Decision.DoNothing;
 			}
 			Decision best = null;
@@ -65,7 +67,7 @@ namespace Core.AI
 			{
 				foreach (Decision decision in adviser.Advise(state, paths))
 				{
-                    log.Debug(state.RoundNumber + " " + state.Time + " " + DecisionLogString(decision));
+					log.Debug(state.RoundNumber + " " + state.Time + " " + DecisionLogString(decision));
 					double beauty = CalculateBeauty(decision);
 					if (beauty > bestBeauty)
 					{
@@ -75,17 +77,18 @@ namespace Core.AI
 				}
 			}
 			Decision d = best ?? Decision.DoNothing;
-            log.Info(state.RoundNumber + " " + state.Time + " chosen move: " + DecisionLogString(d));
+			log.Info(state.RoundNumber + " " + state.Time + " chosen move: " + DecisionLogString(d));
 			if (state.Sapkas[state.Me].BombsLeft == 0)
 				d = new Decision(d.Path, d.Target, d.TargetPt, false, d.Duration, d.PotentialScore, d.Name, d.WillBomb);
 			if (d.PutBomb)
 			{
 				state.UseBomb();
-                log.Info(state.RoundNumber + " " + state.Time + " BOMB!");
+				log.Info(state.RoundNumber + " " + state.Time + " BOMB!");
 			}
-			if (state.InvertedMe)
+			inversionDetector.RegisterMove(state, d.Path == null ? 's' : d.Path.FirstMove());
+			if (inversionDetector.Inverted)
 			{
-                log.Info(state.RoundNumber + " " + state.Time + " INVERSED!");
+				log.Info(state.RoundNumber + " " + state.Time + " INVERTED!");
 				d.Inverse = true;
 			}
 			return d;
@@ -93,8 +96,9 @@ namespace Core.AI
 
 		private string DecisionLogString(Decision decision)
 		{
-			return "from " + state.MyCell + " " + state.Sapkas[state.Me].Pos + " " +decision +
-				" cost:" + decision.PotentialScore + "/" + decision.Duration + " = " + ((double)decision.PotentialScore / decision.Duration);
+			return "from " + state.MyCell + " " + state.Sapkas[state.Me].Pos + " " + decision +
+			       " cost:" + decision.PotentialScore + "/" + decision.Duration + " = " +
+			       ((double) decision.PotentialScore/decision.Duration);
 		}
 
 		private double CalculateBeauty(Decision decision)
@@ -109,7 +113,7 @@ namespace Core.AI
 				if (expertsEstimate == byte.MaxValue)
 				{
 					result = int.MinValue; // Эксперт сказал «нет», значит «нет»!
-                    log.Info(state.RoundNumber + " " + state.Time + " " + expert.GetType().Name + " declined " + decision);
+					log.Info(state.RoundNumber + " " + state.Time + " " + expert.GetType().Name + " declined " + decision);
 				}
 				result -= expertsEstimate*expertWeight;
 			}
