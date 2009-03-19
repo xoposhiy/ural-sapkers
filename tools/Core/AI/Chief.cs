@@ -38,7 +38,8 @@ namespace Core.AI
 					state.Sapkas[state.Me].Speed, Constants.Radius);
 				sw.Stop();
 				if (sw.ElapsedMilliseconds > 50)
-					log.Warn("FindPaths spends too much time: " + sw.ElapsedMilliseconds + " ms (should <= 50)");
+					log.Warn(state.RoundNumber + " " + state.Time + 
+                            "FindPaths spends too much time: " + sw.ElapsedMilliseconds + " ms (should <= 50)");
 			}
 		}
 
@@ -47,7 +48,7 @@ namespace Core.AI
 			if (state.Sapkas[state.Me].IsDead)
 			{
 				if (state.InvertedMe)
-					log.Info("SAPKA DIED INVERSED!");
+                    log.Info(state.RoundNumber + " " + state.Time + " SAPKA DIED INVERSED!");
 				return Decision.DoNothing;
 			}
 			Decision best = null;
@@ -64,7 +65,7 @@ namespace Core.AI
 			{
 				foreach (Decision decision in adviser.Advise(state, paths))
 				{
-					log.Debug(state.Time + " " + DecisionLogString(decision));
+                    log.Debug(state.RoundNumber + " " + state.Time + " " + DecisionLogString(decision));
 					double beauty = CalculateBeauty(decision);
 					if (beauty > bestBeauty)
 					{
@@ -74,17 +75,17 @@ namespace Core.AI
 				}
 			}
 			Decision d = best ?? Decision.DoNothing;
-			log.Info(state.Time + " chosen move: " + DecisionLogString(d));
+            log.Info(state.RoundNumber + " " + state.Time + " chosen move: " + DecisionLogString(d));
 			if (state.Sapkas[state.Me].BombsLeft == 0)
 				d = new Decision(d.Path, d.Target, d.TargetPt, false, d.Duration, d.PotentialScore, d.Name, d.WillBomb);
 			if (d.PutBomb)
 			{
 				state.UseBomb();
-				log.Info("BOMB!");
+                log.Info(state.RoundNumber + " " + state.Time + " BOMB!");
 			}
 			if (state.InvertedMe)
 			{
-				log.Info("INVERSED!");
+                log.Info(state.RoundNumber + " " + state.Time + " INVERSED!");
 				d.Inverse = true;
 			}
 			return d;
@@ -108,7 +109,7 @@ namespace Core.AI
 				if (expertsEstimate == byte.MaxValue)
 				{
 					result = int.MinValue; // Эксперт сказал «нет», значит «нет»!
-					log.Info(expert.GetType().Name + " declined " + decision);
+                    log.Info(state.RoundNumber + " " + state.Time + " " + expert.GetType().Name + " declined " + decision);
 				}
 				result -= expertsEstimate*expertWeight;
 			}
