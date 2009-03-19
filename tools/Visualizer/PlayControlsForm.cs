@@ -16,15 +16,18 @@ namespace Visualizer
 {
     public partial class PlayControlsForm : Form
     {
+        Visualizer visualizer;
         private List<String> sapkaLog;
         private List<String> chiefLog;
+        private List<ChiefStateDescription> chiefStates = new List<ChiefStateDescription>();
         private Parser parser;
         private LogSapka sapka;
         private Thread threadAutoPlay;
 
-        public PlayControlsForm(Parser parser, LogSapka sapka)
+        public PlayControlsForm(Visualizer visualizer, Parser parser, LogSapka sapka)
         {
             ReadLogs();
+            this.visualizer = visualizer;
             this.parser = parser;
             this.sapka = sapka;
             InitializeComponent();
@@ -101,6 +104,11 @@ namespace Visualizer
             }
         }
 
+        private void trackBar_ValueChanged(object sender, EventArgs e)
+        {
+            textBoxMessage.Text = sapkaLog[trackBar.Value];
+        }
+
         private static void AutoPlay(PlayControlsForm form)
         {
             while (true)
@@ -111,10 +119,5 @@ namespace Visualizer
         }
 
         private static Regex sapkaTickRegex = new Regex(@"^T\d+&");
-
-        private void trackBar_ValueChanged(object sender, EventArgs e)
-        {
-            textBoxMessage.Text = sapkaLog[trackBar.Value];
-        }
     }
 }

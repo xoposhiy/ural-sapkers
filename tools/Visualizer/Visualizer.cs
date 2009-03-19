@@ -41,7 +41,7 @@ namespace Visualizer
 				Color.Yellow
 			};
 
-		private readonly VisualizerModel model = new VisualizerModel();
+		public readonly VisualizerModel model = new VisualizerModel();
 		private readonly IDictionary<char, Image> typeToPicture = new Dictionary<char, Image>();
 		private readonly ModelUpdatersQueue updatersQueue;
 		private int fieldPaddingX;
