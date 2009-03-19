@@ -7,18 +7,19 @@ namespace Core.AI
 	{
 		public bool Inverse = false;
 
-		public Decision(IPath path, Pos target, bool putBomb, int duration, int potentialScore, string name)
-		: this(path, target, putBomb, duration, potentialScore, name, false)
+		public Decision(IPath path, Pos target, Pos targetPt, bool putBomb, int duration, int potentialScore, string name)
+			: this(path, target, targetPt, putBomb, duration, potentialScore, name, false)
 		{
 		}
 
-		public Decision(IPath path, Pos target, bool putBomb, int duration, int potentialScore, string name, bool willBomb)
+		public Decision(IPath path, Pos target, Pos targetPt, bool putBomb, int duration, int potentialScore, string name, bool willBomb)
 		{
 			Path = path;
 			PutBomb = putBomb;
 			Duration = duration;
 			PotentialScore = potentialScore;
 			Target = target;
+			this.TargetPt = targetPt;
 			Name = name;
 			WillBomb = willBomb;
 		}
@@ -50,10 +51,11 @@ namespace Core.AI
 		public readonly string Name;
 		public readonly IPath Path;
 		public readonly bool PutBomb;
-		public Pos Target;
+		public readonly Pos Target;
+		public readonly Pos TargetPt;
 		public int Duration;
 		public int PotentialScore;
-		public static Decision DoNothing = new Decision(null, null, false, 1, 0, "NOTHING");
+		public static Decision DoNothing = new Decision(null, null, null, false, 1, 0, "NOTHING");
 
 		public string PathString()
 		{

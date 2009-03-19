@@ -67,7 +67,13 @@ namespace Visualizer
 
         private void NextStep()
         {
-            if (trackBar.Value < trackBar.Maximum)
+			if(trackBar.InvokeRequired)
+			{
+				trackBar.Invoke(new ThreadStart(NextStep));
+				return;
+			}
+			
+			if (trackBar.Value < trackBar.Maximum)
             {
                 string message = sapkaLog[trackBar.Value++];
                 parser.ParseMessage(message);

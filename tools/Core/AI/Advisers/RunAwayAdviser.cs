@@ -14,7 +14,8 @@ namespace Core.AI.Advisers
 		{
 			for (int d = 0; d < 4; ++d)
 			{
-				yield return new Decision(new Path(null, PathFinder.Dir[d]), state.MyCell, false, 1, -1, "RunAway");
+				//TODO Косячный target у сапки :(
+				yield return new Decision(new Path(null, PathFinder.Dir[d]), state.MyCell, state.MySapka.Pos, false, 1, -1, "RunAway");
 			}
 		}
 	}

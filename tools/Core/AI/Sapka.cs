@@ -4,12 +4,6 @@ using log4net;
 
 namespace Core.AI
 {
-	public interface ISapkaMindView
-	{
-		IList<char> LastDecisionPath { get; }
-		string LastDecisionName { get; }
-	}
-
 	public class Sapka : AbstractSapka, ISapkaMindView
 	{
 		private static readonly ILog log = LogManager.GetLogger("performance");
@@ -38,6 +32,11 @@ namespace Core.AI
 				if (lastDecision == null) return "NULL";
 				return lastDecision.Name;
 			}
+		}
+
+		public bool IsInverted
+		{
+			get { return lastDecision == null ? false : lastDecision.Inverse; }
 		}
 
 		#endregion

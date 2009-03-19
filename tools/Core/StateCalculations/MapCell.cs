@@ -68,7 +68,7 @@ namespace Core.StateCalculations
 
 		public bool IsDeadlyAt(int time)
 		{
-			return time >= DeadlySince && time <= DeadlyTill;
+			return time >= DeadlySince-1 && time <= DeadlyTill+1;
 		}
 	}
 }

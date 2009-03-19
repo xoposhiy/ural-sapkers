@@ -55,6 +55,7 @@
     <Compile Include="AI\Experts\DontGoToDeadlyCell.cs" />
     <Compile Include="AI\IAdviser.cs" />
     <Compile Include="AI\IExpert.cs" />
+    <Compile Include="AI\ISapkaMindView.cs" />
     <Compile Include="AI\LogSapka.cs" />
     <Compile Include="AI\Sapka.cs" />
     <Compile Include="AI\Experts\TargetShouldHaveSense.cs" />
