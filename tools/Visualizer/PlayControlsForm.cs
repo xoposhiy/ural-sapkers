@@ -9,19 +9,24 @@ using System.Windows.Forms;
 using Core.Parsing;
 using System.Text.RegularExpressions;
 using System.Threading;
+using Core.AI;
+using System.IO;
 
 namespace Visualizer
 {
     public partial class PlayControlsForm : Form
     {
         private List<String> sapkaLog;
+        private List<String> chiefLog;
         private Parser parser;
+        private LogSapka sapka;
         private Thread threadAutoPlay;
 
-        public PlayControlsForm(List<String> sapkaLog, Parser parser)
+        public PlayControlsForm(Parser parser, LogSapka sapka)
         {
-            this.sapkaLog = sapkaLog;
+            ReadLogs();
             this.parser = parser;
+            this.sapka = sapka;
             InitializeComponent();
    
             trackBar.Minimum = 0;
@@ -30,6 +35,34 @@ namespace Visualizer
             trackBar.Value = 0;
 
             trackBar.TickFrequency = 10;
+        }
+
+        private static FileStream CreateStream(string fileName)
+        {
+            return new FileStream(fileName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+        }
+
+        private void ReadLogs()
+        {
+            StreamReader sapkaReader = new StreamReader(CreateStream("sapka.log"));
+            sapkaLog = new List<string>();
+            while (!sapkaReader.EndOfStream)
+            {
+                StringBuilder sb = new StringBuilder();
+                while (!sapkaReader.EndOfStream && !sb.ToString().Contains(";"))
+                {
+                    string line = sapkaReader.ReadLine();
+                    sb.Append(line + Environment.NewLine);
+                }
+                sapkaLog.Add(sb.ToString());
+            }
+            sapkaReader.Close();
+
+            StreamReader chiefReader = new StreamReader(CreateStream("chief.log"));
+            chiefLog = new List<string>();
+            while (!chiefReader.EndOfStream)
+                chiefLog.Add(chiefReader.ReadLine());
+            chiefReader.Close();
         }
 
         private void NextStep()

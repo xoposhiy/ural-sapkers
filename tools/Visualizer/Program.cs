@@ -12,6 +12,7 @@ using Core.StateCalculations;
 using log4net.Config;
 using System.IO;
 using System.Text;
+using Core.AI;
 
 namespace Visualizer
 {
@@ -70,43 +71,29 @@ namespace Visualizer
 			var updatersQueue = new ModelUpdatersQueue();
 			var parser = new Parser(new VisualizerParserListener(updatersQueue));
 
+            Visualizer visualizer = new Visualizer(updatersQueue) { WindowState = FormWindowState.Maximized };
+
             if (dataSource == DataSource.Localhost)
             {
                 new Thread(() => ListenToServer(parser)) { IsBackground = true }.Start();
                 XmlConfigurator.Configure();
             }
             else if (dataSource == DataSource.Logs)
-                new Thread(() => ReadLogs(parser)) { IsBackground = true }.Start();
+            {
+                LogSapka sapka = new LogSapka();
+                visualizer.StartSapkaMindView(sapka);
+                new Thread(() => ReadLogs(parser,sapka)) { IsBackground = true }.Start();
+            }
             else throw new IndexOutOfRangeException("Unknown dataSource");
 
-			return new Visualizer(updatersQueue) { WindowState = FormWindowState.Maximized };
-
+            return visualizer;
 		}
 
-        private static FileStream CreateStream(string fileName)
-        {
-            return new FileStream(fileName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
-        }
-
-        private static void ReadLogs(Parser parser)
+        private static void ReadLogs(Parser parser, LogSapka sapka)
         {
             try
             {
-                StreamReader sapkaReader = new StreamReader(CreateStream("sapka.log"));
-                //StreamReader chiefReader = new StreamReader(CreateStream("chief.log"));
-                List<String> sapkaLog = new List<string>();
-                while (!sapkaReader.EndOfStream)
-                {
-                    StringBuilder sb = new StringBuilder();
-                    while (!sapkaReader.EndOfStream && !sb.ToString().Contains(";"))
-                    {
-                        string line = sapkaReader.ReadLine();
-                        sb.Append(line+Environment.NewLine);
-                    }
-                    sapkaLog.Add(sb.ToString());
-                }
-                (new PlayControlsForm(sapkaLog, parser)).ShowDialog();
-
+                (new PlayControlsForm(parser, sapka)).ShowDialog();
             }
             catch (Exception ex)
             {
