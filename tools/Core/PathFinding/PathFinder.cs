@@ -13,9 +13,7 @@ namespace Core.PathFinding
 		private int n, m;
 		private MapCell[,] map;
 		private int[] cc;
-		private bool[,,] alreadyVisited;
-		private static Queues qs;
-		private static int visited, maxVisited;
+		private Queues qs;
 
 		#region IPathFinder Members
 
