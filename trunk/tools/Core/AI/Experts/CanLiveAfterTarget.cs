@@ -4,7 +4,7 @@ using Core.StateCalculations;
 
 namespace Core.AI.Experts
 {
-	internal class TargetShouldHaveSense : AbstractExpert
+	internal class CanLiveAfterTarget : AbstractExpert
 	{
 		public override byte EstimateDecisionDanger(GameState state, IPath[,] paths, Decision decision)
 		{

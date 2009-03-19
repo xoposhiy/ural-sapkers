@@ -1,30 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace Core.AI
 {
-    public class LogSapka : ISapkaMindView
-    {
-        public IList<char> LastDecisionPath
-        {
-            get { return lastDecisionPath; }
-            set { lastDecisionPath = value;  }
-        }
+	public class LogSapka : ISapkaMindView
+	{
+		public LogSapka()
+		{
+			LastDecisionPath = new char[0];
+			LastDecisionName = "?";
+		}
 
-        public string LastDecisionName
-        {
-            get { return lastDecisionName; }
-            set { lastDecisionName = value; }
-        }
+		#region ISapkaMindView Members
 
-    	public bool IsInverted
-    	{
-    		get { return lastInverted; }
-    	}
+		public IList<char> LastDecisionPath { get; set; }
 
-    	private IList<char> lastDecisionPath = new char[0];
-        private string lastDecisionName = "?";
-    	private bool lastInverted;
-    }
+		public string LastDecisionName { get; set; }
+
+		public bool IsInverted { get; set; }
+
+		#endregion
+	}
 }
