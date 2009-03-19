@@ -5,8 +5,8 @@ namespace Core
 {
 	public class Commons
 	{
-		public const int BombTimeout = 39;
-		public const int ExplosionDuration = 6;
+		public const int BombTimeout = 40;
+		public const int ExplosionDuration = 3;
 		public const int Radius = int.MaxValue;
 
 		public static IDictionary<char, int> dx =
