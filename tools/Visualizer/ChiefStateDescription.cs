@@ -10,6 +10,6 @@ namespace Visualizer
         public List<KeyValuePair<string, string>> targets = new List<KeyValuePair<string, string>>();
         public KeyValuePair<string, string> bestTarget;
 
-        public static KeyValuePair<string, string>
+        //public static KeyValuePair<string, string>
     }
 }
