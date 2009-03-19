@@ -59,7 +59,7 @@
     <Compile Include="AI\ISapkaMindView.cs" />
     <Compile Include="AI\LogSapka.cs" />
     <Compile Include="AI\Sapka.cs" />
-    <Compile Include="AI\Experts\TargetShouldHaveSense.cs" />
+    <Compile Include="AI\Experts\CanLiveAfterTarget.cs" />
     <Compile Include="DummySapka.cs" />
     <Compile Include="Parsing\AddInfo.cs" />
     <Compile Include="Parsing\Cell.cs" />

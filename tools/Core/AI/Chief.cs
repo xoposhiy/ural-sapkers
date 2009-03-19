@@ -23,7 +23,7 @@ namespace Core.AI
 			advisers.Add(new DestroyWallsAdviser());
 			advisers.Add(new BonusAdviser());
 			experts.Add(new DontGoToDeadlyCell());
-			experts.Add(new TargetShouldHaveSense());
+			experts.Add(new CanLiveAfterTarget());
 		}
 
 		public Chief(GameState state, IInversionDetector inversionDetector)

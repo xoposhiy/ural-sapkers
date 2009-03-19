@@ -224,7 +224,7 @@ namespace Visualizer
 
 		private void DrawRoundString(Graphics gr)
 		{
-			string roundString = model.CurrentRound > 0 ? ("Раунд " + model.CurrentRound) : "Игра не идёт";
+			string roundString = model.CurrentRound > 0 ? ("Раунд " + model.CurrentRound) : "Ждем сервера...";
 			var font = new Font(FontFamily.GenericSansSerif, 48);
 			SizeF areaNeeded = gr.MeasureString(roundString, font);
 			gr.DrawString(roundString, font, Brushes.Black, (Width - areaNeeded.Width)/2, mainMenu.Height);

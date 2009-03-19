@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 
 namespace Visualizer.LogParsing
@@ -14,10 +11,10 @@ namespace Visualizer.LogParsing
             Match match = parser.Match(s);
             if (!match.Success)
                 throw new FormatException(s);
-            round = Int32.Parse(match.Groups[1].Captures[0].Value);
-            time = Int32.Parse(match.Groups[2].Captures[0].Value);
-            target = new TargetDescription(match.Groups[3].Captures[0].Value);
-            isChosen = s.Contains("chosen move:");
+            Round = Int32.Parse(match.Groups[1].Captures[0].Value);
+            Time = Int32.Parse(match.Groups[2].Captures[0].Value);
+            Target = new TargetDescription(match.Groups[3].Captures[0].Value);
+            IsChosen = s.Contains("chosen move:");
         }
 
         public static bool IsGoodLine(string s)
@@ -37,17 +34,11 @@ namespace Visualizer.LogParsing
             return "  " + Target;
         }
 
-        public TargetDescription Target { get { return target; } }
-        public int Round { get { return round; } }
-        public int Time { get { return time; } }
-        public bool IsChosen { get { return isChosen; } }
+    	public TargetDescription Target { get; private set; }
+    	public int Round { get; private set; }
+    	public int Time { get; private set; }
+    	public bool IsChosen { get; private set; }
 
-        private TargetDescription target;
-        private int round;
-        private int time;
-        private bool isChosen;
-
-        private static string s;
-        private static Regex parser = new Regex(@"^\S+\s+\S+\s+(\d+)\s+(\d+)\s+(.*)");
+    	private static readonly Regex parser = new Regex(@"^\S+\s+\S+\s+(\d+)\s+(\d+)\s+(.*)");
     }
 }
