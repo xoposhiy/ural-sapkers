@@ -47,7 +47,8 @@ namespace Core.AI
 
 		public Decision MakeDecision()
 		{
-			if (state.Sapkas[state.Me].IsDead)
+			Stopwatch sw = Stopwatch.StartNew();
+			if(state.Sapkas[state.Me].IsDead)
 			{
 				if (inversionDetector.Inverted)
 					log.Info(state.RoundNumber + " " + state.Time + " SAPKA DIED INVERTED!");
@@ -74,7 +75,9 @@ namespace Core.AI
 						best = decision;
 						bestBeauty = beauty;
 					}
+					if (sw.ElapsedMilliseconds > 40) break;
 				}
+				if(sw.ElapsedMilliseconds > 40) break;
 			}
 			Decision d = best ?? Decision.DoNothing;
 			if(bestBeauty == 0) d = Decision.DoNothing;
@@ -92,8 +95,12 @@ namespace Core.AI
 				log.Info(state.RoundNumber + " " + state.Time + " INVERTED!");
 				d.Inverse = true;
 			}
+			sw.Stop();
+			performanceLog.InfoFormat("{0}\t{1} ms", state.Time, sw.ElapsedMilliseconds);
 			return d;
 		}
+
+		private static readonly ILog performanceLog = LogManager.GetLogger("performance");
 
 		private string DecisionLogString(Decision decision)
 		{
