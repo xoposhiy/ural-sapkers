@@ -248,8 +248,14 @@ namespace Visualizer
 					DrawDamageLine(gr, x, y, 0, -1);
 				}
 
-			foreach (var pair in model.SapkaInfos)
-				DrawSapka(pair.Value.Pos.X, pair.Value.Pos.Y, gr, sapkaBrushes[pair.Key]);
+			try
+			{
+				IDictionary<int, SapkaInfo> infos = new Dictionary<int, SapkaInfo>(model.SapkaInfos);
+				foreach (var pair in infos)
+					DrawSapka(pair.Value.Pos.X, pair.Value.Pos.Y, gr, sapkaBrushes[pair.Key]);
+			}catch
+			{
+			}
 		}
 
 		private void DrawDamageLine(Graphics gr, int x, int y, int dx, int dy)

@@ -7,12 +7,12 @@ namespace Core.AI
 	{
 		public bool Inverse = false;
 
-		public Decision(IPath path, Pos target, Pos targetPt, bool putBomb, int duration, int potentialScore, string name)
+		public Decision(IPath path, Pos target, Pos targetPt, bool putBomb, int duration, double potentialScore, string name)
 			: this(path, target, targetPt, putBomb, duration, potentialScore, name, false)
 		{
 		}
 
-		public Decision(IPath path, Pos target, Pos targetPt, bool putBomb, int duration, int potentialScore, string name, bool willBomb)
+		public Decision(IPath path, Pos target, Pos targetPt, bool putBomb, int duration, double potentialScore, string name, bool willBomb)
 		{
 			Path = path;
 			PutBomb = putBomb;
@@ -54,7 +54,7 @@ namespace Core.AI
 		public readonly Pos Target;
 		public readonly Pos TargetPt;
 		public int Duration;
-		public int PotentialScore;
+		public double PotentialScore;
 		public static Decision DoNothing = new Decision(null, null, null, false, 1, 0, "NOTHING");
 
 		public string PathString()

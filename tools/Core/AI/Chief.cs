@@ -19,9 +19,9 @@ namespace Core.AI
 
 		static Chief()
 		{
-			advisers.Add(new RunAwayAdviser());
 			advisers.Add(new DestroyWallsAdviser());
 			advisers.Add(new BonusAdviser());
+			advisers.Add(new RunAwayAdviser());
 			experts.Add(new DontGoToDeadlyCell());
 			experts.Add(new CanLiveAfterTarget());
 		}
@@ -68,7 +68,7 @@ namespace Core.AI
 				foreach (Decision decision in adviser.Advise(state, paths))
 				{
 					log.Debug(state.RoundNumber + " " + state.Time + " " + DecisionLogString(decision));
-					double beauty = CalculateBeauty(decision);
+					double beauty = CalculateBeauty(decision, bestBeauty);
 					if (beauty > bestBeauty)
 					{
 						best = decision;
@@ -77,6 +77,7 @@ namespace Core.AI
 				}
 			}
 			Decision d = best ?? Decision.DoNothing;
+			if(bestBeauty == 0) d = Decision.DoNothing;
 			log.Info(state.RoundNumber + " " + state.Time + " chosen move: " + DecisionLogString(d));
 			if (state.Sapkas[state.Me].BombsLeft == 0)
 				d = new Decision(d.Path, d.Target, d.TargetPt, false, d.Duration, d.PotentialScore, d.Name, d.WillBomb);
@@ -101,21 +102,23 @@ namespace Core.AI
 			       ((double) decision.PotentialScore/decision.Duration);
 		}
 
-		private double CalculateBeauty(Decision decision)
+		private double CalculateBeauty(Decision decision, double bestBeauty)
 		{
 			Debug.Assert(decision.Duration > 0);
 			// Эти фиговины нужно будет подобрать...
-			const double expertWeight = 0.1;
 			double result = (double) decision.PotentialScore/decision.Duration;
+			if (result <= bestBeauty) return 0;
 			foreach (IExpert expert in experts)
 			{
 				byte expertsEstimate = expert.EstimateDecisionDanger(state, paths, decision);
 				if (expertsEstimate == byte.MaxValue)
 				{
-					result = int.MinValue; // Эксперт сказал «нет», значит «нет»!
+					result = 0; // Эксперт сказал «нет», значит «нет»!
 					log.Info(state.RoundNumber + " " + state.Time + " " + expert.GetType().Name + " declined " + decision);
 				}
-				result -= expertsEstimate*expertWeight;
+				result *= (255 - expertsEstimate);
+				result /= 255;
+				if(result <= bestBeauty) return 0;
 			}
 			return result;
 		}
