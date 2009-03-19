@@ -11,6 +11,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using Core.AI;
 using System.IO;
+using Visualizer.LogParsing;
 
 namespace Visualizer
 {
@@ -18,15 +19,14 @@ namespace Visualizer
     {
         Visualizer visualizer;
         private List<String> sapkaLog;
-        private List<String> chiefLog;
-        private List<ChiefStateDescription> chiefStates = new List<ChiefStateDescription>();
+        private List<ChiefLogLine> chiefLog = new List<ChiefLogLine>();
         private Parser parser;
         private LogSapka sapka;
         private Thread threadAutoPlay;
 
         public PlayControlsForm(Visualizer visualizer, Parser parser, LogSapka sapka)
         {
-            ReadLogs();
+            ParseLogs();
             this.visualizer = visualizer;
             this.parser = parser;
             this.sapka = sapka;
@@ -40,12 +40,30 @@ namespace Visualizer
             trackBar.TickFrequency = 10;
         }
 
+        private static void RemoveNotChosenDuplicates(List<ChiefLogLine> chiefLog)
+        {
+            List<int> toKill = new List<int>();
+            for (int i = 0; i<chiefLog.Count; ++i)
+                for (int j = i+1; j<chiefLog.Count; ++j)
+                    if (ChiefLogLine.AreDuplicates(chiefLog[i], chiefLog[j]))
+                    {
+                        if (chiefLog[i].IsChosen)
+                            toKill.Add(j);
+                        else
+                            toKill.Add(i);
+                    }
+            toKill.Sort();
+            toKill.Reverse();
+            foreach (int i in toKill)
+                chiefLog.RemoveAt(i);
+        }
+
         private static FileStream CreateStream(string fileName)
         {
             return new FileStream(fileName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
         }
 
-        private void ReadLogs()
+        private void ParseLogs()
         {
             StreamReader sapkaReader = new StreamReader(CreateStream("sapka.log"));
             sapkaLog = new List<string>();
@@ -62,10 +80,14 @@ namespace Visualizer
             sapkaReader.Close();
 
             StreamReader chiefReader = new StreamReader(CreateStream("chief.log"));
-            chiefLog = new List<string>();
             while (!chiefReader.EndOfStream)
-                chiefLog.Add(chiefReader.ReadLine());
+            {
+                string s = chiefReader.ReadLine();
+                try { chiefLog.Add(new ChiefLogLine(s)); } catch (Exception) {}
+            }
             chiefReader.Close();
+
+            //RemoveNotChosenDuplicates(chiefLog);
         }
 
         private void NextStep()
@@ -80,6 +102,36 @@ namespace Visualizer
             {
                 string message = sapkaLog[trackBar.Value++];
                 parser.ParseMessage(message);
+                visualizer.UpdateModel();
+
+                int round = visualizer.model.State.RoundNumber;
+                int time = visualizer.model.State.Time;
+                Text = String.Format("Round {0}, time {1}", round, time);
+
+                List<ChiefLogLine> currentTimeLines = new List<ChiefLogLine>();
+                ChiefLogLine chosen = null;
+                foreach (ChiefLogLine line in chiefLog)
+                    if (line.Round == round && line.Time == time)
+                    {
+                        currentTimeLines.Add(line);
+                        if (line.IsChosen)
+                            chosen = line;
+                    }
+                if (chosen != null)
+                {
+                    sapka.LastDecisionPath = chosen.Target.path.ToCharArray();
+                    sapka.LastDecisionName = chosen.Target.adviser;
+                    // Удалим не-Chosen строчку
+                    for (int i = 0; i < currentTimeLines.Count; ++i)
+                        if (chosen.Target.ToString() == currentTimeLines[i].Target.ToString() && !currentTimeLines[i].IsChosen)
+                        {
+                            currentTimeLines.RemoveAt(i);
+                            break;
+                        }
+                }
+                listBoxTargets.Items.Clear();
+                foreach (ChiefLogLine line in currentTimeLines)
+                    listBoxTargets.Items.Add(line);
             }
         }
 
@@ -119,5 +171,12 @@ namespace Visualizer
         }
 
         private static Regex sapkaTickRegex = new Regex(@"^T\d+&");
+
+        private void listBoxTargets_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            ChiefLogLine line = (ChiefLogLine) listBoxTargets.SelectedItem;
+            sapka.LastDecisionPath = line.Target.path.ToCharArray();
+            sapka.LastDecisionName = line.Target.adviser ;
+        }
     }
 }
