@@ -27,7 +27,7 @@ namespace Core.AI.Experts
 				Bomb? bomb = null;
 				if (bom == 1)
 				{
-					bomb = new Bomb(tx / state.CellSize, ty / state.CellSize, state.Sapkas[state.Me].BombsStrength, state.Time + Constants.BombTimeout);
+					bomb = new Bomb(tx / state.CellSize, ty / state.CellSize, state.Sapkas[state.Me].BombsStrength, state.Time + Commons.BombTimeout);
 					state.AddBomb(bomb.Value);
 				}
 				MapCell backup = null;

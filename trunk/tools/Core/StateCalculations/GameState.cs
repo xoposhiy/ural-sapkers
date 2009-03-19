@@ -49,8 +49,11 @@ namespace Core.StateCalculations
 			bombs = new List<Bomb>();
 		}
 
+		public MapChangeInfo LastInfo { get; private set;}
+		
 		public void OnMapChange(MapChangeInfo info)
 		{
+			LastInfo = info;
 			DangerLevel = info.HasDangerLevel ? info.DangerLevel : 0;
 			Time = info.Time;
 			Sapkas = info.Sapkas;
@@ -59,7 +62,7 @@ namespace Core.StateCalculations
 				Pos p = add.Pos;
 				if (add.SubstanceType == '*')
 				{
-					AddBomb(new Bomb(p.X, p.Y, add.DamagingRange, Time + Constants.BombTimeout - 1));
+					AddBomb(new Bomb(p.X, p.Y, add.DamagingRange, Time + Commons.BombTimeout - 1));
 				}
 				else if (add.SubstanceType == '#')
 				{
@@ -93,7 +96,7 @@ namespace Core.StateCalculations
 			}
 			RecalcDeadly();
 		}
-		
+
 		public void AddBomb(Bomb b)
 		{
 			bombs.Add(b);
@@ -192,7 +195,7 @@ namespace Core.StateCalculations
 			                            false,
 			                            true,
 			                            dt,
-			                            dt + Constants.ExplosionDuration - 1,
+			                            dt + Commons.ExplosionDuration - 1,
 			                            dt,
 			                            Map[b.X, b.Y].Bonus);
 				for (int d = 0; d < 4; ++d)
@@ -219,7 +222,7 @@ namespace Core.StateCalculations
 								                        false,
 								                        true,
 								                        Math.Min(dt, Map[x, y].DeadlySince),
-								                        Math.Max(dt + Constants.ExplosionDuration - 1, 
+								                        Math.Max(dt + Commons.ExplosionDuration - 1, 
 									                       Map[x, y].DeadlyTill == int.MaxValue ? 0 : Map[x, y].DeadlyTill),
 								                        int.MaxValue,
 								                        Map[x, y].Bonus);
@@ -232,7 +235,7 @@ namespace Core.StateCalculations
 								                        false,
 								                        int.MaxValue,
 								                        int.MaxValue,
-								                        dt + Constants.ExplosionDuration,
+								                        dt + Commons.ExplosionDuration,
 								                        Map[x, y].Bonus);
 								}
 							}
@@ -272,7 +275,7 @@ namespace Core.StateCalculations
 		
 		private bool Expired(Bomb b)
 		{
-			return b.DetTime + Constants.ExplosionDuration - 1 < Time;
+			return b.DetTime + Commons.ExplosionDuration - 1 < Time;
 		}
 
 		private void InitMapFrom(char[,] m)
@@ -290,7 +293,7 @@ namespace Core.StateCalculations
 				if (lastInverted && MySapka.IsDead) return lastInverted;
 				SapkaInfo me = Sapkas[Me];
 				lastInverted = me.Infected &&
-				          (me.BombsLeft > 0 || lastUsedBomb >= Time - Constants.BombTimeout) &&
+				          (me.BombsLeft > 0 || lastUsedBomb >= Time - Commons.BombTimeout) &&
 				          me.BombsStrength > 0 && me.Speed > 1;
 				return lastInverted;
 			}
@@ -300,7 +303,7 @@ namespace Core.StateCalculations
 		{
 			if(MySapka.BombsLeft > 0) return 0;
 			// TODO Если сапка заражена безбомбием, то надо бы как-то это обрабатывать покузявее, чем Math.Min...
-			return Math.Max(0, Constants.BombTimeout - (Time - lastUsedBomb)); 
+			return Math.Max(0, Commons.BombTimeout - (Time - lastUsedBomb)); 
 		}
 
 		public void UseBomb()

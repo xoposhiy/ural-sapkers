@@ -37,7 +37,7 @@ namespace Core.PathFinding
 		public bool Live(int x, int y, int time0, int speed)
 		{
 			Path[,] dist0, dist1;
-			return FindPaths(x, y, time0, speed, Constants.Radius, out dist0, out dist1, true);
+			return FindPaths(x, y, time0, speed, Commons.Radius, out dist0, out dist1, true);
 		}
 		
 		private bool FindPaths(int x0, int y0, int time0, int speed, int radius, out Path[,] dist0, out Path[,] dist1, bool exitOnOk)

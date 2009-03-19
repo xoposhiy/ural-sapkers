@@ -197,11 +197,11 @@ namespace Visualizer
 				finder.SetMap(model.State.Map, model.State.CellSize);
 				int endX = curX;
 				int endY = curY;
-				finder.Move(ref endX, ref endY, model.State.Time, model.State.MySapka.Speed, Constants.dirIndex[dir]);
+				finder.Move(ref endX, ref endY, model.State.Time, model.State.MySapka.Speed, Commons.dirIndex[dir]);
 				while(curX != endX || curY != endY)
 				{
-					curX += Constants.dx[dir];
-					curY += Constants.dy[dir];
+					curX += Commons.dx[dir];
+					curY += Commons.dy[dir];
 					Fill(g, curX, curY);
 				}
 			}
@@ -249,14 +249,7 @@ namespace Visualizer
 				}
 
 			foreach (var pair in model.SapkaInfos)
-			{
-				if (pair.Key == 0 && model.State.Sapkas != null && model.State.InvertedMe)
-				{
-					DrawSapka(pair.Value.Pos.X, pair.Value.Pos.Y, gr, Brushes.Black);
-				}
-				else
 				DrawSapka(pair.Value.Pos.X, pair.Value.Pos.Y, gr, sapkaBrushes[pair.Key]);
-			}
 		}
 
 		private void DrawDamageLine(Graphics gr, int x, int y, int dx, int dy)

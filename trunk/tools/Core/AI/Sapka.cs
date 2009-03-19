@@ -41,13 +41,15 @@ namespace Core.AI
 
 		#endregion
 
+		private readonly IInversionDetector inversionDetector = new InversionDetector();
+
 		public override string GetMove()
 		{
 			if(GameState.Time == 0) return "s";
 			Stopwatch sw = Stopwatch.StartNew();
 			try
 			{
-				Decision decision = new Chief(GameState).MakeDecision();
+				Decision decision = new Chief(GameState, inversionDetector).MakeDecision();
 
 				int skipped = GameState.Time - lastTime;
 				if (skipped > 1)
