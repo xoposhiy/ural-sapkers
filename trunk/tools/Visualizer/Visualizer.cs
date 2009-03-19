@@ -422,6 +422,11 @@ namespace Visualizer
 			StartAI(20015);
 		}
 
+        internal void StartSapkaMindView(ISapkaMindView sapka)
+        {
+            ai = sapka;
+        }
+
 		private void StartAI(int port)
 		{
 			RunSapka(
