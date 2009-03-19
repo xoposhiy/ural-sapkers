@@ -10,9 +10,10 @@ namespace Core.AI.Advisers
 	{
 		public IEnumerable<Decision> Advise(GameState state, IPath[,] paths)
 		{
-			string goodBonus = "bvf?";
-			int[] cost = new int[] {70, 50, 40, 25};
+			string goodBonus = "bvf";
+			int[] cost = new int[] {70, 50, 40};
 			IPath[,] ds = new Path[state.Map.GetLength(0), state.Map.GetLength(1)];
+			Pos[,] targetsPt = new Pos[state.Map.GetLength(0), state.Map.GetLength(1)];
 			for (int i = 0; i < paths.GetLength(0); ++i)
 			{
 				for (int j = 0; j < paths.GetLength(1); ++j)
@@ -22,6 +23,7 @@ namespace Core.AI.Advisers
 					if (paths[i, j] != null && (ds[x, y] == null || ds[x, y].CompareTo(paths[i, j]) > 0))
 					{
 						ds[x, y] = paths[i, j];
+						targetsPt[x,y] = new Pos(i,j);
 					}
 				}
 			}
@@ -37,7 +39,7 @@ namespace Core.AI.Advisers
 					char bonus = state.Map[i, j].Bonus;
 					if (goodBonus.IndexOf(bonus) != -1)
 					{
-						r.Add(new Decision(ds[i, j], new Pos(i, j), false, ds[i, j].Size(), cost[goodBonus.IndexOf(bonus)], "Bonuser"));
+						r.Add(new Decision(ds[i, j], new Pos(i, j), targetsPt[i,j], false, ds[i, j].Size(), cost[goodBonus.IndexOf(bonus)], "Bonuser"));
 					}
 				}
 			}

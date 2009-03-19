@@ -17,6 +17,7 @@ namespace Core.StateCalculations
 		
 		private List<Bomb> bombs;
 		private int lastUsedBomb;
+		private bool lastInverted;
 
 		public Pos MyCell
 		{
@@ -286,10 +287,12 @@ namespace Core.StateCalculations
 		{
 			get
 			{
+				if (lastInverted && MySapka.IsDead) return lastInverted;
 				SapkaInfo me = Sapkas[Me];
-				return me.Infected &&
-					(me.BombsLeft > 0 || lastUsedBomb >= Time - Constants.BombTimeout) &&
-						me.BombsStrength > 0 && me.Speed > 1;
+				lastInverted = me.Infected &&
+				          (me.BombsLeft > 0 || lastUsedBomb >= Time - Constants.BombTimeout) &&
+				          me.BombsStrength > 0 && me.Speed > 1;
+				return lastInverted;
 			}
 		}
 

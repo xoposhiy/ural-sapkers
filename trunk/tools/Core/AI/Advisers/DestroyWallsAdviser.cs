@@ -12,6 +12,8 @@ namespace Core.AI.Advisers
 			var dx = new[] {1, -1, 0, 0};
 			var dy = new[] {0, 0, 1, -1};
 			IPath[,] ds = new Path[state.Map.GetLength(0), state.Map.GetLength(1)];
+			Pos[,] targetsPt = new Pos[state.Map.GetLength(0), state.Map.GetLength(1)];
+
 			for (int i = 0; i < paths.GetLength(0); ++i)
 			{
 				for (int j = 0; j < paths.GetLength(1); ++j)
@@ -21,6 +23,7 @@ namespace Core.AI.Advisers
 					if (paths[i, j] != null && (ds[x, y] == null || ds[x, y].CompareTo(paths[i, j]) > 0))
 					{
 						ds[x, y] = paths[i, j];
+						targetsPt[x, y] = new Pos(i, j);
 					}
 				}
 			}
@@ -29,6 +32,7 @@ namespace Core.AI.Advisers
 			{
 				for (int j = 0; j < ds.GetLength(1); ++j)
 				{
+					if(state.Map[i, j].IsBomb) continue; // Повторно бомба не ставится.
 					if (ds[i, j] == null)
 					{
 						continue;
@@ -60,7 +64,8 @@ namespace Core.AI.Advisers
 					}
 					if (countWalls > 0)
 					{
-						var decision = new Decision(ds[i, j], new Pos(i, j), ds[i, j].Size() == 0, ds[i, j].Size() + 1, countWalls * 10, "WallBreaker", true);
+						var target = new Pos(i, j);
+						var decision = new Decision(ds[i, j], target, targetsPt[i,j], ds[i, j].Size() == 0, ds[i, j].Size() + 1, countWalls * 10, "WallBreaker", true);
 						if(state.GetWaitForBombTime() <= decision.Duration)
 							r.Add(decision);
 						else
@@ -68,7 +73,11 @@ namespace Core.AI.Advisers
 							var cell = state.Map[decision.Target.X, decision.Target.Y];
 							if (cell.DeadlySince == int.MaxValue || cell.DeadlySince < state.Time + decision.Duration)
 							{
-								decision = new Decision(AddStops(decision.Path, state.GetWaitForBombTime() - decision.Duration), decision.Target, decision.PutBomb, state.GetWaitForBombTime(), decision.PotentialScore, decision.Name, true);
+								decision = new Decision(
+									AddStops(decision.Path, state.GetWaitForBombTime() - decision.Duration),
+									decision.Target, targetsPt[decision.Target.X, decision.Target.Y], 
+									decision.PutBomb, state.GetWaitForBombTime(), decision.PotentialScore, 
+									decision.Name, true);
 								r.Add(decision);
 							}
 						}

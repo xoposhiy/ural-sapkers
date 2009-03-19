@@ -330,8 +330,8 @@ namespace Visualizer
 				var decisionName = ai.LastDecisionName;
 				aiNode.Nodes.Add("adviser: " + decisionName);
 			}
-			if (model.State.Sapkas != null)
-			aiNode.Nodes.Add("Inverted: " + model.State.InvertedMe);
+			if (ai!=null)
+				aiNode.Nodes.Add("inversed: " + ai.IsInverted);
 			tvInfo.Nodes.Add(aiNode);
 
 			tvInfo.ExpandAll();

@@ -23,6 +23,7 @@ namespace Visualizer
 		{
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
+			Control.CheckForIllegalCrossThreadCalls = true;
 
             ChooseDataSourceForm startupDialog = new ChooseDataSourceForm();
             startupDialog.ShowDialog();

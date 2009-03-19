@@ -44,7 +44,12 @@ namespace Core.AI
 
 		public Decision MakeDecision()
 		{
-			if (state.Sapkas[state.Me].IsDead) return Decision.DoNothing;
+			if (state.Sapkas[state.Me].IsDead)
+			{
+				if (state.InvertedMe)
+					log.Info("SAPKA DIED INVERSED!");
+				return Decision.DoNothing;
+			}
 			Decision best = null;
 			double bestBeauty = int.MinValue;
 			if (state.Sapkas[state.Me] == null)
@@ -71,7 +76,7 @@ namespace Core.AI
 			Decision d = best ?? Decision.DoNothing;
 			log.Info(state.Time + " chosen move: " + DecisionLogString(d));
 			if (state.Sapkas[state.Me].BombsLeft == 0)
-				d = new Decision(d.Path, d.Target, false, d.Duration, d.PotentialScore, d.Name, d.WillBomb);
+				d = new Decision(d.Path, d.Target, d.TargetPt, false, d.Duration, d.PotentialScore, d.Name, d.WillBomb);
 			if (d.PutBomb)
 			{
 				state.UseBomb();
@@ -79,6 +84,7 @@ namespace Core.AI
 			}
 			if (state.InvertedMe)
 			{
+				log.Info("INVERSED!");
 				d.Inverse = true;
 			}
 			return d;

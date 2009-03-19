@@ -18,7 +18,13 @@ namespace Core.AI
             set { lastDecisionName = value; }
         }
 
-        private IList<char> lastDecisionPath = new char[0];
+    	public bool IsInverted
+    	{
+    		get { return lastInverted; }
+    	}
+
+    	private IList<char> lastDecisionPath = new char[0];
         private string lastDecisionName = "?";
+    	private bool lastInverted;
     }
 }
