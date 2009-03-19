@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Drawing;
+using Core;
 using Core.Parsing;
 using Core.PathFinding;
 using Core.StateCalculations;
@@ -53,8 +54,8 @@ namespace Visualizer
 				for (int i = 0; i < selectedSpeed; i++)
 				{
 					Fill(gr, curPixelX, curPixelY, alive, pointSize, paddingX, paddingY);
-					int nextPixelX = curPixelX + dx[dir] * pointSize;
-					int nextPixelY = curPixelY + dy[dir] * pointSize;
+					int nextPixelX = curPixelX + Commons.dx[dir] * pointSize;
+					int nextPixelY = curPixelY + Commons.dy[dir] * pointSize;
 					var nextCell = cells[nextPixelX/cellSize, nextPixelY/cellSize];
 					if (nextCell.IsBreakableWall || nextCell.IsUnbreakableWall) continue;
 					curPixelX = nextPixelX;
@@ -74,21 +75,5 @@ namespace Visualizer
 		private Pos selectedEndPos;
 		private int selectedSpeed;
 		private readonly IPathFinder pathFinder = new PathFinder();
-
-		private readonly IDictionary<char, int> dx = new Dictionary<char, int>
-			{
-				{ 'u', 0 },
-				{ 'd', 0 },
-				{ 'l', -1 },
-				{ 'r', 1 }
-			};
-
-		private readonly IDictionary<char, int> dy = new Dictionary<char, int>
-			{
-				{ 'u', -1 },
-				{ 'd', 1 },
-				{ 'l', 0 },
-				{ 'r', 0 }
-			};
 	}
 }
