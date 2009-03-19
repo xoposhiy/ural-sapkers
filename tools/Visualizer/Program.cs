@@ -72,7 +72,7 @@ namespace Visualizer
 			var updatersQueue = new ModelUpdatersQueue();
 			var parser = new Parser(new VisualizerParserListener(updatersQueue));
 
-            Visualizer visualizer = new Visualizer(updatersQueue) { WindowState = FormWindowState.Maximized };
+            Visualizer visualizer = new Visualizer(updatersQueue, dataSource == DataSource.Localhost) { WindowState = FormWindowState.Maximized };
 
             if (dataSource == DataSource.Localhost)
             {

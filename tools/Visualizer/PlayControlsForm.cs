@@ -28,6 +28,7 @@ namespace Visualizer
         {
             ParseLogs();
             this.visualizer = visualizer;
+        	visualizer.IsRunning = false;
             this.parser = parser;
             this.sapka = sapka;
             InitializeComponent();
@@ -149,13 +150,15 @@ namespace Visualizer
         {
             if (threadAutoPlay == null)
             {
-                threadAutoPlay = new Thread(() => AutoPlay(this));
+				visualizer.IsRunning = true;
+				threadAutoPlay = new Thread(() => AutoPlay(this)) { IsBackground = true };
                 threadAutoPlay.Start();
                 buttonPlay.Text = "Pause ||";
             }
             else
             {
-                threadAutoPlay.Abort();
+				visualizer.IsRunning = false;
+				threadAutoPlay.Abort();
                 threadAutoPlay = null;
                 buttonPlay.Text = "Auto >>";
             }

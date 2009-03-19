@@ -214,7 +214,7 @@
 			this.Name = "Visualizer";
 			this.Text = "— И ещё сапочку!";
 			this.Paint += new System.Windows.Forms.PaintEventHandler(this.Visualizer_Paint);
-			this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Visualizer_KeyPress);
+			this.MouseClick += new System.Windows.Forms.MouseEventHandler(this.Visualizer_MouseClick);
 			this.mainMenu.ResumeLayout(false);
 			this.mainMenu.PerformLayout();
 			this.ResumeLayout(false);

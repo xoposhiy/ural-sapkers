@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Collections;
+using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
 using Core;
@@ -43,15 +44,18 @@ namespace Visualizer
 			};
 
 		public readonly VisualizerModel model = new VisualizerModel();
+
+		public volatile bool IsRunning = true;
+
 		private readonly IDictionary<char, Image> typeToPicture = new Dictionary<char, Image>();
 		private readonly ModelUpdatersQueue updatersQueue;
-		private int fieldPaddingX;
-		private int fieldPaddingY;
-		private volatile bool makeSnapshot;
+		private readonly int fieldPaddingX;
+		private readonly int fieldPaddingY;
 		private TreeView tvInfo;
 		private ISapkaMindView ai;
+		private readonly DecisionVisualizer decisionVisualizer = new DecisionVisualizer();
 
-		public Visualizer(ModelUpdatersQueue updatersQueue)
+		public Visualizer(ModelUpdatersQueue updatersQueue, bool showMenu)
 		{
 			this.updatersQueue = updatersQueue;
 
@@ -61,6 +65,10 @@ namespace Visualizer
 			InitPictures();
 			fieldPaddingX = Gap;
 			fieldPaddingY = 100;
+			if (!showMenu)
+			{
+				mainMenu.Enabled = false;
+			}
 		}
 
 		private int PictureSize
@@ -143,14 +151,6 @@ namespace Visualizer
 			}
 		}
 
-		private void Visualizer_KeyPress(object sender, KeyPressEventArgs e)
-		{
-			if (e.KeyChar == 'q')
-			{
-				makeSnapshot = true;
-			}
-		}
-
         public void UpdateModel()
         {
             updatersQueue.ExecuteBatch(model);
@@ -163,26 +163,18 @@ namespace Visualizer
 			DrawMap(e.Graphics);
 			DrawSapkaTargetPath(e.Graphics);
 			UpdateStatsTreeView();
-			if (makeSnapshot && model.CurrentMap != null)
+			if (!IsRunning && model.CurrentMap != null)
 			{
-				var fieldImage = new Bitmap(model.WidthInCoords*SmallPictureSize, model.HeightInCoords*SmallPictureSize);
-				using (Graphics gr = Graphics.FromImage(fieldImage))
+				lock (decisionVisualizer)
 				{
-					int oldPaddingX = fieldPaddingX;
-					int oldPaddingY = fieldPaddingY;
-					fieldPaddingX = 0;
-					fieldPaddingY = 0;
-					DrawMap(gr);
-					fieldPaddingX = oldPaddingX;
-					fieldPaddingY = oldPaddingY;
+					Text = decisionVisualizer.Draw(e.Graphics, model.State, SmallPictureSize, PictureSize, fieldPaddingX, fieldPaddingY);
 				}
-				new SnapshotForm(fieldImage, new GameStateSnapshot(model, PictureSize, SmallPictureSize)).Show();
-				makeSnapshot = false;
 			}
 		}
 
 		private void DrawSapkaTargetPath(Graphics g)
 		{
+			if (!IsRunning) return;
 			if (ai == null || model.State.Sapkas == null || model.State.MySapka.IsDead) return;
 			var path = ai.LastDecisionPath;
 			var curX = model.State.MySapka.Pos.X;
@@ -466,6 +458,29 @@ namespace Visualizer
 			Debugger.Launch();
 		}
 
+		private void Visualizer_MouseClick(object sender, MouseEventArgs e)
+		{
+			int pointX = (e.X - fieldPaddingX)/SmallPictureSize;
+			int pointY = (e.Y - fieldPaddingY)/SmallPictureSize;
+			if (e.Button == MouseButtons.Left)
+			{
+				var sapkaAtPoint = model.SapkaInfos.Values.Where(info => info.Pos.X == pointX && info.Pos.Y == pointY).FirstOrDefault();
+				if (sapkaAtPoint != null)
+				{
+					lock (decisionVisualizer)
+					{
+						decisionVisualizer.SelectStartPoint(pointX, pointY, sapkaAtPoint.Speed);
+					}
+				}
+			}
+			else if (e.Button == MouseButtons.Right)
+			{
+				lock (decisionVisualizer)
+				{
+					decisionVisualizer.SelectEndPoint(pointX, pointY);
+				}
+			}
+		}
     }
 
 	public class GameStateSnapshot
