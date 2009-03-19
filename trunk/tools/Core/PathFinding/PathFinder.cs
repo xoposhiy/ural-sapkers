@@ -13,7 +13,9 @@ namespace Core.PathFinding
 		private int n, m;
 		private MapCell[,] map;
 		private int[] cc;
+		private bool[,,] alreadyVisited;
 		private static Queues qs;
+		private static int visited, maxVisited;
 
 		#region IPathFinder Members
 
@@ -36,24 +38,11 @@ namespace Core.PathFinding
 		
 		public bool Live(int x, int y, int time0, int speed)
 		{
-			/*alreadyVisited = new bool[n, m, MAX_TIME + 1];
-			return dfs(x, y, 0, speed, time0);*/
 			Path[,] dist0, dist1;
-			FindPaths(x, y, time0, speed, Constants.Radius, out dist0, out dist1);
-			for (int i = 0; i < n; ++i)
-			{
-				for (int j = 0; j < m; ++j)
-				{
-					if (dist1[i, j] != null || dist0[i, j] != null && bound0(map[cc[i], cc[j]]) == int.MaxValue)
-					{
-						return true;
-					}
-				}
-			}
-			return false;
+			return FindPaths(x, y, time0, speed, Constants.Radius, out dist0, out dist1, true);
 		}
 		
-		private void FindPaths(int x0, int y0, int time0, int speed, int radius, out Path[,] dist0, out Path[,] dist1)
+		private bool FindPaths(int x0, int y0, int time0, int speed, int radius, out Path[,] dist0, out Path[,] dist1, bool exitOnOk)
 		{
 			qs.Clear();
 			dist0 = new Path[n,m];
@@ -93,6 +82,10 @@ namespace Core.PathFinding
 						{
 							continue;
 						}
+						if (exitOnOk && (dist == dist1 || bound0(map[cc[x], cc[y]]) == int.MaxValue))
+						{
+							return true;
+						}
 						dist[x, y] = new Path(p, Dir[d]);
 						qs.Add(Math.Min(time + 1, MAX_TIME), x, y);
 					}
@@ -122,18 +115,23 @@ namespace Core.PathFinding
 						{
 							continue;
 						}
+						if (exitOnOk)
+						{
+							return true;
+						}
 						dist1[x, y] = new Path(new Path(p, 's', time2 - time), Dir[d]);
 						qs.Add(time2 + 1, x, y);
 					}
 				}
 			}
 			//Console.WriteLine("queue size: {0}", qe);
+			return false;
 		}
 		
 		public IPath[,] FindPaths(int x0, int y0, int time0, int speed, int radius)
 		{
 			Path[,] dist0, dist1;
-			FindPaths(x0, y0, time0, speed, radius, out dist0, out dist1);
+			FindPaths(x0, y0, time0, speed, radius, out dist0, out dist1, false);
 			for (int i = 0; i < n; ++i)
 			{
 				for (int j = 0; j < m; ++j)
