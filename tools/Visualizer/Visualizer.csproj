@@ -58,6 +58,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ChiefStateDescription.cs" />
     <Compile Include="ChooseDataSourceForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -80,6 +81,7 @@
     <Compile Include="SnapshotForm.Designer.cs">
       <DependentUpon>SnapshotForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="TargetDescription.cs" />
     <Compile Include="UserControlledSapka\IZombieMaster.cs" />
     <Compile Include="UserControlledSapka\KeyboardZombieMaster.cs" />
     <Compile Include="UserControlledSapka\ZombieSapka.cs" />
