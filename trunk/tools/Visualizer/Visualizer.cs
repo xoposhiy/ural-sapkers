@@ -25,7 +25,7 @@ namespace Visualizer
 		private const int Gap = 30;
 		private const int MaxSapkaCount = 4;
 		private const string PicturesDirectory = @"Pictures";
-		private const int SmallPictureSize = 6;
+		private int SmallPictureSize = 1;
 
 		private static readonly Brush[] sapkaBrushes =
 			{
@@ -62,7 +62,6 @@ namespace Visualizer
 			InitializeComponent();
 			InitTimer();
 			InitStatsTreeView();
-			InitPictures();
 			fieldPaddingX = Gap;
 			fieldPaddingY = 100;
 			if (!showMenu)
@@ -98,6 +97,11 @@ namespace Visualizer
 
 		private void InitPictures()
 		{
+			if (picturesInitialized) return;
+			while ((SmallPictureSize + 1)*model.CellSize*model.HeightInCells + fieldPaddingY < Height - 5)
+			{
+				SmallPictureSize++;
+			}
 			for (int i = 0; i < MaxSapkaCount; i++)
 			{
 				AddPictureForSapka((char) i, sapkaBrushes[i]);
@@ -130,7 +134,10 @@ namespace Visualizer
 				}
 				typeToPicture.Add(key, picture);
 			}
+			picturesInitialized = true;
 		}
+
+		private bool picturesInitialized;
 
 		private void AddPictureForSapka(char key, Brush br)
 		{
@@ -159,6 +166,7 @@ namespace Visualizer
 		private void Visualizer_Paint(object sender, PaintEventArgs e)
 		{
             UpdateModel();
+			if (model.CellSize > 0) InitPictures();
 			DrawRoundString(e.Graphics);
 			DrawMap(e.Graphics);
 			DrawSapkaTargetPath(e.Graphics);
@@ -482,38 +490,4 @@ namespace Visualizer
 			}
 		}
     }
-
-	public class GameStateSnapshot
-	{
-		public readonly MapCell[,] Cells;
-		public readonly int CellSize;
-		public readonly int PictureSize;
-		public readonly int SmallPictureSize;
-		public readonly int Time;
-		public IDictionary<Pos, SapkaSnapshotData> SapkasData = new Dictionary<Pos, SapkaSnapshotData>();
-
-		public GameStateSnapshot(VisualizerModel model, int pictureSize, int smallPictureSize)
-		{
-			Cells = (MapCell[,]) model.State.Map.Clone();
-			CellSize = model.CellSize;
-			Time = model.Time;
-			foreach (var sapka in model.SapkaInfos)
-			{
-				SapkaInfo sapkaInfo = sapka.Value;
-				SapkasData[new Pos(sapkaInfo.Pos.X, sapkaInfo.Pos.Y)] = new SapkaSnapshotData(sapkaInfo.Speed);
-			}
-			PictureSize = pictureSize;
-			SmallPictureSize = smallPictureSize;
-		}
-	}
-
-	public class SapkaSnapshotData
-	{
-		public readonly int Speed;
-
-		public SapkaSnapshotData(int speed)
-		{
-			Speed = speed;
-		}
-	}
 }
