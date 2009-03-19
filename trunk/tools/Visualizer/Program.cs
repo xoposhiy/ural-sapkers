@@ -83,25 +83,14 @@ namespace Visualizer
             {
                 LogSapka sapka = new LogSapka();
                 visualizer.StartSapkaMindView(sapka);
-                new Thread(() => ReadLogs(parser,sapka)) { IsBackground = true }.Start();
+                new Thread(() => {
+                    (new PlayControlsForm(visualizer, parser, sapka)).ShowDialog();
+                }) { IsBackground = true }.Start();
             }
             else throw new IndexOutOfRangeException("Unknown dataSource");
 
             return visualizer;
 		}
-
-        private static void ReadLogs(Parser parser, LogSapka sapka)
-        {
-            try
-            {
-                (new PlayControlsForm(parser, sapka)).ShowDialog();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                Environment.Exit(1);
-            }
-        }
 
 		private static void ListenToServer(Parser parser)
 		{
