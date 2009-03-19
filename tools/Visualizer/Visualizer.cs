@@ -150,9 +150,14 @@ namespace Visualizer
 			}
 		}
 
+        public void UpdateModel()
+        {
+            updatersQueue.ExecuteBatch(model);
+        }
+
 		private void Visualizer_Paint(object sender, PaintEventArgs e)
 		{
-			updatersQueue.ExecuteBatch(model);
+            UpdateModel();
 			DrawRoundString(e.Graphics);
 			DrawMap(e.Graphics);
 			DrawSapkaTargetPath(e.Graphics);
@@ -183,7 +188,7 @@ namespace Visualizer
 			var curY = model.State.MySapka.Pos.Y;
 			foreach(var dir in path)
 			{
-				if(dir == 's')
+                if (dir == 's' || dir == 'b')
 				{
 					continue;
 				}

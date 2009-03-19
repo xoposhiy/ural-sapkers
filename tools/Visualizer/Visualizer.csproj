@@ -58,7 +58,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ChiefStateDescription.cs" />
     <Compile Include="ChooseDataSourceForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -68,6 +67,7 @@
     <Compile Include="DataSource.cs" />
     <Compile Include="Logger\FileSapkaServerLogger.cs" />
     <Compile Include="Logger\ISapkaServerLogger.cs" />
+    <Compile Include="LogParsing\ChiefLogLine.cs" />
     <Compile Include="ModelUpdatersQueue.cs" />
     <Compile Include="PlayControlsForm.cs">
       <SubType>Form</SubType>
@@ -81,7 +81,7 @@
     <Compile Include="SnapshotForm.Designer.cs">
       <DependentUpon>SnapshotForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="TargetDescription.cs" />
+    <Compile Include="LogParsing\TargetDescription.cs" />
     <Compile Include="UserControlledSapka\IZombieMaster.cs" />
     <Compile Include="UserControlledSapka\KeyboardZombieMaster.cs" />
     <Compile Include="UserControlledSapka\ZombieSapka.cs" />
