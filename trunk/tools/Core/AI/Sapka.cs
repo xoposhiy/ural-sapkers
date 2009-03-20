@@ -45,6 +45,18 @@ namespace Core.AI
 		public override string GetMove()
 		{
 			if (GameState.Time == 0) return "s";
+			int dead = 0;
+			foreach (var s in GameState.Sapkas)
+			{
+				if (s.IsDead)
+				{
+					++dead;
+				}
+			}
+			if (dead >= GameState.Sapkas.Length - 1)
+			{
+				return "s;";
+			}
 			Decision decision = chief.MakeDecision(GameState, inversionDetector);
 
 			int skipped = GameState.Time - lastTime;

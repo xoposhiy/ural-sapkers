@@ -10,7 +10,7 @@ namespace Core.AI.Advisers
 		
 		public IEnumerable<Decision> Advise(GameState state, IPath[,] paths)
 		{
-			if (state.GetWaitForBombTime() != 0)
+			if (state.GetWaitForBombTime() != 0) //слишком рано
 			{
 				return new List<Decision>();
 			}
@@ -46,7 +46,7 @@ namespace Core.AI.Advisers
 				}
 				int x = p.X / state.CellSize;
 				int y = p.Y / state.CellSize;
-				for (int d = 0; d < 4; ++d)
+				for (int d = 0; d < 5; ++d)
 				{
 					int i = x + dx[d];
 					int j = y + dy[d];
