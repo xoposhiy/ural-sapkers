@@ -31,9 +31,9 @@ namespace Core.AI.Experts
 					state.AddBomb(bomb.Value);
 				}
 				MapCell backup = null;
+				int speed = state.Sapkas[state.Me].Speed;
 				if (dir != -1)
 				{
-					int speed = state.Sapkas[state.Me].Speed;
 					if (!finder.Move(ref tx, ref ty, state.Time, speed, dir))
 					{
 						cache[dir + 1, bom] = 2;
@@ -42,12 +42,6 @@ namespace Core.AI.Experts
 					if (bonus == 's' || bonus == '?')
 					{
 						speed = 1;
-						tx = state.Sapkas[state.Me].Pos.X;
-						ty = state.Sapkas[state.Me].Pos.Y;
-						if (!finder.Move(ref tx, ref ty, state.Time, speed, dir))
-						{
-							cache[dir + 1, bom] = 2;
-						}
 					}
 					string badBonus = "rsuo?";
 					if (badBonus.IndexOf(bonus) != -1 && state.Sapkas[state.Me].Infected)
@@ -69,7 +63,7 @@ namespace Core.AI.Experts
 				state.RecalcDeadly();
 				if (cache[dir + 1, bom] == 0)
 				{
-					cache[dir + 1, bom] = finder.Live(tx, ty, state.Time + 1, state.Sapkas[state.Me].Speed) ? 1 : 2;
+					cache[dir + 1, bom] = finder.Live(tx, ty, state.Time + 1, speed) ? 1 : 2;
 				}
 				if (bomb != null)
 				{
