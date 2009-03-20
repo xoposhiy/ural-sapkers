@@ -17,7 +17,7 @@ namespace Core.AI.Advisers
 			for (int d = 0; d < 4; ++d)
 			{
 				finder.Move(ref x, ref y, state.Time, state.MySapka.Speed, d);
-				yield return new Decision(new Path(null, PathFinder.Dir[d], 1), new Pos(x/cellSize, y/cellSize), new Pos(x, y), false, 1, 0.000000001, "RunAway");
+				yield return new Decision(new Path(null, PathFinder.Dir[d]), new Pos(x/cellSize, y/cellSize), new Pos(x, y), false, 1, 0.000000001, "RunAway");
 			}
 		}
 	}
