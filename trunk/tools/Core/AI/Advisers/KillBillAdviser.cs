@@ -10,7 +10,7 @@ namespace Core.AI.Advisers
 		
 		public IEnumerable<Decision> Advise(GameState state, IPath[,] paths)
 		{
-			if (state.GetWaitForBombTime() != 0) //слишком рано
+			if (state.GetWaitForBombTime() != 0 || state.Time < 1000) //слишком рано
 			{
 				return new List<Decision>();
 			}
@@ -58,7 +58,21 @@ namespace Core.AI.Advisers
 					}
 					var target = new Pos(i, j);
 					var decision = new Decision(ds[i, j], target, targetsPt[i,j], ds[i, j].Size() == 0, ds[i, j].Size() + 1, 1000, "KillBill", true);
-					r.Add(decision);
+					if(state.GetWaitForBombTime() <= decision.Duration)
+						r.Add(decision);
+					else
+					{
+						var cell = state.Map[decision.Target.X, decision.Target.Y];
+						if (cell.DeadlySince == int.MaxValue || cell.DeadlySince < state.Time + decision.Duration)
+						{
+							decision = new Decision(
+								AddStops(decision.Path, state.GetWaitForBombTime() - decision.Duration),
+								decision.Target, targetsPt[decision.Target.X, decision.Target.Y], 
+								decision.PutBomb, state.GetWaitForBombTime(), decision.PotentialScore, 
+								decision.Name, true);
+							r.Add(decision);
+						}
+					}
 				}
 			}
 			return r;

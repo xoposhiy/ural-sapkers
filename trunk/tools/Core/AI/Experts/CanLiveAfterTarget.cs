@@ -7,6 +7,10 @@ namespace Core.AI.Experts
 	{
 		public override byte EstimateDecisionDanger(GameState state, IPath[,] paths, Decision decision)
 		{
+			if (decision.Name == "RunAway" || decision.Duration >= 50)
+			{
+				return 0;
+			}
 			bool canLive = CalculateCanLive(decision, state, decision.WillBomb);
 			if(canLive) return 0;
 			if(decision.WillBomb)
