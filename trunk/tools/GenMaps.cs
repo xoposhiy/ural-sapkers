@@ -4,6 +4,14 @@ using System.Globalization;
 
 class Program
 {
+  private static void SetChar(char[,] map, char ch, int i, int j, int width, int height)
+  {
+    map[i, j] = ch;
+    map[i, width - j - 1] = ch;
+    map[height - i - 1, j] = ch;
+    map[height - i - 1, width - j - 1] = ch;
+  }
+
   private static void GenMap(int width, int height, int cellSize)
   {
     if (width % 2 != 0 || height % 2 != 0)
@@ -30,13 +38,11 @@ class Program
           double d = random.NextDouble();
           char ch =
             i == 0 && j == 0 ? 'o' :
+            i + j == 1 ? '.' :
             d <= wallProb ? 'w' :
             d <= wallProb + uwallProb ? 'X' :
             '.';
-          map[i, j] = ch;
-          map[i, width - j - 1] = ch;
-          map[height - i - 1, j] = ch;
-          map[height - i - 1, width - j - 1] = ch;
+          SetChar(map, ch, i, j, width, height);
       }
     }
     using (var mapWriter = new StreamWriter(mapName + ".map"))
