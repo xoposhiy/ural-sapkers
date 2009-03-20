@@ -8,7 +8,7 @@ namespace Core.AI.Advisers
 {
 	internal class BonusAdviser : IAdviser
 	{
-		public IEnumerable<Decision> Advise(GameState state, IPath[,] paths)
+		public IList<Decision> Advise(GameState state, IPath[,] paths)
 		{
 			string goodBonus = "bvf";
 			int[] cost = new int[] {70, 50, 40};

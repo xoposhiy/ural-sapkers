@@ -19,8 +19,8 @@ namespace Core.AI.Advisers
 					{'u', 12},
 					{'o', 12}
 				};
-		
-		public IEnumerable<Decision> Advise(GameState state, IPath[,] paths)
+
+		public IList<Decision> Advise(GameState state, IPath[,] paths)
 		{
 			var dx = new[] {1, -1, 0, 0};
 			var dy = new[] {0, 0, 1, -1};

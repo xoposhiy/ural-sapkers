@@ -7,8 +7,9 @@ namespace Core.AI.Advisers
 {
 	public class RunAwayAdviser : IAdviser
 	{
-		public IEnumerable<Decision> Advise(GameState state, IPath[,] paths)
+		public IList<Decision> Advise(GameState state, IPath[,] paths)
 		{
+			List<Decision> r = new List<Decision>();
 			var finder = new PathFinder();
 			var cellSize = state.CellSize;
 			finder.SetMap(state.Map, cellSize);
@@ -18,7 +19,7 @@ namespace Core.AI.Advisers
 				int y = state.MySapka.Pos.Y;
 				if (finder.Move(ref x, ref y, state.Time, state.MySapka.Speed, d))
 				{
-					yield return new Decision(new Path(null, PathFinder.Dir[d]), new Pos(x/cellSize, y/cellSize), new Pos(x, y), false, 1, 0.000000001, "RunAway");
+					r.Add(new Decision(new Path(null, PathFinder.Dir[d]), new Pos(x/cellSize, y/cellSize), new Pos(x, y), false, 1, 0.000000001, "RunAway"));
 				}
 			}
 			
@@ -44,10 +45,11 @@ namespace Core.AI.Advisers
 				{
 					if (ds[i, j] != null && state.Map[i, j].DeadlySince == int.MaxValue)
 					{
-						yield return new Decision(ds[i, j], new Pos(i, j), targetsPt[i, j], false, ds[i, j].Size() + 1, 1.0, "RunAway");
+						r.Add(new Decision(ds[i, j], new Pos(i, j), targetsPt[i, j], false, ds[i, j].Size() + 1, 1.0, "RunAway"));
 					}
 				}
 			}
+			return r;
 		}
 	}
 }
