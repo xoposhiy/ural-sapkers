@@ -64,7 +64,7 @@ namespace Core.StateCalculations
 				Pos p = add.Pos;
 				if (add.SubstanceType == '*')
 				{
-					AddBomb(new Bomb(p.X, p.Y, add.DamagingRange, Time + Commons.BombTimeout - 1));
+					AddBomb(new Bomb(p.X, p.Y, add.DamagingRange, Time + add.Time-1));
 				}
 				else if (add.SubstanceType == '#')
 				{
@@ -288,19 +288,6 @@ namespace Core.StateCalculations
 					Map[x, y] = new MapCell(m[x, y]);
 		}
 		
-		public bool InvertedMe
-		{
-			get
-			{
-				if (lastInverted && MySapka.IsDead) return lastInverted;
-				SapkaInfo me = Sapkas[Me];
-				lastInverted = me.Infected &&
-				          (me.BombsLeft > 0 || lastUsedBomb >= Time - Commons.BombTimeout) &&
-				          me.BombsStrength > 0 && me.Speed > 1;
-				return lastInverted;
-			}
-		}
-
 		public int GetWaitForBombTime()
 		{
 			if(MySapka.BombsLeft > 0) return 0;

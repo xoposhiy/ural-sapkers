@@ -19,6 +19,23 @@ namespace Core.AI.Advisers
 				int y = state.MySapka.Pos.Y;
 				if (finder.Move(ref x, ref y, state.Time, state.MySapka.Speed, d))
 				{
+					r.Add(new Decision(new Path(null, PathFinder.Dir[d]), new Pos(x / cellSize, y / cellSize), new Pos(x, y), false, 1, 0.000000001, "RunAway"));
+				}
+			}
+			return r;
+			
+			
+			
+			/*List<Decision> r = new List<Decision>();
+			var finder = new PathFinder();
+			var cellSize = state.CellSize;
+			finder.SetMap(state.Map, cellSize);
+			for (int d = 0; d < 4; ++d)
+			{
+				int x = state.MySapka.Pos.X;
+				int y = state.MySapka.Pos.Y;
+				if (finder.Move(ref x, ref y, state.Time, state.MySapka.Speed, d))
+				{
 					r.Add(new Decision(new Path(null, PathFinder.Dir[d]), new Pos(x/cellSize, y/cellSize), new Pos(x, y), false, 1, 0.000000001, "RunAway"));
 				}
 			}
@@ -49,7 +66,7 @@ namespace Core.AI.Advisers
 					}
 				}
 			}
-			return r;
+			return r;*/
 		}
 	}
 }
