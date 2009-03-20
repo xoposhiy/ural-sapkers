@@ -1,6 +1,7 @@
 ﻿using System;
 using Core.Parsing;
 using System.Collections.Generic;
+using log4net;
 
 namespace Core.StateCalculations
 {
@@ -55,6 +56,7 @@ namespace Core.StateCalculations
 		
 		public void OnMapChange(MapChangeInfo info)
 		{
+            //gameStateLog.Info(String.Format("info.Sapkas.Length = {0}", info.Sapkas.Length));
 			LastInfo = info;
 			DangerLevel = info.HasDangerLevel ? info.DangerLevel : 0;
 			Time = info.Time;

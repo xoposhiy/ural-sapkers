@@ -17,6 +17,7 @@ using TheSapka;
 using Visualizer.UserControlledSapka;
 using Path=System.IO.Path;
 using Timer=System.Windows.Forms.Timer;
+using log4net;
 
 namespace Visualizer
 {
@@ -182,7 +183,7 @@ namespace Visualizer
 
 		private void DrawSapkaTargetPath(Graphics g)
 		{
-			if (!IsRunning) return;
+            //if (!IsRunning) return;
 			if (ai == null || model.State.Sapkas == null || model.State.MySapka.IsDead) return;
 			var path = ai.LastDecisionPath;
 			var curX = model.State.MySapka.Pos.X;

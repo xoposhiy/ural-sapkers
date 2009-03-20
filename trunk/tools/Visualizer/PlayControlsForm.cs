@@ -136,8 +136,10 @@ namespace Visualizer
                 string message = sapkaLog[trackBar.Value++];
                 parser.ParseMessage(message);
                 visualizer.UpdateModel();
-
                 RefreshWayListBox();
+                if (visualizer.InvokeRequired)
+                    visualizer.Invoke(new ThreadStart(() => { visualizer.Refresh(); }));
+                
             }
         }
 
@@ -197,9 +199,12 @@ namespace Visualizer
 
         private void listBoxTargets_SelectedIndexChanged(object sender, EventArgs e)
         {
-            ChiefLogLine line = (ChiefLogLine) listBoxTargets.SelectedItem;
-            sapka.LastDecisionPath = line.Target.path.ToCharArray();
-            sapka.LastDecisionName = line.Target.adviser ;
+           ChiefLogLine line = (ChiefLogLine) listBoxTargets.SelectedItem;
+           if (line != null)
+           {
+               sapka.LastDecisionPath = line.Target.path.ToCharArray();
+               sapka.LastDecisionName = line.Target.adviser;
+           }
         }
 
         private void PlayControlsForm_FormClosing(object sender, FormClosingEventArgs e)
