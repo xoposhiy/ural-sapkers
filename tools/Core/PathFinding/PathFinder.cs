@@ -13,7 +13,7 @@ namespace Core.PathFinding
 		private int n, m;
 		private MapCell[,] map;
 		private int[] cc;
-		private Queues qs;
+		private static Queues qs;
 
 		#region IPathFinder Members
 
