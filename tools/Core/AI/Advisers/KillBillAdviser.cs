@@ -7,8 +7,8 @@ namespace Core.AI.Advisers
 {
 	internal class KillBillAdviser : IAdviser
 	{
-		
-		public IEnumerable<Decision> Advise(GameState state, IPath[,] paths)
+
+		public IList<Decision> Advise(GameState state, IPath[,] paths)
 		{
 			if (state.GetWaitForBombTime() != 0 || state.Time < 2000) //слишком рано
 			{
