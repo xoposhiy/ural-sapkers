@@ -64,7 +64,7 @@ namespace Core.StateCalculations
 				Pos p = add.Pos;
 				if (add.SubstanceType == '*')
 				{
-					AddBomb(new Bomb(p.X, p.Y, add.DamagingRange, Time + add.Time-1));
+					AddBomb(new Bomb(p.X, p.Y, add.DamagingRange, Time + add.Time - 3));
 				}
 				else if (add.SubstanceType == '#')
 				{
