@@ -9,6 +9,19 @@ namespace Core.AI.Advisers
 	{
 		public IEnumerable<Decision> Advise(GameState state, IPath[,] paths)
 		{
+			var finder = new PathFinder();
+			var cellSize = state.CellSize;
+			finder.SetMap(state.Map, cellSize);
+			for (int d = 0; d < 4; ++d)
+			{
+				int x = state.MySapka.Pos.X;
+				int y = state.MySapka.Pos.Y;
+				if (finder.Move(ref x, ref y, state.Time, state.MySapka.Speed, d))
+				{
+					yield return new Decision(new Path(null, PathFinder.Dir[d]), new Pos(x/cellSize, y/cellSize), new Pos(x, y), false, 1, 0.000000001, "RunAway");
+				}
+			}
+			
 			IPath[,] ds = new Path[state.Map.GetLength(0), state.Map.GetLength(1)];
 			Pos[,] targetsPt = new Pos[state.Map.GetLength(0), state.Map.GetLength(1)];
 
@@ -33,18 +46,6 @@ namespace Core.AI.Advisers
 					{
 						yield return new Decision(ds[i, j], new Pos(i, j), targetsPt[i, j], false, ds[i, j].Size() + 1, 1.0, "RunAway");
 					}
-				}
-			}
-			var finder = new PathFinder();
-			var cellSize = state.CellSize;
-			finder.SetMap(state.Map, cellSize);
-			for (int d = 0; d < 4; ++d)
-			{
-				int x = state.MySapka.Pos.X;
-				int y = state.MySapka.Pos.Y;
-				if (finder.Move(ref x, ref y, state.Time, state.MySapka.Speed, d))
-				{
-					yield return new Decision(new Path(null, PathFinder.Dir[d]), new Pos(x/cellSize, y/cellSize), new Pos(x, y), false, 1, 0.000000001, "RunAway");
 				}
 			}
 		}

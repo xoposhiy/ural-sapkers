@@ -1,5 +1,6 @@
 using Core.PathFinding;
 using Core.Parsing;
+using System;
 
 namespace Core.AI
 {
@@ -33,8 +34,19 @@ namespace Core.AI
 			return !Inverse || c == 's' ? c : s2[s1.IndexOf(c)];
 		}
 		
+		static Random rnd = new Random();
+		
 		public string GetMove()
 		{
+			if (Name == "NOTHING")
+			{
+				string r = "" + "lrud"[rnd.Next(4)];
+				if (rnd.Next(2) == 0)
+				{
+					r += "b";
+				}
+				return r;
+			}
 			string res = (Path == null ? 's' : norm(Path.FirstMove())).ToString();
 			if(PutBomb) res += "b";
 			return res;
