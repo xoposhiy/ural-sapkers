@@ -16,9 +16,10 @@ namespace Core.AI
 
 		public Chief()
 		{
+			advisers.Add(new RunAwayAdviser());
 			advisers.Add(new DestroyWallsAdviser());
 			advisers.Add(new BonusAdviser());
-			advisers.Add(new RunAwayAdviser());
+			advisers.Add(new KillBillAdviser());
 			experts.Add(new DontGoToDeadlyCell());
 			experts.Add(new CanLiveAfterTarget());
 		}
