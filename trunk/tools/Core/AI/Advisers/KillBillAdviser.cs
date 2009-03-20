@@ -10,7 +10,7 @@ namespace Core.AI.Advisers
 		
 		public IEnumerable<Decision> Advise(GameState state, IPath[,] paths)
 		{
-			if (state.GetWaitForBombTime() != 0 || state.Time < 1000) //слишком рано
+			if (state.GetWaitForBombTime() != 0 || state.Time < 2000) //слишком рано
 			{
 				return new List<Decision>();
 			}
