@@ -49,7 +49,7 @@ namespace Core.AI
 
 			int skipped = GameState.Time - lastTime;
 			if (skipped > 1)
-				log.WarnFormat("Пропуск {0} тиков", skipped);
+				log.WarnFormat("РџСЂРѕРїСѓСЃРє {0} С‚РёРєРѕРІ", skipped);
 			lastTime = GameState.Time;
 			lastDecision = decision;
 			return lastDecision.GetMove();

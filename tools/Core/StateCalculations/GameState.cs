@@ -38,6 +38,7 @@ namespace Core.StateCalculations
 			CellSize = gameInfo.MapInfo.MapCellSize;
 			InitMapFrom(gameInfo.MapInfo.Map);
 			bombs = new List<Bomb>();
+			Time = 0;
 		}
 
 		public void OnRoundStart(StartRoundInfo startRoundInfo)
@@ -47,6 +48,7 @@ namespace Core.StateCalculations
 			CellSize = startRoundInfo.MapInfo.MapCellSize;
 			InitMapFrom(startRoundInfo.MapInfo.Map);
 			bombs = new List<Bomb>();
+			Time = 0;
 		}
 
 		public MapChangeInfo LastInfo { get; private set;}
