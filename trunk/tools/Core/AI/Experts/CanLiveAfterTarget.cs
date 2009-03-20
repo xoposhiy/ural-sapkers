@@ -7,7 +7,7 @@ namespace Core.AI.Experts
 	{
 		public override byte EstimateDecisionDanger(GameState state, IPath[,] paths, Decision decision)
 		{
-			if (decision.Name == "RunAway" || decision.Duration >= 50)
+			if (decision.Name == "RunAway")
 			{
 				return 0;
 			}

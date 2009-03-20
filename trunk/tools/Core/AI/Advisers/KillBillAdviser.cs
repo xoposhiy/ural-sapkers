@@ -52,12 +52,12 @@ namespace Core.AI.Advisers
 					int j = y + dy[d];
 					if (i < 0 || i >= state.Map.GetLength(0) ||
 					    j < 0 || j >= state.Map.GetLength(1) ||
-					    ds[i, j] == null)
+					    ds[i, j] == null || state.Map[i, j].IsBomb)
 					{
 						continue;
 					}
 					var target = new Pos(i, j);
-					var decision = new Decision(ds[i, j], target, targetsPt[i,j], ds[i, j].Size() == 0, ds[i, j].Size() + 1, 1000, "KillBill", true);
+					var decision = new Decision(ds[i, j], target, targetsPt[i,j], ds[i, j].Size() == 0, ds[i, j].Size(), 1000, "KillBill", true);
 					if(state.GetWaitForBombTime() <= decision.Duration)
 						r.Add(decision);
 					else
