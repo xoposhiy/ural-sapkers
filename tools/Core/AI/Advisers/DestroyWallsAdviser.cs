@@ -7,6 +7,19 @@ namespace Core.AI.Advisers
 {
 	internal class DestroyWallsAdviser : IAdviser
 	{
+		public static IDictionary<char, int> bonusCost =
+			new Dictionary<char, int>
+				{
+					{'b', -7},
+					{'v', -7},
+					{'f', -7},
+					{'?', 1},
+					{'r', 5},
+					{'s', 7},
+					{'u', 12},
+					{'o', 12}
+				};
+		
 		public IEnumerable<Decision> Advise(GameState state, IPath[,] paths)
 		{
 			var dx = new[] {1, -1, 0, 0};
@@ -32,12 +45,12 @@ namespace Core.AI.Advisers
 			{
 				for (int j = 0; j < ds.GetLength(1); ++j)
 				{
-					if(state.Map[i, j].IsBomb) continue; // Ïîâòîðíî áîìáà íå ñòàâèòñÿ.
+					if(state.Map[i, j].IsBomb) continue; // ÐŸÐ¾Ð²Ñ‚Ð¾Ñ€Ð½Ð¾ Ð±Ð¾Ð¼Ð±Ð° Ð½Ðµ ÑÑ‚Ð°Ð²Ð¸Ñ‚ÑÑ.
 					if (ds[i, j] == null)
 					{
 						continue;
 					}
-					int countWalls = 0;
+					int score = 0;
 					for (int d = 0; d < 4; ++d)
 					{
 						int x = i;
@@ -46,7 +59,7 @@ namespace Core.AI.Advisers
 						{
 							if (x < 0 || x >= ds.GetLength(0) ||
 							    y < 0 || y >= ds.GetLength(1) ||
-							    state.Map[x, y].IsEmpty ||
+							    state.Map[x, y].IsEmpty && state.Map[x, y].Bonus == '.' ||
 							    state.Map[x, y].IsBreakableWall &&
 							    state.Time >= state.Map[x, y].EmptySince)
 							{
@@ -59,13 +72,19 @@ namespace Core.AI.Advisers
 						    state.Map[x, y].IsBreakableWall && 
 						    state.Map[x, y].EmptySince == int.MaxValue)
 						{
-							++countWalls;
+							score += 10;
+						}
+						if (x >= 0 && x < ds.GetLength(0) && 
+						    y >= 0 && y < ds.GetLength(1) && 
+						    state.Map[x, y].IsEmpty && state.Map[x, y].Bonus != '.')
+						{
+							score += bonusCost[state.Map[x, y].Bonus];
 						}
 					}
-					if (countWalls > 0)
+					if (score > 0)
 					{
 						var target = new Pos(i, j);
-						var decision = new Decision(ds[i, j], target, targetsPt[i,j], ds[i, j].Size() == 0, ds[i, j].Size() + 1, countWalls * 10, "WallBreaker", true);
+						var decision = new Decision(ds[i, j], target, targetsPt[i,j], ds[i, j].Size() == 0, ds[i, j].Size() + 1, score, "WallBreaker", true);
 						if(state.GetWaitForBombTime() <= decision.Duration)
 							r.Add(decision);
 						else
