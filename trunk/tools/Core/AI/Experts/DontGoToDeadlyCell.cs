@@ -36,7 +36,7 @@ namespace Core.AI.Experts
 					int speed = state.Sapkas[state.Me].Speed;
 					if (!finder.Move(ref tx, ref ty, state.Time, speed, dir))
 					{
-						cache[dir + 1, bom] = 1;
+						cache[dir + 1, bom] = 2;
 					}
 					char bonus = state.Map[tx / state.CellSize, ty / state.CellSize].Bonus;
 					if (bonus == 's' || bonus == '?')
@@ -44,7 +44,10 @@ namespace Core.AI.Experts
 						speed = 1;
 						tx = state.Sapkas[state.Me].Pos.X;
 						ty = state.Sapkas[state.Me].Pos.Y;
-						finder.Move(ref tx, ref ty, state.Time, speed, dir);
+						if (!finder.Move(ref tx, ref ty, state.Time, speed, dir))
+						{
+							cache[dir + 1, bom] = 2;
+						}
 					}
 					string badBonus = "rsuo?";
 					if (badBonus.IndexOf(bonus) != -1 && state.Sapkas[state.Me].Infected)
